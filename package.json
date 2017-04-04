@@ -1,0 +1,49 @@
+{
+  "name": "hawkeye.ninja",
+  "description": "Real time security and vulnerability scanning for your projects.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/Stono/hawkeye.ninja",
+  "author": {
+    "name": "Karl Stoney",
+    "email": "me@karlstoney.com",
+    "url": "https://karlstoney.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Stono/hawkeye.ninja.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Stono/hawkeye.ninja/issues"
+  },
+  "main": "index.js",
+  "engines": {
+    "node": ">= 7.0.0"
+  },
+  "scripts": {
+    "test": "./node_modules/grunt/bin/grunt mochaTest"
+  },
+  "devDependencies": {
+    "deride": "^1.1.0",
+    "grunt": "1.0.1",
+    "grunt-contrib-jshint": "1.1.0",
+    "grunt-contrib-watch": "1.0.0",
+    "grunt-mocha-istanbul": "5.0.2",
+    "grunt-mocha-test": "0.13.2",
+    "grunt-notify": "0.4.5",
+    "istanbul": "0.4.5",
+    "mocha": "3.2.0",
+    "mocha-jenkins-reporter": "0.3.7",
+    "should": "11.2.1"
+  },
+  "keywords": [],
+  "license": "UNLICENSED",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "cookie-parser": "^1.4.3",
+    "debug": "^2.6.3",
+    "express": "4.15.2",
+    "express-session": "^1.15.2",
+    "passport": "^0.3.2",
+    "passport-github": "1.1.0"
+  }
+}
