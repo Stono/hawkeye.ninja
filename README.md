@@ -1,14 +1,8 @@
-# hawkeye.ninja  [![Dependency Status](https://david-dm.org/kstoney/hawkeye.ninja.svg)](https://david-dm.org/kstoney/hawkeye.ninja)
-
+# hawkeye.ninja
 Real time security and vulnerability scanning for your projects.
 
 ## Getting Started
-Install the module with: `npm install hawkeye.ninja`
-
-```javascript
-var hawkeye_ninja = new require('hawkeye.ninja');
-hawkeye_ninja.execute(); // "awesome"
-```
+_(Coming soon)_
 
 ## Documentation
 _(Coming soon)_
@@ -23,5 +17,5 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 _(Nothing yet)_
 
 ## License
-Copyright (c) 2017 Karl Stoney  
-Licensed under the UNLICENSED license.
+Copyright (c) 2017 Karl Stoney
+UNLICENSED.
