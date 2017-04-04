@@ -1,0 +1,23 @@
+sudo: required
+
+services:
+  - docker
+
+language: node_js
+
+node_js:
+  - 7
+
+notifications:
+  email: false
+
+branches:
+  only:
+    - master
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker build -t stono/hawkeye.ninja .
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    docker push stono/hawkeye.ninja;
+    fi

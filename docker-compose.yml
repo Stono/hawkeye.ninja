@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  hawkeye:
+    image: stono/hawkeye.ninja
+    build: .
+    environment:
+      - GITHUB_SECRET
+      - GITHUB_CLIENTID
+    ports:
+      - 5000
+    volumes:
+      - ./lib:/app/lib

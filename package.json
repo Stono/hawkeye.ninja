@@ -20,6 +20,7 @@
     "node": ">= 7.0.0"
   },
   "scripts": {
+    "start": "DEBUG=hawkeye:* node index.js",
     "test": "./node_modules/grunt/bin/grunt mochaTest"
   },
   "devDependencies": {
