@@ -44,6 +44,7 @@
     "debug": "^2.6.3",
     "express": "4.15.2",
     "express-session": "^1.15.2",
+    "lodash": "^4.17.4",
     "passport": "^0.3.2",
     "passport-github": "1.1.0",
     "pug": "^2.0.0-beta11"
