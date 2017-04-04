@@ -2,7 +2,7 @@
 Real time security and vulnerability scanning for your projects.
 
 ## Getting Started
-_(Coming soon)_
+`npm run start` and then the site will be listening on `http://127.0.0.1:5000`
 
 ## Documentation
 _(Coming soon)_
