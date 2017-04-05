@@ -1,10 +1,10 @@
 extend layout
 block content
   p.
-    Thanks #{profile.name}, you rock.
+    Thanks #{user.name}, you rock.
   p Pick a Repo to scan
 
   ul
   each repo in repos
     li
-      a(href='scan/' + repo.full_name) #{repo.name}
+      a(href='repo/' + repo.full_name) #{repo.name}
