@@ -24,10 +24,11 @@
     "test": "./node_modules/grunt/bin/grunt mochaTest"
   },
   "devDependencies": {
-    "deride": "^1.1.0",
+    "deride": "1.1.0",
     "grunt": "1.0.1",
     "grunt-contrib-jshint": "1.1.0",
-    "grunt-contrib-uglify": "^2.3.0",
+    "grunt-contrib-less": "1.4.1",
+    "grunt-contrib-uglify": "2.3.0",
     "grunt-contrib-watch": "1.0.0",
     "grunt-mocha-istanbul": "5.0.2",
     "grunt-mocha-test": "0.13.2",
@@ -35,7 +36,7 @@
     "istanbul": "0.4.5",
     "mocha": "3.2.0",
     "mocha-jenkins-reporter": "0.3.7",
-    "mock-require": "^2.0.2",
+    "mock-require": "2.0.2",
     "should": "11.2.1"
   },
   "keywords": [],

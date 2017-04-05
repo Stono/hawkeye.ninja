@@ -39,6 +39,19 @@ module.exports = function(grunt) {
         })
       }
     },
+    less: {
+      css: {
+        options: {
+          compress: true
+        },
+        files: grunt.file.expandMapping('build/css/*.less', 'public/css/', {
+          flatten: true,
+          rename: (destBase, destPath) => {
+            return destBase + destPath.replace('.less', '.css');
+          }
+        })
+      }
+    },
     /* jshint camelcase:false */
     mocha_istanbul: {
       test: {
@@ -68,8 +81,22 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      files: config.targets.all,
-      tasks: ['default']
+      node: {
+        files: config.targets.all,
+        tasks: ['jshint:stdout', 'mochaTest:stdout']
+      },
+      js: {
+        files: [
+          'build/js/*.js'
+        ],
+        tasks: ['uglify']
+      },
+      assets: {
+        files: [
+          'build/css/*.less',
+        ],
+        tasks: ['less']
+      }
     }
   });
 
@@ -78,9 +105,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-notify');
 
   // Default task.
-  grunt.registerTask('default', ['jshint:stdout', 'mochaTest:stdout']);
-  grunt.registerTask('ci', ['uglify', 'jshint:checkstyle', 'mocha_istanbul']);
+  grunt.registerTask('default', ['uglify', 'less', 'jshint:stdout', 'mochaTest:stdout']);
+  grunt.registerTask('ci', ['uglify', 'less', 'jshint:checkstyle', 'mocha_istanbul']);
 };
