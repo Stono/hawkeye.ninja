@@ -1,20 +1,20 @@
 'use strict';
 const RepoController = require('../../lib/controllers/repo');
 const Repo = require('../../lib/models/repo');
-const BuildManager = require('../../lib/buildManager');
+const ScanManager = require('../../lib/scanManager');
 const deride = require('deride');
 const should = require('should');
 
 describe('Controllers.Repo', () => {
-  let repo, buildManager;
+  let repo, scanManager;
   before(() => {
-    buildManager = deride.wrap(new BuildManager());
+    scanManager = deride.wrap(new ScanManager());
     repo = new RepoController({
-      buildManager: buildManager
+      scanManager: scanManager
     });
   });
   describe('viewRepo', () => {
-    it('should append the buildManager builds', done => {
+    it('should append the scanManager scans', done => {
       let req = {
         params: {
           org: 'stono',
@@ -29,9 +29,9 @@ describe('Controllers.Repo', () => {
       let res = deride.stub(['render']);
       let fullName = `${req.params.org}/${req.params.repo}`;
       res.setup.render.toDoThis((view, model) => {
-        buildManager.builds(fullName, (err, builds) => {
-          buildManager.expect.builds.called.withArg(fullName);
-          should(model.builds).eql(builds);
+        scanManager.scans(fullName, (err, scans) => {
+          scanManager.expect.scans.called.withArg(fullName);
+          should(model.scans).eql(scans);
           done();
         });
       });

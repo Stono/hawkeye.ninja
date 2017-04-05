@@ -3,3 +3,9 @@ block content
   p #{repo.name}
   p #{repo.description}
 
+  ul
+  each scan in scans
+    li
+      a(href='repo/' + repo.fullName + '/' + scan.number) #{repo.name}
+
+  a(href='repo/' + repo.fullName + '/new') Start new scan

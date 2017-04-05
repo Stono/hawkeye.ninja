@@ -1,39 +1,39 @@
 'use strict';
-const BuildManager = require('../lib/buildManager');
+const ScanManager = require('../lib/scanManager');
 const should = require('should');
 
-describe('Build Manager', () => {
-  let buildManager, repo;
+describe('Scan Manager', () => {
+  let scanManager, repo;
   beforeEach(() => {
     repo = {
       fullName: 'testorg/test'
     };
-    buildManager = new BuildManager();
+    scanManager = new ScanManager();
   });
-  it('should return an empty array when there are no builds', done => {
-    buildManager.builds(repo.fullName, (err, builds) => {
+  it('should return an empty array when there are no scans', done => {
+    scanManager.scans(repo.fullName, (err, scans) => {
       should.ifError(err);
-      should(builds).eql([]);
+      should(scans).eql([]);
       done();
     });
   });
-  it('should create new builds', done => {
-    buildManager.schedule(repo.fullName, (err, build) => {
+  it('should create new scans', done => {
+    scanManager.schedule(repo.fullName, (err, scan) => {
       should.ifError(err);
-      should(build.id).match(/[a-z0-9]{40}/);
-      should(build.status).eql('pending');
-      should(build.number).eql(1);
+      should(scan.id).match(/[a-z0-9]{40}/);
+      should(scan.status).eql('pending');
+      should(scan.number).eql(1);
       done();
     });
   });
-  it('build numbers should increment, and ids should be different', done => {
-    buildManager.schedule(repo.fullName, (err, first) => {
+  it('scan numbers should increment, and ids should be different', done => {
+    scanManager.schedule(repo.fullName, (err, first) => {
       should(first.number).eql(1);
       should.ifError(err);
-      buildManager.schedule(repo.fullName, (err, build) => {
+      scanManager.schedule(repo.fullName, (err, scan) => {
         should.ifError(err);
-        should(build.id).not.eql(first.id);
-        should(build.number).eql(2);
+        should(scan.id).not.eql(first.id);
+        should(scan.number).eql(2);
         done();
       });
     });

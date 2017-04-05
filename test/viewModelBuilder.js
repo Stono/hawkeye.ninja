@@ -30,7 +30,7 @@ describe('ViewModels', () => {
     before(() => {
       model = builder('selectRepo')
       .withRequest(request)
-      .build();
+      .scan();
     });
     userInfo();
     it('should have the repo list', () => {
@@ -41,13 +41,13 @@ describe('ViewModels', () => {
     before(() => {
       model = builder('viewRepo')
       .withRequest(request)
-      .withBuilds([])
-      .build();
+      .withScans([])
+      .scan();
     });
     it('should have the repo information', () => {
       shouldHaveKeys(model.repo, ['id', 'name', 'private', 'description', 'fullName']);
       should(model.repo.fullName).eql('Stono/hawkeye');
-      should(model.builds).eql([]);
+      should(model.scans).eql([]);
     });
   });
 });
