@@ -1,5 +1,5 @@
 'use strict';
-const builder = require('../lib/viewModels/builder');
+const builder = require('../lib/viewModelBuilder');
 const should = require('should');
 const Repo = require('../lib/models/repo');
 
@@ -28,9 +28,10 @@ describe('ViewModels', () => {
   };
   describe('selectRepo', () => {
     before(() => {
-      model = builder('selectRepo')
-      .withRequest(request)
-      .scan();
+      model = builder()
+      .withUser(request)
+      .withRepoList(request)
+      .build();
     });
     userInfo();
     it('should have the repo list', () => {
@@ -39,10 +40,11 @@ describe('ViewModels', () => {
   });
   describe('viewRepo', () => {
     before(() => {
-      model = builder('viewRepo')
-      .withRequest(request)
+      model = builder()
+      .withUser(request)
+      .withRepo(request)
       .withScans([])
-      .scan();
+      .build();
     });
     it('should have the repo information', () => {
       shouldHaveKeys(model.repo, ['id', 'name', 'private', 'description', 'fullName']);
