@@ -13,7 +13,7 @@ describe('ViewModels', () => {
       user: {
         profile: 'profile info here',
         oauth: 'oauth here',
-        repos: require('./samples/github/repos.json').map(r => { return new Repo(r) })
+        repos: require('./samples/github/repos.json').map(r => { return new Repo().fromGithub(r); })
       }
     };
   });

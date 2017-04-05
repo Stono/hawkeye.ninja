@@ -12,13 +12,13 @@ const MockGithubApi = function() {
 };
 const mockGithubApi = new MockGithubApi();
 mock('github', function StubGithub() { return mockGithubApi; });
-const User = require('../lib/user');
+const User = require('../../lib/models/user');
 
 describe('User', () => {
   let user, profile;
   beforeEach(() => {
     user = new User();
-    profile = require('./samples/github/profile.json');
+    profile = require('../samples/github/profile.json');
     user.setProfile(profile);
   });
   it('should populate the profile', () => {
