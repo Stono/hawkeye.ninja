@@ -109,6 +109,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-notify');
 
   // Default task.
-  grunt.registerTask('default', ['uglify', 'less', 'jshint:stdout', 'mochaTest:stdout']);
-  grunt.registerTask('ci', ['uglify', 'less', 'jshint:checkstyle', 'mocha_istanbul']);
+  grunt.registerTask('assets', ['uglify', 'less']);
+  grunt.registerTask('test', ['jshint:stdout', 'mochaTest:stdout']);
+  grunt.registerTask('default', ['assets', 'test']);
 };

@@ -20,8 +20,10 @@
     "node": ">= 7.0.0"
   },
   "scripts": {
+    "prestart": "./node_modules/grunt/bin/grunt assets",
     "start": "DEBUG=hawkeye:* node index.js",
-    "test": "./node_modules/grunt/bin/grunt mochaTest"
+    "test": "./node_modules/grunt/bin/grunt test",
+    "build": "./node_modules/grunt/bin/grunt assets"
   },
   "devDependencies": {
     "deride": "1.1.0",
@@ -43,6 +45,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "body-parser": "1.17.1",
+    "colors": "1.1.2",
     "command-exists": "1.2.2",
     "cookie-parser": "1.4.3",
     "debug": "2.6.3",
