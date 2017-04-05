@@ -2,6 +2,7 @@
 const builder = require('../lib/viewModels/builder');
 const should = require('should');
 const Repo = require('../lib/models/repo');
+
 describe('ViewModels', () => {
   let model, request;
   before(() => {
@@ -27,7 +28,9 @@ describe('ViewModels', () => {
   };
   describe('selectRepo', () => {
     before(() => {
-      model = builder('selectRepo').withRequest(request).build();
+      model = builder('selectRepo')
+      .withRequest(request)
+      .build();
     });
     userInfo();
     it('should have the repo list', () => {
@@ -36,11 +39,15 @@ describe('ViewModels', () => {
   });
   describe('viewRepo', () => {
     before(() => {
-      model = builder('viewRepo').withRequest(request).build();
+      model = builder('viewRepo')
+      .withRequest(request)
+      .withBuilds([])
+      .build();
     });
     it('should have the repo information', () => {
       shouldHaveKeys(model.repo, ['id', 'name', 'private', 'description', 'fullName']);
       should(model.repo.fullName).eql('Stono/hawkeye');
+      should(model.builds).eql([]);
     });
   });
 });
