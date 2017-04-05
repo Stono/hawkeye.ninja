@@ -25,6 +25,20 @@ module.exports = function(grunt) {
         src: config.targets.test
       }
     },
+    uglify: {
+      options: {
+        mangle: true,
+        preserveComments: 'some'
+      },
+      app: {
+        files: grunt.file.expandMapping('build/js/*.js', 'public/js/', {
+          flatten: true,
+          rename: (destBase, destPath) => {
+            return destBase + destPath.replace('.js', '.min.js');
+          }
+        })
+      }
+    },
     /* jshint camelcase:false */
     mocha_istanbul: {
       test: {
@@ -63,9 +77,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-istanbul');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-notify');
 
   // Default task.
   grunt.registerTask('default', ['jshint:stdout', 'mochaTest:stdout']);
-  grunt.registerTask('ci', ['jshint:checkstyle', 'mocha_istanbul']);
+  grunt.registerTask('ci', ['uglify', 'jshint:checkstyle', 'mocha_istanbul']);
 };
