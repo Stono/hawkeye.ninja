@@ -25,11 +25,11 @@
   "maxdepth": 2,
   "maxparams": 4,
   "maxstatements": 25,
- 
+
   // Relaxing options:
   "esnext": true,
   "lastsemic": true,
- 
+
   // Environments:
   "node": true,
   "globals"   : {
