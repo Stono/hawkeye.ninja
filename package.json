@@ -24,7 +24,7 @@
     "test": "./node_modules/grunt/bin/grunt mochaTest"
   },
   "devDependencies": {
-    "deride": "^1.1.0",
+    "deride": "1.1.0",
     "grunt": "1.0.1",
     "grunt-contrib-jshint": "1.1.0",
     "grunt-contrib-watch": "1.0.0",
@@ -39,14 +39,15 @@
   "keywords": [],
   "license": "UNLICENSED",
   "dependencies": {
-    "body-parser": "^1.17.1",
-    "cookie-parser": "^1.4.3",
-    "debug": "^2.6.3",
+    "body-parser": "1.17.1",
+    "cookie-parser": "1.4.3",
+    "debug": "2.6.3",
     "express": "4.15.2",
-    "express-session": "^1.15.2",
-    "lodash": "^4.17.4",
-    "passport": "^0.3.2",
+    "express-session": "1.15.2",
+    "github": "9.2.0",
+    "lodash": "4.17.4",
+    "passport": "0.3.2",
     "passport-github": "1.1.0",
-    "pug": "^2.0.0-beta11"
+    "pug": "2.0.0-beta11"
   }
 }
