@@ -40,11 +40,11 @@ config.sessionSecret = validateEnv('HE_SESSION_SECRET');
 
 config.port = 5000;
 config.github.callbackUrl = `${callbackUrl(config.port)}/oauth/github/callback`;
-const envConfigFile = `./${process.env.APP_ENV}.js`;
-if(process.env.APP_ENV && fs.existsSync(path.join(__dirname, envConfigFile))) {
+const envConfigFile = `./${process.env.NODE_ENV}.js`;
+if(process.env.NODE_ENV && fs.existsSync(path.join(__dirname, envConfigFile))) {
   const envConfig = require(envConfigFile);
   config = _.merge(config, envConfig);
 } else {
-  console.warn('Warning'.yellow + ' no environmental configuration found for environment: ' + process.env.APP_ENV);
+  console.warn('Warning'.yellow + ' no environmental configuration found for environment: ' + process.env.NODE_ENV);
 }
 module.exports = config;
