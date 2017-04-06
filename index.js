@@ -1,4 +1,5 @@
 'use strict';
 const App = require('./lib/app');
-const app = new App();
+const config = require('./config');
+const app = new App(config);
 app.start(() => {});
