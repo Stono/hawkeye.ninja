@@ -44,12 +44,11 @@ module.exports = function(grunt) {
         options: {
           compress: true
         },
-        files: grunt.file.expandMapping('build/css/*.less', 'public/css/', {
-          flatten: true,
-          rename: (destBase, destPath) => {
-            return destBase + destPath.replace('.less', '.css');
-          }
-        })
+        files: {
+          'dist/css/AdminLTE.min.css': 'build/css/AdminLTE.less',
+          'dist/css/hawkeye.min.css': 'build/css/hawkeye.less',
+          'dist/css/skins/skin-black.min.css': 'build/css/skins/skin-black.less'
+        }
       }
     },
     /* jshint camelcase:false */

@@ -1,0 +1,56 @@
+//- Navbar mixins
+mixin nav_link(item)
+  li(class=(item.active ? 'treeview.active' : 'treeview'))
+    a(href='#')
+      i.fa(class=item.icon)
+      |
+      span #{item.name}
+      if item.repos
+        span.pull-right-container
+          i.fa.fa-angle-left.pull-right
+    if item.repos
+      ul.treeview-menu.menu-open
+        each child in item.repos
+          li
+            a(href='repo/' + child.fullName)
+              i.fa(class=child.icon)
+              | #{child.name}
+
+//- Top bar stuff
+mixin menu_dropdown(name, icon, label, count)
+  li.dropdown(class=name)
+    a.dropdown-toggle(href='#', data-toggle='dropdown')
+      i.fa(class=icon)
+      span.label(class="label-" + label) #{count}
+    ul.dropdown-menu
+      block
+
+mixin menu_dropdown_header(header)
+  li.header #{header}
+
+mixin menu_dropdown_body
+  li
+    ul.menu
+      block
+
+mixin menu_dropdown_footer(message, link)
+  li.footer
+    a(href=link) #{message}
+
+mixin menu_dropdown_item_icon(icon, message, link)
+  li
+    a(href=link)
+      i.fa.text-aqua(class=icon)
+      |  #{message}
+
+mixin menu_dropdown_item_image(name, image, when, message, link)
+  li
+    a(href=link)
+      .pull-left
+        img.img-circle(src=image, alt='Image')
+      h4
+        | #{name}
+        small
+          i.fa.fa-clock-o
+          |  #{when}
+      p #{message}

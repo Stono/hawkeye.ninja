@@ -1,15 +1,55 @@
+include mixins
 doctype html
 html
   head
     meta(charset='utf-8')
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
-    title Hawkeye
+    title ThoughtData - #{title}
     meta(content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no', name='viewport')
     block header
+    link(rel='stylesheet', href='/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/css/font-awesome.min.css')
+    link(rel='stylesheet', href='/css/ionicons.min.css')
+    link(rel='stylesheet', href='/css/AdminLTE.min.css')
+    link(rel='stylesheet', href='/css/skins/skin-black.min.css')
+    link(rel='stylesheet', href='/css/highlightjs.min.css')
+    link(rel='stylesheet', href='/css/hawkeye.min.css')
 
-  body
-    block content
+    //if lt IE 9
+      script(src='dist/js/html5shiv.min.js')
+    //
+  body.hold-transition.skin-black.sidebar-mini.sidebar-collapse
+    .wrapper
+      header.main-header
+        a.logo(href='/')
+          span.logo-mini
+            b H
+            | E
+          span.logo-lg
+            b Hawk
+            | eye
+        nav.navbar.navbar-static-top(role='navigation')
+          a.sidebar-toggle(href='#', data-toggle='offcanvas', role='button')
+            span.sr-only Toggle navigation
 
-    script(src='/js/jquery-3.2.0.min.js')
-    script(src='/js/socket.io.min.js')
+      aside.main-sidebar
+        section.sidebar
+          ul.sidebar-menu
+            li.header Navigation
+            each item in navItems
+              +nav_link(item)
+      .content-wrapper
+        section.content-header
+          h1
+            | #{title}
+        section.content
+          block content
+    script(src='/js/jquery-2.2.3.min.js')
+    script(src='/js/js.cookie.min.js')
+    script(src='/js/jquery.slimscroll.min.js')
+    script(src='/js/fastclick.min.js')
+    script(src='/js/bootstrap.min.js')
+    script(src='/js/app.min.js')
+    script(src='/js/highlightjs.min.js')
+    script(src='/js/hawkeye.min.js')
     block javascript

@@ -1,0 +1,31 @@
+include mixins
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    title ThoughtData - #{title}
+    meta(content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no', name='viewport')
+    block header
+    link(rel='stylesheet', href='/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/css/font-awesome.min.css')
+    link(rel='stylesheet', href='/css/ionicons.min.css')
+    link(rel='stylesheet', href='/css/AdminLTE.min.css')
+    link(rel='stylesheet', href='/css/skins/skin-black.min.css')
+    link(rel='stylesheet', href='/css/highlightjs.min.css')
+    link(rel='stylesheet', href='/css/hawkeye.min.css')
+
+    //if lt IE 9
+      script(src='dist/js/html5shiv.min.js')
+    //
+  body.hold-transition.login-page
+    .login-box
+      .login-logo
+        b Hawk
+        | eye
+      .login-box-body
+        p.login-box-msg Welcome to Hawkeye Beta
+        div.text-center
+          a(href='/oauth/github')
+            img(src='images/logo.png')
+        p.login-box-msg Sign-in with GitHub to start scanning!

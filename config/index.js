@@ -36,9 +36,10 @@ config.redis.password = validateEnv('HE_REDIS_PASSWORD');
 config.redis.encryptionKey = validateEnv('HE_REDIS_ENCRYPTION_KEY', true);
 config.github.clientid = validateEnv('HE_GITHUB_CLIENTID');
 config.github.clientsecret = validateEnv('HE_GITHUB_SECRET');
-config.github.callbackUrl = `${callbackUrl()}/oauth/github/callback`;
-config.port = 5000;
+config.sessionSecret = validateEnv('HE_SESSION_SECRET');
 
+config.port = 5000;
+config.github.callbackUrl = `${callbackUrl(config.port)}/oauth/github/callback`;
 const envConfigFile = `./${process.env.APP_ENV}.js`;
 if(process.env.APP_ENV && fs.existsSync(path.join(__dirname, envConfigFile))) {
   const envConfig = require(envConfigFile);

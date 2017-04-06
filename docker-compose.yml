@@ -8,6 +8,8 @@ services:
       - HE_GITHUB_SECRET
       - HE_GITHUB_CLIENTID
       - HE_GITHUB_CALLBACK_URL
+      - HE_SESSION_SECRET
+      - HE_REDIS_PASSWORD
     ports:
       - 5000
     volumes:

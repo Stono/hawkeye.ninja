@@ -47,7 +47,7 @@ describe('ViewModels', () => {
       .build();
     });
     it('should have the repo information', () => {
-      shouldHaveKeys(model.repo, ['id', 'name', 'private', 'description', 'fullName']);
+      shouldHaveKeys(model.repo, ['id', 'name', 'private', 'description', 'fullName', 'owner']);
       should(model.repo.fullName).eql('Stono/hawkeye');
       should(model.scans).eql([]);
     });
