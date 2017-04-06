@@ -5,9 +5,9 @@ services:
     image: stono/hawkeye.ninja
     build: .
     environment:
-      - GITHUB_SECRET
-      - GITHUB_CLIENTID
-      - GITHUB_CALLBACK_URL
+      - HE_GITHUB_SECRET
+      - HE_GITHUB_CLIENTID
+      - HE_GITHUB_CALLBACK_URL
     ports:
       - 5000
     volumes:

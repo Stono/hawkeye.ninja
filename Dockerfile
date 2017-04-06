@@ -15,13 +15,14 @@ RUN yum -y -q install nodejs
 
 # Install hawkeye
 RUN mkdir -p /app
+WORKDIR /app
+EXPOSE 5000
+CMD ["npm", "run", "start"]
+
 COPY package.json /app
 
 RUN cd /app && \
-    npm install --production --quiet
+    npm install --quiet
+
 COPY ./ /app
-
-WORKDIR /app
-EXPOSE 5000
-
-CMD ["npm", "run", "start"]
+RUN npm run assets

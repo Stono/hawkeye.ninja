@@ -20,7 +20,7 @@
     "node": ">= 7.0.0"
   },
   "scripts": {
-    "prestart": "./node_modules/grunt/bin/grunt assets",
+    "assets": "./node_modules/grunt/bin/grunt assets",
     "start": "DEBUG=hawkeye:* node index.js",
     "test": "./node_modules/grunt/bin/grunt test",
     "build": "./node_modules/grunt/bin/grunt assets"
