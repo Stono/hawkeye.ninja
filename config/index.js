@@ -1,11 +1,16 @@
 'use strict';
 require('colors');
 const util = require('../lib/util');
-const validateEnv = key => {
+const validateEnv = (key, warnOnly) => {
   if(!process.env[key]) {
-    console.error('Error'.red + ' ' + key + ' is a required environment variable!');
-    console.log('Please set it and try again');
-    process.exit(1);
+    if(warnOnly) {
+      console.error('Warning'.yellow + ' ' + key + ' should really be set!');
+      return null;
+    } else {
+      console.error('Error'.red + ' ' + key + ' is a required environment variable!');
+      console.log('Please set it and try again');
+      process.exit(1);
+    }
   }
   return process.env[key];
 };
@@ -24,7 +29,7 @@ let config = {
 };
 
 config.redis.password = validateEnv('HE_REDIS_PASSWORD');
-config.redis.encryptionKey = validateEnv('HE_REDIS_ENCRYPTION_KEY');
+config.redis.encryptionKey = validateEnv('HE_REDIS_ENCRYPTION_KEY', true);
 config.github.clientid = validateEnv('HE_GITHUB_CLIENTID');
 config.github.clientsecret = validateEnv('HE_GITHUB_SECRET');
 config.github.callbackUrl = `${callbackUrl()}/oauth/github/callback`;
