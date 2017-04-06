@@ -4,14 +4,17 @@ const Repo = require('../../lib/models/repo');
 const ScanManager = require('../../lib/scanManager');
 const deride = require('deride');
 const should = require('should');
+const Redis = require('../../lib/redis');
 
 describe('Controllers.Repo', () => {
-  let repo, scanManager;
-  before(() => {
-    scanManager = deride.wrap(new ScanManager());
+  let repo, scanManager, redis;
+  beforeEach(done => {
+    redis = new Redis();
+    scanManager = deride.wrap(new ScanManager(redis));
     repo = new RepoController({
       scanManager: scanManager
     });
+    redis.flushall(done);
   });
   describe('viewRepo', () => {
     it('should append the scanManager scans', done => {

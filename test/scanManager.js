@@ -1,14 +1,17 @@
 'use strict';
 const ScanManager = require('../lib/scanManager');
 const should = require('should');
+const Redis = require('../lib/redis');
 
 describe('Scan Manager', () => {
-  let scanManager, repo;
-  beforeEach(() => {
+  let scanManager, repo, redis;
+  beforeEach(done => {
+    redis = new Redis();
     repo = {
       fullName: 'testorg/test'
     };
-    scanManager = new ScanManager();
+    scanManager = new ScanManager(redis);
+    redis.flushall(done);
   });
   it('should return an empty array when there are no scans', done => {
     scanManager.scans(repo.fullName, (err, scans) => {
