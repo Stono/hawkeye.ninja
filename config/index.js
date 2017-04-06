@@ -16,11 +16,17 @@ const callbackUrl = port => {
 };
 
 let config = {
-  github: {}
+  github: {},
+  redis: {
+    host: 'localhost',
+    port: 6379
+  }
 };
 
-config.github.clientid = validateEnv('GITHUB_CLIENTID');
-config.github.clientsecret = validateEnv('GITHUB_SECRET');
+config.redis.password = validateEnv('HE_REDIS_PASSWORD');
+config.redis.encryptionKey = validateEnv('HE_REDIS_ENCRYPTION_KEY');
+config.github.clientid = validateEnv('HE_GITHUB_CLIENTID');
+config.github.clientsecret = validateEnv('HE_GITHUB_SECRET');
 config.github.callbackUrl = `${callbackUrl()}/oauth/github/callback`;
 config.port = 5000;
 module.exports = config;
