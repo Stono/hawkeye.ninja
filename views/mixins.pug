@@ -1,7 +1,7 @@
 //- Navbar mixins
 mixin nav_link(item)
-  li(class=(item.active ? 'treeview.active' : 'treeview'))
-    a(href='#')
+  li(class=(item.active ? 'treeview active' : 'treeview'))
+    a(href=item.url)
       i.fa(class=item.icon)
       |
       span #{item.name}
@@ -11,8 +11,8 @@ mixin nav_link(item)
     if item.repos
       ul.treeview-menu.menu-open
         each child in item.repos
-          li
-            a(href='repo/' + child.fullName)
+          li(class=(child.active ? 'active' : ''))
+            a(href='/repo/' + child.fullName)
               i.fa(class=child.icon)
               | #{child.name}
 

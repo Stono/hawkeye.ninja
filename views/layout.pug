@@ -18,7 +18,7 @@ html
     //if lt IE 9
       script(src='dist/js/html5shiv.min.js')
     //
-  body.hold-transition.skin-black.sidebar-mini.sidebar-collapse
+  body.hold-transition.skin-black.sidebar-mini.layout-boxed
     .wrapper
       header.main-header
         a.logo(href='/')
@@ -41,9 +41,23 @@ html
       .content-wrapper
         section.content-header
           h1
-            | #{title}
+            | #{page.title}
+          small #{page.subTitle}
+          ol.breadcrumb
+            each crumb in breadCrumbs
+              li(class=(crumb.active ? 'active' : ''))
+                a(href=crumb.url)
+                  |  #{crumb.text}
+
         section.content
           block content
+      footer.main-footer
+        .pull-right.hidden-xs
+          b Version
+          |  0.1.0
+        |
+        strong &nbsp;
+
     script(src='/js/jquery-2.2.3.min.js')
     script(src='/js/js.cookie.min.js')
     script(src='/js/jquery.slimscroll.min.js')

@@ -30,8 +30,7 @@ describe('ViewModels', () => {
     before(() => {
       model = builder()
       .withUser(request)
-      .withRepoList(request)
-      .build();
+      .withRepoList(request);
     });
     userInfo();
     it('should have the repo list', () => {
@@ -43,8 +42,7 @@ describe('ViewModels', () => {
       model = builder()
       .withUser(request)
       .withRepo(request)
-      .withScans([])
-      .build();
+      .withScans([]);
     });
     it('should have the repo information', () => {
       shouldHaveKeys(model.repo, ['id', 'name', 'private', 'description', 'fullName', 'owner']);

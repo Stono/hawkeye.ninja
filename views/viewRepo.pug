@@ -1,0 +1,37 @@
+extend layout
+block header
+block content
+  .row
+    .col-md-3
+      .box.box-primary
+        .box-header.with-border
+          h3.box-title About
+        .box-body
+          if repo.description
+            strong
+              i.fa.fa-book.margin-r-5
+              |  Description
+            p.text-muted  #{repo.description}
+            hr
+          strong
+            i.fa.fa-file-text-o.margin-r-5
+            |  Notes
+          p
+            |  Some other information here?
+    .col-md-9
+      .nav-tabs-custom
+        ul.nav.nav-tabs
+          li.active
+            a(href='#overview', data-toggle='tab') Overview
+          li
+            a(href='#history', data-toggle='tab') History
+          li
+            a(href='#settings', data-toggle='tab') Settings
+        .tab-content
+          #overview.active.tab-pane
+            .post coming soon
+          #history.tab-pane
+            .post coming soon
+          #settings.tab-pane
+            .post coming soon
+block javascript
