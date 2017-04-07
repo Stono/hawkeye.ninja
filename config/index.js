@@ -21,7 +21,7 @@ const validateEnv = (key, warnOnly) => {
 
 const callbackUrl = port => {
   const localUrl = 'http://127.0.0.1:' + port;
-  return util.defaultValue(process.env.GITHUB_CALLBACK_URL, localUrl);
+  return util.defaultValue(process.env.HE_GITHUB_CALLBACK_URL, localUrl);
 };
 
 let config = {
