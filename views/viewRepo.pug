@@ -38,20 +38,20 @@ block content
                   th
                     .pull-right Status
               tbody
-                tr
-                  td
-                    a(href='/repo/' + repo.fullName) 2
-                  td 2017-04-08 11:52:12
-                  td
-                    span.label.label-warning.pull-right Pending
-                tr
-                  td
-                    a(href='/repo/' + repo.fullName) 1
-                  td 2017-04-08 11:34:02
-                  td
-                    span.label.label-success.pull-right Pass
+                if !scans.length
+                  tr
+                    td(colspan=3)
+                      div.text-center There have not been any scans run against this repository!
+                else
+                  each scan in scans
+                    tr
+                      td
+                        a(href='/repo/' + repo.fullName + '/' + scan.number) #{scan.number}
+                      td 2017-04-08 11:34:02
+                      td
+                        span.label.label-success.pull-right #{scan.status}
 
         .box-footer.clearfix(style='display: block;')
           |
-          a.btn.btn-sm.btn-success.btn-flat.pull-right(href='javascript:void(0)') Scan Now
+          a.btn.btn-sm.btn-success.btn-flat.pull-right(href='/repo/' + repo.fullName + '/new') Scan Now
 block javascript

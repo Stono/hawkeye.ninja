@@ -2,15 +2,17 @@
 const ScanManager = require('../lib/scanManager');
 const should = require('should');
 const Redis = require('../lib/redis');
+const JsonStore = require('../lib/stores/jsonStore');
 
 describe('Scan Manager', () => {
   let scanManager, repo, redis;
   beforeEach(done => {
     redis = new Redis();
+    const store = new JsonStore('he:scans:test', redis);
     repo = {
       fullName: 'testorg/test'
     };
-    scanManager = new ScanManager(redis);
+    scanManager = new ScanManager(store);
     redis.flushall(done);
   });
   it('should return an empty array when there are no scans', done => {
