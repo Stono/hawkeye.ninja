@@ -5,11 +5,12 @@ services:
   - redis-server
 
 env:
-  - HE_GITHUB_SECRET=test-secret
-  - HE_GITHUB_CLIENTID=test-clientid
-  - HE_GITHUB_CALLBACK_URL=http://127.0.0.1
-  - HE_SESSION_SECRET=test-sessionsecret
-  - HE_REDIS_PASSWORD=test-redispassword
+  global:
+    - HE_GITHUB_SECRET=test-secret
+    - HE_GITHUB_CLIENTID=test-clientid
+    - HE_GITHUB_CALLBACK_URL=http://127.0.0.1
+    - HE_SESSION_SECRET=test-sessionsecret
+    - HE_REDIS_PASSWORD=test-redispassword
 
 language: node_js
 
