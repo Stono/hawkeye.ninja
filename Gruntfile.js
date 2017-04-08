@@ -28,7 +28,7 @@ module.exports = function(grunt) {
     uglify: {
       options: {
         mangle: true,
-        preserveComments: 'some'
+        preserveComments: 'none'
       },
       app: {
         files: grunt.file.expandMapping('build/js/*.js', 'public/js/', {
@@ -45,9 +45,9 @@ module.exports = function(grunt) {
           compress: true
         },
         files: {
-          'dist/css/AdminLTE.min.css': 'build/css/AdminLTE.less',
-          'dist/css/hawkeye.min.css': 'build/css/hawkeye.less',
-          'dist/css/skins/skin-black.min.css': 'build/css/skins/skin-black.less'
+          'public/css/AdminLTE.min.css': 'build/css/AdminLTE.less',
+          'public/css/hawkeye.min.css': 'build/css/hawkeye.less',
+          'public/css/skins/skin-black.min.css': 'build/css/skins/skin-black.less'
         }
       }
     },
