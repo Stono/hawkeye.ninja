@@ -26,6 +26,8 @@ html
       .login-box-body
         p.login-box-msg Welcome to Hawkeye Beta
         div.text-center
-          a(href='/oauth/github')
-            img(src='images/logo.png')
-        p.login-box-msg Sign-in with GitHub to start scanning!
+          img(src='images/logo.png')
+        br
+        a(href='/oauth/github').btn.btn-block.btn-social.btn-github
+          i.fa.fa-github
+          |  Sign in with GitHub

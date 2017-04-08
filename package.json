@@ -49,6 +49,7 @@
     "command-exists": "1.2.2",
     "connect-redis": "^3.2.0",
     "cookie-parser": "1.4.3",
+    "dateformat": "^2.0.0",
     "debug": "2.6.3",
     "express": "4.15.2",
     "express-session": "1.15.2",

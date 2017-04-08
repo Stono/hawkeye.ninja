@@ -31,6 +31,25 @@ html
         nav.navbar.navbar-static-top(role='navigation')
           a.sidebar-toggle(href='#', data-toggle='offcanvas', role='button')
             span.sr-only Toggle navigation
+          .navbar-custom-menu
+            ul.nav.navbar-nav
+              li.dropdown.user.user-menu
+                a.dropdown-toggle(href='#', data-toggle='dropdown', aria-expanded='false')
+                  img.user-image(src=user.avatar_url, alt='User Image')
+                  |
+                  span.hidden-xs #{user.login}
+                ul.dropdown-menu
+                  li.user-header
+                    img.img-circle(src=user.avatar_url, alt='User Image')
+                    p
+                      | #{user.name}
+                      small #{user.created_at}
+                  li.user-footer
+                    .pull-right
+                      a.btn.btn-default.btn-flat(href='/logout') Sign out
+              li
+                a(href='#', data-toggle='control-sidebar')
+                  i.fa.fa-gears
 
       aside.main-sidebar
         section.sidebar
@@ -66,4 +85,5 @@ html
     script(src='/js/app.min.js')
     script(src='/js/highlightjs.min.js')
     script(src='/js/hawkeye.min.js')
+    script(src='/js/jquery.sparkline.min.js')
     block javascript

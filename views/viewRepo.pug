@@ -19,21 +19,39 @@ block content
           p
             |  Some other information here?
     .col-md-9
-      .nav-tabs-custom
-        ul.nav.nav-tabs
-          li.active
-            a(href='#overview', data-toggle='tab') Overview
-          li
-            a(href='#history', data-toggle='tab') History
-          li
-            a(href='#settings', data-toggle='tab') Settings
-        .tab-content
-          #overview.active.tab-pane
-            .box-body coming soon
-            .box-footer.clearfix
-              button.btn.btn-success.pull-right(type='submit') Scan Now!
-          #history.tab-pane
-            .post coming soon
-          #settings.tab-pane
-            .post coming soon
+      .box.box-primary
+        .box-header.with-border
+          h3.box-title Latest Scans
+          .box-tools.pull-right
+            button.btn.btn-box-tool(type='button', data-widget='collapse')
+              i.fa.fa-minus
+            |
+            button.btn.btn-box-tool(type='button', data-widget='remove')
+              i.fa.fa-times
+        .box-body(style='display: block;')
+          .table-responsive
+            table.table.no-margin
+              thead
+                tr
+                  th Scan ID
+                  th Date/Time
+                  th
+                    .pull-right Status
+              tbody
+                tr
+                  td
+                    a(href='/repo/' + repo.fullName) 2
+                  td 2017-04-08 11:52:12
+                  td
+                    span.label.label-warning.pull-right Pending
+                tr
+                  td
+                    a(href='/repo/' + repo.fullName) 1
+                  td 2017-04-08 11:34:02
+                  td
+                    span.label.label-success.pull-right Pass
+
+        .box-footer.clearfix(style='display: block;')
+          |
+          a.btn.btn-sm.btn-success.btn-flat.pull-right(href='javascript:void(0)') Scan Now
 block javascript
