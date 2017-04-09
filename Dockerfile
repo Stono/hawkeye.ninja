@@ -12,6 +12,8 @@ RUN yum -y -q update && \
               ruby rubygemsi nodejs && \
     yum -y -q clean all
 
+RUN groupadd hawkeye && \
+    useradd -g hawkeye hawkeye
 
 # Install hawkeye
 RUN mkdir -p /app
@@ -25,4 +27,8 @@ RUN cd /app && \
     npm install --quiet
 
 COPY ./ /app
+
+RUN find . -type d \( -path ./node_modules \) -prune -o -exec chown hawkeye:hawkeye {} \;
+RUN chown hawkeye:hawkeye /app
+
 RUN npm run assets
