@@ -2,23 +2,19 @@
 const ScanManager = require('../lib/scanManager');
 const should = require('should');
 const Redis = require('../lib/redis');
-const JsonStore = require('../lib/stores/jsonStore');
 const List = require('../lib/list');
 
 describe('Scan Manager', () => {
   let scanManager, repo, redis, list;
   beforeEach(done => {
     redis = new Redis();
-    const store = new JsonStore('scans:test', redis);
-    list = new List('scan-quest:test', redis);
     repo = {
       fullName: 'testorg/test'
     };
     redis.once('ready', () => {
-      scanManager = new ScanManager(store, list);
-      store.flush(() => {
-        list.flush(done);
-      });
+      list = new List('scans:pending', redis);
+      scanManager = new ScanManager({ redis: redis });
+      redis.flushall(done);
     });
   });
   it('should return an empty array when there are no scans', done => {
