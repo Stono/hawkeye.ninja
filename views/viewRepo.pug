@@ -1,12 +1,13 @@
 extend layout
 block header
 block content
-  .alert.alert-info.alert-dismissible
-    button.close(type='button', data-dismiss='alert', aria-hidden='true') &times;
-    h4
-      i.icon.fa.fa-info
-      |  Hey - a quick note when it comes to security!
-    |  This is a private repository.  We want you to know that we clone and scan your repository in a run-once docker conatiner, that is completely isolated from all other builds.
+  if repo.private
+    .alert.alert-info.alert-dismissible
+      button.close(type='button', data-dismiss='alert', aria-hidden='true') &times;
+      h4
+        i.icon.fa.fa-info
+        |  Hey - a quick note when it comes to security!
+      |  This is a private repository.  We want you to know that we clone and scan your repository in a run-once docker conatiner, that is completely isolated from all other builds.
   .row
     .col-md-3
       .box.box-primary
