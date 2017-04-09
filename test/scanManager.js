@@ -9,7 +9,7 @@ describe('Scan Manager', () => {
   beforeEach(done => {
     redis = new Redis();
     repo = {
-      fullName: 'testorg/test'
+      id: 123456
     };
     redis.once('ready', () => {
       list = new List({id: 'scans:pending', redis: redis });
@@ -18,14 +18,14 @@ describe('Scan Manager', () => {
     });
   });
   it('should return an empty array when there are no scans', done => {
-    scanManager.scans(repo.fullName, (err, scans) => {
+    scanManager.scans(repo.id, (err, scans) => {
       should.ifError(err);
       should(scans).eql([]);
       done();
     });
   });
   it('should create new scans', done => {
-    scanManager.schedule(repo.fullName, (err, scan) => {
+    scanManager.schedule(repo.id, (err, scan) => {
       should.ifError(err);
       should(scan.id).match(/[a-z0-9]{40}/);
       should(scan.status).eql('pending');
@@ -34,7 +34,7 @@ describe('Scan Manager', () => {
     });
   });
   it('new scans should be added to the scan list', done => {
-    scanManager.schedule(repo.fullName, () => {
+    scanManager.schedule(repo.id, () => {
       list.pop((err, scan) => {
         should.ifError(err);
         should(scan.id).match(/[a-z0-9]{40}/);
@@ -43,14 +43,25 @@ describe('Scan Manager', () => {
     });
   });
   it('scan numbers should increment, and ids should be different', done => {
-    scanManager.schedule(repo.fullName, (err, first) => {
+    scanManager.schedule(repo.id, (err, first) => {
       should(first.number).eql(1);
       should.ifError(err);
-      scanManager.schedule(repo.fullName, (err, scan) => {
+      scanManager.schedule(repo.id, (err, scan) => {
         should.ifError(err);
         should(scan.id).not.eql(first.id);
         should(scan.number).eql(2);
         done();
+      });
+    });
+  });
+  it('should let me get a scan by its repo and number', done => {
+    scanManager.schedule(repo.id, () => {
+      scanManager.schedule(repo.id, (err, second) => {
+        scanManager.get(repo.id, 2, (err, scan) => {
+          should(scan.id).eql(second.id);
+          should(scan.number).eql(2);
+          done();
+        });
       });
     });
   });

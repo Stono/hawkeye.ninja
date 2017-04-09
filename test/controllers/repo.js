@@ -32,10 +32,9 @@ describe('Controllers.Repo', () => {
         }
       };
       let res = deride.stub(['render']);
-      let fullName = `${req.params.org}/${req.params.repo}`;
       res.setup.render.toDoThis((view, model) => {
-        scanManager.scans(fullName, (err, scans) => {
-          scanManager.expect.scans.called.withArg(fullName);
+        scanManager.scans(85411269, (err, scans) => {
+          scanManager.expect.scans.called.withArg(85411269);
           should(model.scans).eql(scans);
           done();
         });
