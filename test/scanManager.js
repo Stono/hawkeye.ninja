@@ -10,7 +10,7 @@ describe('Scan Manager', () => {
   beforeEach(done => {
     redis = new Redis();
     const store = new JsonStore('he:scans:test', redis);
-    queue = new Queue('hs:scan-quest:test', redis);
+    queue = new Queue('he:scan-quest:test', redis);
     repo = {
       fullName: 'testorg/test'
     };
