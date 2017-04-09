@@ -1,0 +1,16 @@
+extend layout
+block header
+  link(rel='stylesheet', href='/css/codemirror.min.css')
+  link(rel='stylesheet', href='/css/codemirror-theme-material.min.css')
+
+block content
+  .row
+    .col-md-12
+      textarea#console
+        | Hawkeye starting...
+
+block javascript
+  script(src='/js/codemirror.min.js')
+  script(src='/js/codemirror-shell.min.js')
+  script(src='/js/console.min.js')
+  script(src='/js/socket.io.min.js')
