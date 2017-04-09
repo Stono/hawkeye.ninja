@@ -3,7 +3,7 @@ let Exec = require('../lib/exec');
 let should = require('should');
 let deride = require('deride');
 
-describe.only('Exec', () => {
+describe('Exec', () => {
   let exec, proc, stderr, stdout;
   before(() => {
     stderr = deride.stub(['write']);
@@ -32,8 +32,8 @@ describe.only('Exec', () => {
       });
     });
     it('should execute commands, and write them to stdout', done => {
-      exec.command('pwd', { output: true }, () => {
-        stdout.expect.write.called.withArg(require('process').cwd() + '\n');
+      exec.command('pwd', { stdout: stdout.write }, () => {
+        stdout.expect.write.called.withArg(require('process').cwd());
         done();
       });
     });

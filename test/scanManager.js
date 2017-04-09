@@ -25,7 +25,7 @@ describe('Scan Manager', () => {
     });
   });
   it('should create new scans', done => {
-    scanManager.schedule(repo.id, (err, scan) => {
+    scanManager.schedule({ id: repo.id }, (err, scan) => {
       should.ifError(err);
       should(scan.id).match(/[a-z0-9]{40}/);
       should(scan.status).eql('pending');
@@ -34,19 +34,19 @@ describe('Scan Manager', () => {
     });
   });
   it('new scans should be added to the scan list', done => {
-    scanManager.schedule(repo.id, () => {
-      list.pop((err, scan) => {
+    scanManager.schedule({ id: repo.id }, () => {
+      list.pop((err, model) => {
         should.ifError(err);
-        should(scan.id).match(/[a-z0-9]{40}/);
+        should(model.scan.id).match(/[a-z0-9]{40}/);
         done();
       });
     });
   });
   it('scan numbers should increment, and ids should be different', done => {
-    scanManager.schedule(repo.id, (err, first) => {
+    scanManager.schedule({ id: repo.id }, (err, first) => {
       should(first.number).eql(1);
       should.ifError(err);
-      scanManager.schedule(repo.id, (err, scan) => {
+      scanManager.schedule({ id: repo.id }, (err, scan) => {
         should.ifError(err);
         should(scan.id).not.eql(first.id);
         should(scan.number).eql(2);
@@ -55,8 +55,8 @@ describe('Scan Manager', () => {
     });
   });
   it('should let me get a scan by its repo and number', done => {
-    scanManager.schedule(repo.id, () => {
-      scanManager.schedule(repo.id, (err, second) => {
+    scanManager.schedule({ id: repo.id }, () => {
+      scanManager.schedule({ id: repo.id }, (err, second) => {
         scanManager.get(repo.id, 2, (err, scan) => {
           should(scan.id).eql(second.id);
           should(scan.number).eql(2);
