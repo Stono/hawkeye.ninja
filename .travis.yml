@@ -24,11 +24,17 @@ branches:
   only:
     - master
 
+before_install:
+- sudo apt-get update && sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-engine
+- docker pull stono/hawkeye.ninja
+- docker pull stono/hawkeye.ninja-worker
+- docker pull stono/hawkeye.ninja-oneshot
+
 after_success:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-  - docker build -f Dockerfile -t stono/hawkeye.ninja .
-  - docker build -f Dockerfile.worker -t stono/hawkeye.ninja-worker .
-  - docker build -f Dockerfile.oneshot -t stono/hawkeye.ninja-oneshot .
+  - docker build -f Dockerfile -t stono/hawkeye.ninja --cache-from stono/hawkeye.ninja .
+  - docker build -f Dockerfile.worker -t stono/hawkeye.ninja-worker --cache-from stono/hawkeye.ninja-worker .
+  - docker build -f Dockerfile.oneshot -t stono/hawkeye.ninja-oneshot --cache-from stono/hawkeye.ninja-oneshot .
   - docker push stono/hawkeye.ninja
   - docker push stono/hawkeye.ninja-worker
   - docker push stono/hawkeye.ninja-oneshot
