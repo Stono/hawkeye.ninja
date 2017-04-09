@@ -2,13 +2,18 @@
 const config = require('../config');
 const ScanLog = require('../lib/scanLog');
 const should = require('should');
-const deride = require('deride');
+const List = require('../lib/list');
+const Redis = require('../lib/redis');
 
 describe('Scan Log', () => {
-  let log, list;
-  beforeEach(() => {
-    list = deride.stub(['push']);
-    log = new ScanLog({ id: 'test', list: list, redis: config.redis });
+  let log, list, redis;
+  beforeEach(done => {
+    redis = new Redis(config.redis);
+    redis.on('ready', () => {
+      log = new ScanLog({ id: 'test', redis: redis });
+      list = new List({ id: 'scans:pending', redis: redis });
+      done();
+    });
   });
   afterEach(() => {
     log.stop();
@@ -25,6 +30,5 @@ describe('Scan Log', () => {
   });
   it('should log messages to the list', () => {
     log.write('test');
-    list.expect.push.called.once();
   });
 });

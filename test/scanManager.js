@@ -12,7 +12,7 @@ describe('Scan Manager', () => {
       fullName: 'testorg/test'
     };
     redis.once('ready', () => {
-      list = new List('scans:pending', redis);
+      list = new List({id: 'scans:pending', redis: redis });
       scanManager = new ScanManager({ redis: redis });
       redis.flushall(done);
     });

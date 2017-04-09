@@ -8,7 +8,7 @@ describe('FIFO List', () => {
   before(done => {
     redis = new Redis();
     redis.once('ready', () => {
-      list = new List('scan-list:test', redis);
+      list = new List({ id: 'scan-list:test', redis: redis });
       done();
     });
   });
