@@ -1,6 +1,9 @@
 FROM centos:7
 MAINTAINER Karl Stoney <me@karlstoney.com>
 
+RUN groupadd hawkeye && \
+    useradd -g hawkeye hawkeye
+
 # Get nodejs repos
 RUN curl --silent --location https://rpm.nodesource.com/setup_7.x | bash -
 
@@ -11,9 +14,6 @@ RUN yum -y -q update && \
 							gcc gcc-c++ make zlib-devel pcre-devel ca-certificates \
               ruby rubygemsi nodejs && \
     yum -y -q clean all
-
-RUN groupadd hawkeye && \
-    useradd -g hawkeye hawkeye
 
 # Install hawkeye
 RUN mkdir -p /app
