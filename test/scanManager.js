@@ -12,7 +12,7 @@ describe('Scan Manager', () => {
     repo = {
       fullName: 'testorg/test'
     };
-    redis.on('ready', () => {
+    redis.once('ready', () => {
       scanManager = new ScanManager(store);
       store.flush(done);
     });

@@ -7,7 +7,7 @@ describe('FIFO Queue', () => {
   let queue, redis;
   before(done => {
     redis = new Redis();
-    redis.on('ready', () => {
+    redis.once('ready', () => {
       queue = new Queue('he:scan-queue:test', redis);
       done();
     });

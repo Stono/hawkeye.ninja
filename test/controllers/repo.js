@@ -12,7 +12,7 @@ describe('Controllers.Repo', () => {
   beforeEach(done => {
     let redis = new Redis();
     store = new JsonStore('he:scan-manager:test', redis);
-    redis.on('ready', () => {
+    redis.once('ready', () => {
       scanManager = deride.wrap(new ScanManager(store));
       repo = new RepoController({
         scanManager: scanManager
