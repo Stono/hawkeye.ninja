@@ -27,7 +27,7 @@ describe('FIFO List', () => {
       });
     });
   });
-  it('should push an item1 to the back of the list', done => {
+  it('should push an item to the back of the list', done => {
     const item1 = { id: 1 };
     const item2 = { id: 2 };
     const firstInList = (err, result) => {
@@ -39,6 +39,19 @@ describe('FIFO List', () => {
       list.push(item2, err => {
         should.ifError(err);
         list.pop(firstInList);
+      });
+    });
+  });
+  it('should return all items', done => {
+    const item1 = { id: 1 };
+    const item2 = { id: 2 };
+    const resultHandler = (err, results) => {
+      should(results.length).eql(2);
+      done();
+    };
+    list.push(item1, () => {
+      list.push(item2, () => {
+        list.all(resultHandler);
       });
     });
   });
