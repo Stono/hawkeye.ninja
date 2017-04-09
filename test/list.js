@@ -8,12 +8,12 @@ describe('FIFO List', () => {
   before(done => {
     redis = new Redis();
     redis.once('ready', () => {
-      list = new List('he:scan-list:test', redis);
+      list = new List('scan-list:test', redis);
       done();
     });
   });
   beforeEach(done => {
-    redis.del('he:scan-list:test', done);
+    redis.del('scan-list:test', done);
   });
   it('should flush a list', done => {
     list.push({ id: 1 }, () => {

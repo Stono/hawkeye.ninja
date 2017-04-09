@@ -48,7 +48,7 @@ describe('Stores', () => {
       before(done => {
         client = new RedisClient(config.redis);
         client.once('ready', () => {
-          store = new Stores[type]('he:store:normal:test', client);
+          store = new Stores[type]('store:normal:test', client);
           done();
         });
       });
@@ -77,7 +77,7 @@ describe('Stores', () => {
       before(done => {
         client = new EncryptedRedisClient(config.redis, 'password');
         client.once('ready', () => {
-          store = new Stores[type]('he:store:encrypted:test', client);
+          store = new Stores[type]('store:encrypted:test', client);
           done();
         });
       });

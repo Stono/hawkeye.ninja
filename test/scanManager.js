@@ -9,8 +9,8 @@ describe('Scan Manager', () => {
   let scanManager, repo, redis, list;
   beforeEach(done => {
     redis = new Redis();
-    const store = new JsonStore('he:scans:test', redis);
-    list = new List('he:scan-quest:test', redis);
+    const store = new JsonStore('scans:test', redis);
+    list = new List('scan-quest:test', redis);
     repo = {
       fullName: 'testorg/test'
     };
