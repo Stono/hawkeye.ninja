@@ -42,10 +42,12 @@ describe('FIFO List', () => {
       });
     });
   });
-  it('should return all items', done => {
+  it('should return all items in order', done => {
     const item1 = { id: 1 };
     const item2 = { id: 2 };
     const resultHandler = (err, results) => {
+      should.ifError(err);
+      should(results[0].id).eql(1);
       should(results.length).eql(2);
       done();
     };
