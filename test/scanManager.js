@@ -16,7 +16,9 @@ describe('Scan Manager', () => {
     };
     redis.once('ready', () => {
       scanManager = new ScanManager(store, queue);
-      redis.flushall(done);
+      store.flush(() => {
+        queue.flush(done);
+      });
     });
   });
   it('should return an empty array when there are no scans', done => {

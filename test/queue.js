@@ -15,9 +15,21 @@ describe('FIFO Queue', () => {
   beforeEach(done => {
     redis.del('he:scan-queue:test', done);
   });
+  it('should flush a queue', done => {
+    queue.push({ id: 1 }, () => {
+      queue.flush(err => {
+        should.ifError(err);
+        queue.pop((err, data) => {
+          should.ifError(err);
+          should(data).eql(null);
+          done();
+        });
+      });
+    });
+  });
   it('should push an item1 to the back of the queue', done => {
-    const item1 = { id : 1 };
-    const item2 = { id : 2 };
+    const item1 = { id: 1 };
+    const item2 = { id: 2 };
     const firstInQueue = (err, result) => {
       should(item1).eql(result);
       done();
