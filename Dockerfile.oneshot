@@ -1,0 +1,13 @@
+FROM stono/hawkeye:latest
+
+# Install hawkeye
+RUN mkdir -p /app
+WORKDIR /app
+ENTRYPOINT ["node", "oneshot.js"]
+
+COPY package.json /app
+
+RUN cd /app && \
+    npm install --quiet --production
+
+COPY ./ /app

@@ -18,8 +18,10 @@ coverage.*
 junit.xml
 shippable/
 
+public/
 kubernetes
 Dockerfile
+Dockerfile.worker
 docker-compose.yml
 .git
 .git-crypt

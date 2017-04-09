@@ -1,16 +1,54 @@
 version: '2'
 
 services:
-  hawkeye:
+  web:
     image: stono/hawkeye.ninja
-    build: .
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       - HE_GITHUB_SECRET
       - HE_GITHUB_CLIENTID
       - HE_GITHUB_CALLBACK_URL
       - HE_SESSION_SECRET
       - HE_REDIS_PASSWORD
+      - NODE_ENV=prod
     ports:
-      - 5000
+      - 5000:5000
     volumes:
       - ./lib:/app/lib
+      - ./config:/app/config
+      - ./views:/app/views
+      - ./images:/app/images
+      - ./dist:/app/dist
+
+  worker:
+    image: stono/hawkeye.ninja-worker
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    command: npm run worker
+    environment:
+      - HE_GITHUB_SECRET
+      - HE_GITHUB_CLIENTID
+      - HE_GITHUB_CALLBACK_URL
+      - HE_SESSION_SECRET
+      - HE_REDIS_PASSWORD
+      - NODE_ENV=prod
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./lib:/app/lib
+      - ./config:/app/config
+
+  oneshot:
+    image: stono/hawkeye.ninja-oneshot
+    command: /bin/true
+    build:
+      context: .
+      dockerfile: Dockerfile.oneshot
+
+  redis:
+    image: redis:alpine
+    restart: always

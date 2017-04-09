@@ -3,7 +3,7 @@ let Exec = require('../lib/exec');
 let should = require('should');
 let deride = require('deride');
 
-describe('Exec', () => {
+describe.only('Exec', () => {
   let exec, proc, stderr, stdout;
   before(() => {
     stderr = deride.stub(['write']);

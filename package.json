@@ -21,7 +21,8 @@
   },
   "scripts": {
     "assets": "./node_modules/grunt/bin/grunt assets",
-    "start": "DEBUG=hawkeye:* node index.js",
+    "web": "DEBUG=hawkeye:* node index.js",
+    "worker": "node worker.js",
     "test": "./node_modules/grunt/bin/grunt test",
     "build": "./node_modules/grunt/bin/grunt assets"
   },
@@ -64,6 +65,7 @@
     "passport": "0.3.2",
     "passport-github": "1.1.0",
     "pug": "2.0.0-beta11",
-    "socket.io": "1.7.3"
+    "socket.io": "1.7.3",
+    "tmp": "0.0.31"
   }
 }

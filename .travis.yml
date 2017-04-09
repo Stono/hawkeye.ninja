@@ -25,6 +25,10 @@ branches:
     - master
 
 after_success:
-  - docker build -t stono/hawkeye.ninja .
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker build -f Dockerfile -t stono/hawkeye.ninja .
+  - docker build -f Dockerfile.worker -t stono/hawkeye.ninja-worker .
+  - docker build -f Dockerfile.oneshot -t stono/hawkeye.ninja-oneshot .
   - docker push stono/hawkeye.ninja
+  - docker push stono/hawkeye.ninja-worker
+  - docker push stono/hawkeye.ninja-oneshot
