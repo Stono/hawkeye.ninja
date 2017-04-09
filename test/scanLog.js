@@ -3,12 +3,12 @@ const config = require('../config');
 const ScanLog = require('../lib/scanLog');
 const should = require('should');
 const List = require('../lib/list');
-const Redis = require('../lib/redis');
+const EncryptedRedis = require('../lib/encryptedRedis');
 
 describe('Scan Log', () => {
   let log, list, redis;
   beforeEach(done => {
-    redis = new Redis(config.redis);
+    redis = new EncryptedRedis(config.redis);
     redis.on('ready', () => {
       log = new ScanLog({ id: 'test', redis: redis });
       list = new List({ id: 'scans:pending', redis: redis });
