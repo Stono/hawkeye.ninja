@@ -13,7 +13,8 @@ describe('Controllers.Repo', () => {
     let redis = new Redis();
     store = new JsonStore('he:scan-manager:test', redis);
     redis.once('ready', () => {
-      scanManager = deride.wrap(new ScanManager(store));
+      const stubScanStore = deride.stub(['push', 'pop']);
+      scanManager = deride.wrap(new ScanManager(store, stubScanStore));
       repo = new RepoController({
         scanManager: scanManager
       });
