@@ -3,21 +3,21 @@ const ScanManager = require('../lib/scanManager');
 const should = require('should');
 const Redis = require('../lib/redis');
 const JsonStore = require('../lib/stores/jsonStore');
-const Queue = require('../lib/queue');
+const List = require('../lib/list');
 
 describe('Scan Manager', () => {
-  let scanManager, repo, redis, queue;
+  let scanManager, repo, redis, list;
   beforeEach(done => {
     redis = new Redis();
     const store = new JsonStore('he:scans:test', redis);
-    queue = new Queue('he:scan-quest:test', redis);
+    list = new List('he:scan-quest:test', redis);
     repo = {
       fullName: 'testorg/test'
     };
     redis.once('ready', () => {
-      scanManager = new ScanManager(store, queue);
+      scanManager = new ScanManager(store, list);
       store.flush(() => {
-        queue.flush(done);
+        list.flush(done);
       });
     });
   });
@@ -37,9 +37,9 @@ describe('Scan Manager', () => {
       done();
     });
   });
-  it('new scans should be added to the scan queue', done => {
+  it('new scans should be added to the scan list', done => {
     scanManager.schedule(repo.fullName, () => {
-      queue.pop((err, scan) => {
+      list.pop((err, scan) => {
         should.ifError(err);
         should(scan.id).match(/[a-z0-9]{40}/);
         done();
