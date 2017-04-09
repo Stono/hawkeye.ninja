@@ -12,8 +12,10 @@ describe('Scan Manager', () => {
     repo = {
       fullName: 'testorg/test'
     };
-    scanManager = new ScanManager(store);
-    redis.flushall(done);
+    redis.on('ready', () => {
+      scanManager = new ScanManager(store);
+      store.flush(done);
+    });
   });
   it('should return an empty array when there are no scans', done => {
     scanManager.scans(repo.fullName, (err, scans) => {

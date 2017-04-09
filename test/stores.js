@@ -45,9 +45,12 @@ describe('Stores', () => {
 
   let testSuite = (type) => {
     describe(type, () => {
-      before(() => {
+      before(done => {
         client = new RedisClient(config.redis);
-        store = new Stores[type]('sn:core:testing', client);
+        client.on('ready', () => {
+          store = new Stores[type]('he:store:normal:test', client);
+          done();
+        });
       });
       beforeEach(done => {
         store.flush(done);
@@ -71,9 +74,12 @@ describe('Stores', () => {
     });
 
     describe('Encrypted: ' + type, () => {
-      before(() => {
+      before(done => {
         client = new EncryptedRedisClient(config.redis, 'password');
-        store = new Stores[type]('sn:core:testing', client);
+        client.on('ready', () => {
+          store = new Stores[type]('he:store:encrypted:test', client);
+          done();
+        });
       });
       beforeEach(done => {
         store.flush(done);
