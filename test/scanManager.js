@@ -5,12 +5,13 @@ const Redis = require('../lib/redis');
 const List = require('../lib/list');
 
 describe('Scan Manager', () => {
-  let scanManager, repo, redis, list;
+  let scanManager, repo, redis, list, target;
   beforeEach(done => {
     redis = new Redis();
     repo = {
       id: 123456
     };
+    target = { repo: repo, oauth: {} };
     redis.once('ready', () => {
       list = new List({id: 'scans:pending', redis: redis });
       scanManager = new ScanManager({ redis: redis });
@@ -25,7 +26,7 @@ describe('Scan Manager', () => {
     });
   });
   it('should create new scans', done => {
-    scanManager.schedule({ id: repo.id }, (err, scan) => {
+    scanManager.schedule(target, (err, scan) => {
       should.ifError(err);
       should(scan.id).match(/[a-z0-9]{40}/);
       should(scan.status).eql('pending');
@@ -34,7 +35,7 @@ describe('Scan Manager', () => {
     });
   });
   it('new scans should be added to the scan list', done => {
-    scanManager.schedule({ id: repo.id }, () => {
+    scanManager.schedule(target, () => {
       list.pop((err, model) => {
         should.ifError(err);
         should(model.scan.id).match(/[a-z0-9]{40}/);
@@ -43,10 +44,10 @@ describe('Scan Manager', () => {
     });
   });
   it('scan numbers should increment, and ids should be different', done => {
-    scanManager.schedule({ id: repo.id }, (err, first) => {
+    scanManager.schedule(target, (err, first) => {
       should(first.number).eql(1);
       should.ifError(err);
-      scanManager.schedule({ id: repo.id }, (err, scan) => {
+      scanManager.schedule(target, (err, scan) => {
         should.ifError(err);
         should(scan.id).not.eql(first.id);
         should(scan.number).eql(2);
@@ -55,8 +56,8 @@ describe('Scan Manager', () => {
     });
   });
   it('should let me get a scan by its repo and number', done => {
-    scanManager.schedule({ id: repo.id }, () => {
-      scanManager.schedule({ id: repo.id }, (err, second) => {
+    scanManager.schedule(target, () => {
+      scanManager.schedule(target, (err, second) => {
         scanManager.get(repo.id, 2, (err, scan) => {
           should(scan.id).eql(second.id);
           should(scan.number).eql(2);
