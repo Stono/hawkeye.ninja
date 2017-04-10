@@ -10,7 +10,7 @@ describe('Scan Log', () => {
   beforeEach(done => {
     redis = new EncryptedRedis(config.redis);
     redis.on('ready', () => {
-      log = new ScanLog({ id: 'test', redis: redis });
+      log = new ScanLog({ repoId: 'repo', number: 'test', redis: redis });
       list = new List({ id: 'scans:pending', redis: redis });
       done();
     });
