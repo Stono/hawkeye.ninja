@@ -11,9 +11,9 @@ describe('Controllers.Repo', () => {
   beforeEach(done => {
     let redis = new Redis();
     redis.once('ready', () => {
-      scanManager = deride.wrap(new ScanManager({ redis: redis }));
+      scanManager = deride.wrap(new ScanManager({ redis: redis, id: 85411269 }));
       repo = new RepoController({
-        scanManager: scanManager
+        redis: redis
       });
       redis.flushall(done);
     });
@@ -33,8 +33,8 @@ describe('Controllers.Repo', () => {
       };
       let res = deride.stub(['render']);
       res.setup.render.toDoThis((view, model) => {
-        scanManager.scans(85411269, (err, scans) => {
-          scanManager.expect.scans.called.withArg(85411269);
+        scanManager.scans((err, scans) => {
+          scanManager.expect.scans.called.once();
           should(model.scans).eql(scans);
           done();
         });

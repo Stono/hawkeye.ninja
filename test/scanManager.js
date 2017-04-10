@@ -11,15 +11,15 @@ describe('Scan Manager', () => {
     repo = {
       id: 123456
     };
-    target = { repo: repo, oauth: {} };
+    target = { oauth: {} };
     redis.once('ready', () => {
-      list = new List({id: 'scans:pending', redis: redis });
-      scanManager = new ScanManager({ redis: redis });
+      list = new List({ id: 'scans:pending', redis: redis });
+      scanManager = new ScanManager({ redis: redis, id: repo.id });
       redis.flushall(done);
     });
   });
   it('should return an empty array when there are no scans', done => {
-    scanManager.scans(repo.id, (err, scans) => {
+    scanManager.scans((err, scans) => {
       should.ifError(err);
       should(scans).eql([]);
       done();
@@ -31,7 +31,12 @@ describe('Scan Manager', () => {
       should(scan.id).match(/[a-z0-9]{40}/);
       should(scan.status).eql('pending');
       should(scan.number).eql(1);
-      done();
+      redis.hget('scans:123456', 1, (err, data) => {
+        data = JSON.parse(data);
+        should.ifError(err);
+        should(data.number).eql(1);
+        done();
+      });
     });
   });
   it('new scans should be added to the scan list', done => {
@@ -58,7 +63,7 @@ describe('Scan Manager', () => {
   it('should let me get a scan by its repo and number', done => {
     scanManager.schedule(target, () => {
       scanManager.schedule(target, (err, second) => {
-        scanManager.get(repo.id, 2, (err, scan) => {
+        scanManager.get(2, (err, scan) => {
           should(scan.id).eql(second.id);
           should(scan.number).eql(2);
           done();
