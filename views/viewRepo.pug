@@ -56,7 +56,7 @@ block content
                         a(href='/repo/' + repo.fullName + '/' + scan.number) #{scan.number}
                       td 2017-04-08 11:34:02
                       td
-                        span.label.label-success.pull-right #{scan.status}
+                        span.label(class=scan.label).pull-right #{scan.status}
 
         .box-footer.clearfix(style='display: block;')
           |

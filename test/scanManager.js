@@ -11,7 +11,7 @@ describe('Scan Manager', () => {
     repo = {
       id: 123456
     };
-    target = { oauth: {} };
+    target = { oauth: { accessToken: 'abc' }, repo: repo };
     redis.once('ready', () => {
       list = new List({ id: 'scans:pending', redis: redis });
       scanManager = new ScanManager({ redis: redis, id: repo.id });
@@ -71,4 +71,27 @@ describe('Scan Manager', () => {
       });
     });
   });
+  it('should fail scans', done => {
+    scanManager.schedule(target, () => {
+      scanManager.fail(1, {}, err => {
+        should.ifError(err);
+        scanManager.get(1, (err, data) => {
+          should(data.status).eql('failed');
+          done();
+        });
+      });
+    });
+  });
+  it('should pass scans', done => {
+    scanManager.schedule(target, () => {
+      scanManager.pass(1, {}, err => {
+        should.ifError(err);
+        scanManager.get(1, (err, data) => {
+          should(data.status).eql('pass');
+          done();
+        });
+      });
+    });
+  });
+
 });
