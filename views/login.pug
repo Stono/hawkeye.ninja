@@ -18,16 +18,56 @@ html
     //if lt IE 9
       script(src='dist/js/html5shiv.min.js')
     //
-  body.hold-transition.login-page
-    .login-box
-      .login-logo
-        b Hawk
-        | eye
-      .login-box-body
-        p.login-box-msg Welcome to Hawkeye Beta
-        div.text-center
-          img(src='images/logo.png')
-        br
-        a(href='/oauth/github').btn.btn-block.btn-social.btn-github
-          i.fa.fa-github
-          |  Sign in with GitHub
+  body.hold-transition.login-page.skin-black.layout-boxed
+    .row
+      .col-md-4
+        .login-box
+          .login-logo
+            b &nbsp;
+          .login-box-body
+            p.login-box-msg
+              b About
+            div
+              p SaaS offering of &nbsp;
+                a(href='https://github.com/Stono/hawkeye') Hawkeye &nbsp;
+                | giving you:
+              ul
+                li Module Vulnerability Scanning for nodejs and ruby using &nbsp;
+                  a(href='https://github.com/nodesecurity/nsp') Node Security Project
+                  a(href='https://github.com/rubysec/bundler-audit') Bundler Audit
+                  | and
+                li Bad file pattern matching from &nbsp;
+                  a(href='https://github.com/michenriksen/gitrob') GitRob
+                li Custom file content searching for things like private keys, passwords, high entropy strings
+                li Outdated module checking for nodejs, using &nbsp;
+                  a(href='https://github.com/tjunnone/npm-check-updates') NPM Check Updates
+              p All through your browser.
+      .col-md-4
+        .login-box
+          .login-logo
+            b Hawk
+            | eye
+          .login-box-body
+            p.login-box-msg
+              b Get Started
+            div.text-center
+              img(src='images/logo.png')
+            br
+            a(href='/oauth/github').btn.btn-block.btn-social.btn-github
+              i.fa.fa-github
+              |  Sign in with GitHub
+
+      .col-md-4
+        .login-box
+          .login-logo
+            b &nbsp;
+          .login-box-body
+            p.login-box-msg
+              b Secure
+            div.text-left
+              p We've taken the following steps to protect your data:
+              ul
+                li We only require the minimum amount of scopes from GitHub in order to operate.  You can restrict which repositories we can access.
+                li Each clone and scan is performed in its own, ephemeral docker container, ensuring your code is never stored, or shared.
+                li Our database, and messaging is encrypted using AES256-CTR
+                li Your connections to this site are entirely HTTPS
