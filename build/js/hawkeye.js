@@ -26,11 +26,16 @@ $(document).ready(function() {
     bInfo: false
   });
 
-  var defaultOrg = $('.treeView.active');
+  var defaultOrg = $('.treeview.active')[0];
+  var defaultRepo = $('.repo.active')[0];
 
   $('#filter-repo').keyup(function() {
     var search = $(this).val();
-    $('.treeview').each(function() {
+    $('.treeview.active').each(function() {
+      $(this).removeClass('active');
+    });
+
+    $('.repo.active').each(function() {
       $(this).removeClass('active');
     });
 
@@ -40,6 +45,7 @@ $(document).ready(function() {
       });
 
       $(defaultOrg).addClass('active');
+      $(defaultRepo).addClass('active');
       return;
     };
 
@@ -49,7 +55,6 @@ $(document).ready(function() {
       if(item.text().indexOf(search) > -1) {
         item.parent().show();
         item.parents('.treeview').addClass('active');
-        console.log('got it');
       }
     });
 
