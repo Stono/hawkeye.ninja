@@ -13,7 +13,14 @@ describe('FIFO List', () => {
     });
   });
   beforeEach(done => {
-    redis.del('scan-list:test', done);
+    redis.flushall(done);
+  });
+  it('should handle no results', done => {
+    list.pop((err, data) => {
+      should.ifError(err);
+      should(data).eql(null);
+      done();
+    });
   });
   it('should flush a list', done => {
     list.push({ id: 1 }, () => {
