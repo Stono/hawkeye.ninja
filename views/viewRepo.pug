@@ -36,8 +36,8 @@ block content
             button.btn.btn-box-tool(type='button', data-widget='remove')
               i.fa.fa-times
         .box-body(style='display: block;')
-          .table-responsive
-            table.table.no-margin
+          .table-responsive#scans
+            table.table.table-bordered.table-striped
               thead
                 tr
                   th Scan ID
@@ -45,18 +45,13 @@ block content
                   th
                     .pull-right Status
               tbody
-                if !scans.length
+                each scan in scans
                   tr
-                    td(colspan=3)
-                      div.text-center There have not been any scans run against this repository!
-                else
-                  each scan in scans
-                    tr
-                      td
-                        a(href='/repo/' + repo.fullName + '/' + scan.number) #{scan.number}
-                      td 2017-04-08 11:34:02
-                      td
-                        span.label(class=scan.label).pull-right #{scan.status}
+                    td
+                      a(href='/repo/' + repo.fullName + '/' + scan.number) #{scan.number}
+                    td 2017-04-08 11:34:02
+                    td
+                      span.label(class=scan.label).pull-right #{scan.status}
 
         .box-footer.clearfix(style='display: block;')
           |
