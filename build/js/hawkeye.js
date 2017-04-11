@@ -12,6 +12,7 @@ $(document).ready(function() {
     oLanguage: {
       sEmptyTable: '<div align="center">There have not been any scans run against this repository!</div>'
     },
+    autoWidth: true,
     columns: [
       { width: '15%' },
       { width: '70%' },
