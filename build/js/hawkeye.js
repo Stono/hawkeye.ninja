@@ -25,4 +25,37 @@ $(document).ready(function() {
     order: [[ 0, 'desc' ]],
     bInfo: false
   });
+
+  var defaultOrg = $('.treeView.active');
+
+  $('#filter-repo').keyup(function() {
+    var search = $(this).val();
+    $('.treeview').each(function() {
+      $(this).removeClass('active');
+    });
+
+    if(search === '') {
+      $('.repo').each(function() {
+        $(this).show();
+      });
+
+      $(defaultOrg).addClass('active');
+      return;
+    };
+
+    $('.repo a').each(function(idx, i) {
+      var item = $(i);
+      item.parent().hide();
+      if(item.text().indexOf(search) > -1) {
+        item.parent().show();
+        item.parents('.treeview').addClass('active');
+        console.log('got it');
+      }
+    });
+
+  }).keydown(function(event) {
+    if (event.which === 13) {
+      event.preventDefault();
+    }
+  });
 });

@@ -53,7 +53,15 @@ html
       aside.main-sidebar
         section.sidebar
           ul.sidebar-menu
-            li.header Navigation
+            li.header Repos
+            form.sidebar-form(action='#', method='get')
+              .input-group
+                input#filter-repo.form-control(type='text', placeholder='Filter...')
+                |
+                span.input-group-btn
+                  button.btn.btn-flat(type='submit', name='search')
+                    i.fa.fa-search
+
             each item in navItems
               +nav_link(item)
       .content-wrapper

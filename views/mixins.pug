@@ -11,7 +11,7 @@ mixin nav_link(item)
     if item.repos
       ul.treeview-menu.menu-open
         each child in item.repos
-          li(class=(child.active ? 'active' : ''))
+          li(class=(child.active ? 'repo active' : 'repo'))
             a(href='/repo/' + child.fullName)
               i.fa(class=child.icon)
               if child.private
