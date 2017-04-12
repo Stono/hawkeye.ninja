@@ -1,10 +1,10 @@
 $(document).ready(function() {
-  $.fn.dataTable.ext.errMode = 'none';
+  //$.fn.dataTable.ext.errMode = 'none';
 
   var defaultTable = function(extra) {
     return Object.assign({
       oLanguage: {
-        sEmptyTable: '<div align="center">There have not been any scans run against this repository!</div>'
+        sEmptyTable: '<div align="center">No data to show.</div>'
       },
       autoWidth: true,
       dom: 'Bfrtip',
@@ -187,21 +187,33 @@ $(document).ready(function() {
   var scansTable = $('#scans table').DataTable(defaultTable({
     columns: [
       { width: '15%', data: 'number' },
-      { width: '70%', data: 'datetime' },
+      { width: '50%', data: 'datetime' },
+      { width: '5%', data: 'critical' },
+      { width: '5%', data: 'high' },
+      { width: '5%', data: 'medium' },
+      { width: '5%', data: 'low' },
       { width: '15%', data: 'status' }
     ],
     ajax: {
       url: '/api' + window.location.pathname,
       dataSrc: function(data) {
         drawGraph(data.scans);
-        var metrics = data.scans[data.scans.length -1].metrics.items;
+        var metrics = (data.scans.length === 0) ? [] : data.scans[data.scans.length -1].metrics.items;
         drawPie(metrics);
         drawVulnerabilities(metrics);
-        return data.scans;
+        return data.scans.map(function(scan) {
+          var result = Object.assign({
+            number: scan.number,
+            datetime: scan.datetime,
+            status: scan.status,
+          }, scan.metrics.byLevel);
+          console.log(result);
+          return result;
+        });
       }
     },
     createdRow: function(row) {
-      var element = $('td', row).eq(2);
+      var element = $('td', row).eq(6);
       var status = element.text();
       var labels = {
         fail: 'label-danger',

@@ -16,6 +16,13 @@ function updateCodeMirror(data){
     ch: line.length - 1 // set the character position to the end of the line
   };
   doc.replaceRange('\n' + data, pos); // adds a new line
+  if(data.indexOf('Scan complete') > -1) {
+    var path = window.location.pathname.split('/');
+    path.pop();
+    setTimeout(function() {
+      window.location.pathname = path.join('/');
+    }, 2000);
+  }
 }
 
 $(document).ready(function() {

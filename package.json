@@ -63,6 +63,7 @@
     "lodash": "4.17.4",
     "mkdirp": "0.5.1",
     "mock-require": "2.0.2",
+    "moment": "2.18.1",
     "passport": "0.3.2",
     "passport-github": "1.1.0",
     "pug": "2.0.0-beta11",
