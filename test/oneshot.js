@@ -1,5 +1,5 @@
 'use strict';
-const OneShot = require('../lib/oneShot');
+const OneShot = require('../lib/oneshot');
 const deride = require('deride');
 const should = require('should');
 describe('OneShot', () => {
