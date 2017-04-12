@@ -1,5 +1,5 @@
 'use strict';
-const List = require('../lib/list');
+const List = require('../lib/stores/list');
 const Redis = require('../lib/redis');
 const should = require('should');
 

@@ -2,16 +2,14 @@
 const config = require('../config');
 const ScanLog = require('../lib/scanLog');
 const should = require('should');
-const List = require('../lib/list');
 const EncryptedRedis = require('../lib/encryptedRedis');
 
 describe('Scan Log', () => {
-  let log, list, redis;
+  let log, redis;
   beforeEach(done => {
     redis = new EncryptedRedis(config.redis);
     redis.on('ready', () => {
       log = new ScanLog({ repoId: 'repo', number: 'test', redis: redis });
-      list = new List({ id: 'scans:pending', redis: redis });
       redis.flushall(done);
     });
   });

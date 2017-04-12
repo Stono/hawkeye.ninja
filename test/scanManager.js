@@ -2,7 +2,7 @@
 const ScanManager = require('../lib/scanManager');
 const should = require('should');
 const Redis = require('../lib/redis');
-const List = require('../lib/list');
+const List = require('../lib/stores/list');
 const path = require('path');
 const _ = require('lodash');
 
