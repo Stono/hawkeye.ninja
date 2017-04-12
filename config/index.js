@@ -30,6 +30,11 @@ config.redis.password = validateEnv('HE_REDIS_PASSWORD');
 config.redis.encryptionKey = validateEnv('HE_REDIS_ENCRYPTION_KEY', true);
 config.github.clientid = validateEnv('HE_GITHUB_CLIENTID');
 config.github.clientsecret = validateEnv('HE_GITHUB_SECRET');
+
+config.github.authorizationURL = 'https://github.com/login/oauth/authorize';
+config.github.tokenURL = 'https://github.com/login/oauth/access_token';
+config.github.userProfileURL = 'https://api.github.com/user';
+
 config.sessionSecret = validateEnv('HE_SESSION_SECRET');
 
 config.port = 5000;
