@@ -44,6 +44,66 @@ $(document).ready(function() {
     }));
   };
 
+  var colors = {
+    critical: '#dd4b39',
+    high: '#FF851B',
+    medium: '#f39c12',
+    low: '#3c8dbc'
+  };
+
+  var drawPie = function(data) {
+    var pieChartCanvas = $("#vulnModules canvas").get(0).getContext("2d");
+    var pieChart = new Chart(pieChartCanvas);
+    var getData = function(level) {
+      return data.filter(function(item) {
+        return item.level === level;
+      }).length;
+    };
+    var dataBlock = function(level) {
+      return {
+        label: level,
+        highlight: colors[level],
+        color: colors[level],
+        value: getData(level)
+      };
+    };
+
+    function onlyUnique(value, index, self) {
+      return self.indexOf(value) === index;
+    }
+    var levels = data.map(function(item) { return item.level }).filter(onlyUnique);
+    var PieData = levels.map(function(level) { return dataBlock(level); });
+
+    var pieOptions = {
+      //Boolean - Whether we should show a stroke on each segment
+      segmentShowStroke: true,
+      //String - The colour of each segment stroke
+      segmentStrokeColor: "#fff",
+      //Number - The width of each segment stroke
+      segmentStrokeWidth: 2,
+      //Number - The percentage of the chart that we cut out of the middle
+      percentageInnerCutout: 50, // This is 0 for Pie charts
+      //Number - Amount of animation steps
+      animationSteps: 100,
+      //String - Animation easing effect
+      animationEasing: "easeOutBounce",
+      //Boolean - Whether we animate the rotation of the Doughnut
+      animateRotate: true,
+      //Boolean - Whether we animate scaling the Doughnut from the centre
+      animateScale: false,
+      //Boolean - whether to make the chart responsive to window resizing
+      responsive: true,
+      // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+      maintainAspectRatio: true,
+      //String - A legend template
+      legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
+    };
+    //Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    pieChart.Doughnut(PieData, pieOptions);
+  };
+
+
   var drawGraph = function(data) {
     var labels = data.map(function(row) { return row.number });
 
@@ -55,13 +115,6 @@ $(document).ready(function() {
       });
       $('#scanHistory .' + level).text(result[result.length -1]);
       return result;
-    };
-
-    var colors = {
-      critical: '#dd4b39',
-      high: '#FF851B',
-      medium: '#f39c12',
-      low: '#3c8dbc'
     };
 
     var dataBlock = function(level) {
@@ -141,7 +194,9 @@ $(document).ready(function() {
       url: '/api' + window.location.pathname,
       dataSrc: function(data) {
         drawGraph(data.scans);
-        drawVulnerabilities(data.scans[data.scans.length -1].metrics.items);
+        var metrics = data.scans[data.scans.length -1].metrics.items;
+        drawPie(metrics);
+        drawVulnerabilities(metrics);
         return data.scans;
       }
     },
