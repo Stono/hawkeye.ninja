@@ -9,6 +9,54 @@ block content
         |  Hey - a quick note when it comes to security!
       |  This is a private repository.  We want you to know that we clone and scan your repository in a run-once docker conatiner, that is completely isolated from all other builds.
   .row
+    .col-md-12
+      .box.box-primary#scanHistory
+        .box-header.with-border
+          h3.box-title Recent Summary
+          .box-tools.pull-right
+            button.btn.btn-box-tool(type='button', data-widget='collapse')
+              i.fa.fa-minus
+        .box-body
+          .row
+            .col-md-12
+              .chart
+                canvas
+          .box-footer
+            .row
+              .col-sm-3.col-xs-6
+                .description-block.border-right
+                  span.description-percentage.text-yellow
+                    i.fa.fa-caret-left
+                    |  0%
+                  h5.description-header.high.low 0
+                  |
+                  span.description-text LOW
+              .col-sm-3.col-xs-6
+                .description-block.border-right
+                  span.description-percentage.text-yellow
+                    i.fa.fa-caret-left
+                    |  0%
+                  h5.description-header.medium 0
+                  |
+                  span.description-text MEDIUM
+              .col-sm-3.col-xs-6
+                .description-block.border-right
+                  span.description-percentage.text-yellow
+                    i.fa.fa-caret-left
+                    |  0%
+                  h5.description-header.high 0
+                  |
+                  span.description-text HIGH
+              .col-sm-3.col-xs-6
+                .description-block
+                  span.description-percentage.text-yellow
+                    i.fa.fa-caret-left
+                    |  0%
+                  h5.description-header.critical 0
+                  |
+                  span.description-text CRITICAL
+
+
     .col-md-3
       .box.box-primary
         .box-header.with-border
@@ -26,17 +74,14 @@ block content
           p
             |  Some other information here?
     .col-md-9
-      .box.box-primary
+      .box.box-primary#scans
         .box-header.with-border
           h3.box-title Latest Scans
           .box-tools.pull-right
             button.btn.btn-box-tool(type='button', data-widget='collapse')
               i.fa.fa-minus
-            |
-            button.btn.btn-box-tool(type='button', data-widget='remove')
-              i.fa.fa-times
         .box-body(style='display: block;')
-          .table-responsive#scans
+          .table-responsive
             table.table.table-bordered.table-striped
               thead
                 tr
@@ -44,16 +89,13 @@ block content
                   th Date/Time
                   th
                     .pull-right Status
-              tbody
-                each scan in scans
-                  tr
-                    td
-                      a(href='/repo/' + repo.fullName + '/' + scan.number) #{scan.number}
-                    td 2017-04-08 11:34:02
-                    td
-                      span.label(class=scan.label).pull-right #{scan.status}
+        .overlay
+          i.fa.fa-refresh.fa-spin
 
         .box-footer.clearfix(style='display: block;')
           |
           a.btn.btn-sm.btn-primary.btn-flat.pull-right(href='/repo/' + repo.fullName + '/new') Scan Now
+
 block javascript
+  script(src='/js/chart.min.js')
+  script(src='/js/repo.min.js')

@@ -8,25 +8,6 @@ $(document).ready(function() {
     });
   });
 
-  var scansTable = $('#scans table').DataTable({
-    oLanguage: {
-      sEmptyTable: '<div align="center">There have not been any scans run against this repository!</div>'
-    },
-    autoWidth: true,
-    columns: [
-      { width: '15%' },
-      { width: '70%' },
-      { width: '15%' }
-    ],
-    dom: 'Bfrtip',
-    buttons: [
-      'copyHtml5',
-      'csvHtml5'
-    ],
-    order: [[ 0, 'desc' ]],
-    bInfo: false
-  });
-
   var defaultOrg = $('.treeview.active')[0];
   var defaultRepo = $('.repo.active')[0];
 
