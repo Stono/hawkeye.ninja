@@ -7,6 +7,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    depends_on:
+      - redis
     environment:
       - HE_GITHUB_SECRET
       - HE_GITHUB_CLIENTID
@@ -14,14 +16,9 @@ services:
       - HE_SESSION_SECRET
       - HE_REDIS_PASSWORD
       - NODE_ENV=prod
+      - DEBUG
     ports:
       - 5000:5000
-    volumes:
-      - ./lib:/app/lib
-      - ./config:/app/config
-      - ./views:/app/views
-      - ./images:/app/images
-      - ./dist:/app/dist
 
   worker:
     image: stono/hawkeye.ninja-worker
@@ -30,6 +27,8 @@ services:
       context: .
       dockerfile: Dockerfile.worker
     command: npm run worker
+    depends_on:
+      - redis
     environment:
       - HE_GITHUB_SECRET
       - HE_GITHUB_CLIENTID
@@ -37,10 +36,10 @@ services:
       - HE_SESSION_SECRET
       - HE_REDIS_PASSWORD
       - NODE_ENV=prod
+      - DEBUG
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./lib:/app/lib
-      - ./config:/app/config
+      - /tmp/scanLogs:/tmp/scanLogs
 
   oneshot:
     image: stono/hawkeye.ninja-oneshot

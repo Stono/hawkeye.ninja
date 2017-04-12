@@ -5,16 +5,10 @@ const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
 
-const validateEnv = (key, warnOnly) => {
+const validateEnv = (key) => {
   if(!process.env[key]) {
-    if(warnOnly) {
-      console.warn('Warning'.yellow + ' ' + key + ' should really be set!');
+      console.error('Warning'.yellow + ' ' + key + ' should really be set!');
       return null;
-    } else {
-      console.error('Error'.red + ' ' + key + ' is a required environment variable!');
-      console.log('Please set it and try again');
-      process.exit(1);
-    }
   }
   return process.env[key];
 };

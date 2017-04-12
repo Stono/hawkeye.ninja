@@ -16,3 +16,4 @@ checkstyle-result.xml
 coverage.*
 junit.xml
 public
+scanLogs
