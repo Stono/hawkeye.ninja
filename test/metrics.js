@@ -4,9 +4,13 @@ const Redis = require('../lib/redis');
 const config = require('../config');
 const path = require('path');
 const should = require('should');
+const _ = require('lodash');
 
 describe('Metrics', () => {
-  let metrics, redis;
+  let metrics, redis, sample;
+  before(() => {
+    sample = _.cloneDeep(require(path.join(__dirname, 'samples/hawkeye/results.json')));
+  });
   beforeEach(done => {
     redis = new Redis(config.redis);
     metrics = new Metrics({
@@ -17,9 +21,10 @@ describe('Metrics', () => {
       redis.flushall(done);
     });
   });
-
+  afterEach(done => {
+    redis.flushall(done);
+  });
   it('should update the metrics fora a repo', done => {
-    const sample = require(path.join(__dirname, 'samples/hawkeye/results.json'));
     metrics.update(sample, err => {
       should.ifError(err);
       done();
@@ -27,7 +32,6 @@ describe('Metrics', () => {
   });
 
   it('let me get the latest results', done => {
-    const sample = require(path.join(__dirname, 'samples/hawkeye/results.json'));
     metrics.update(sample, () => {
       sample.pop();
       metrics.update(sample, () => {
@@ -50,7 +54,6 @@ describe('Metrics', () => {
   });
 
   it('let me get a range of tminus results', done => {
-    const sample = require(path.join(__dirname, 'samples/hawkeye/results.json'));
     metrics.update(sample, () => {
       sample.pop();
       metrics.update(sample, () => {

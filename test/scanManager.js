@@ -3,10 +3,13 @@ const ScanManager = require('../lib/scanManager');
 const should = require('should');
 const Redis = require('../lib/redis');
 const List = require('../lib/list');
+const path = require('path');
+const _ = require('lodash');
 
 describe('Scan Manager', () => {
-  let scanManager, repo, redis, list, target;
+  let scanManager, repo, redis, list, target, sample;
   beforeEach(done => {
+    sample = _.cloneDeep(require(path.join(__dirname, 'samples/hawkeye/results.json')));
     redis = new Redis();
     repo = {
       id: 123456
@@ -73,10 +76,11 @@ describe('Scan Manager', () => {
   });
   it('should fail scans', done => {
     scanManager.schedule(target, () => {
-      scanManager.fail(1, {}, err => {
+      scanManager.fail(1, sample, err => {
         should.ifError(err);
         scanManager.get(1, (err, data) => {
-          should(data.status).eql('failed');
+          should(data.status).eql('fail');
+          should(data.metrics.items.length).eql(16);
           done();
         });
       });
@@ -84,10 +88,11 @@ describe('Scan Manager', () => {
   });
   it('should pass scans', done => {
     scanManager.schedule(target, () => {
-      scanManager.pass(1, {}, err => {
+      scanManager.pass(1, sample, err => {
         should.ifError(err);
         scanManager.get(1, (err, data) => {
           should(data.status).eql('pass');
+          should(data.metrics.items.length).eql(16);
           done();
         });
       });
