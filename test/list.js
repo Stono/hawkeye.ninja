@@ -64,4 +64,34 @@ describe('FIFO List', () => {
       });
     });
   });
+  it('should let me return items from the start', done => {
+    const item1 = { id: 1 };
+    const item2 = { id: 2 };
+    const resultHandler = (err, results) => {
+      should.ifError(err);
+      should(results.length).eql(1);
+      should(results[0].id).eql(1);
+      done();
+    };
+    list.push(item1, () => {
+      list.push(item2, () => {
+        list.fromStart(1, resultHandler);
+      });
+    });
+  });
+  it('should let me return items from the end', done => {
+    const item1 = { id: 1 };
+    const item2 = { id: 2 };
+    const resultHandler = (err, results) => {
+      should.ifError(err);
+      should(results.length).eql(1);
+      should(results[0].id).eql(2);
+      done();
+    };
+    list.push(item1, () => {
+      list.push(item2, () => {
+        list.fromEnd(1, resultHandler);
+      });
+    });
+  });
 });
