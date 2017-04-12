@@ -1,6 +1,6 @@
 'use strict';
 const Worker = require('./lib/worker');
-const Redis = require('./lib/redis');
+const Redis = require('./lib/encryptedRedis');
 const config = require('./config');
 const debug = require('debug')('hawkeye:worker');
 

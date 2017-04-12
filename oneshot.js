@@ -1,5 +1,5 @@
 'use strict';
-const OneShot = require('./lib/oneShot');
+const OneShot = require('./lib/oneshot');
 
 const repo = process.argv[2];
 const workerId = process.argv[3];
