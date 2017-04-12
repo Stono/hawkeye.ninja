@@ -1,4 +1,48 @@
 $(document).ready(function() {
+  $.fn.dataTable.ext.errMode = 'none';
+
+  var defaultTable = function(extra) {
+    return Object.assign({
+      oLanguage: {
+        sEmptyTable: '<div align="center">There have not been any scans run against this repository!</div>'
+      },
+      autoWidth: true,
+      dom: 'Bfrtip',
+      buttons: [
+        'copyHtml5',
+        'csvHtml5'
+      ],
+      order: [[ 0, 'desc' ]],
+      bInfo: false
+    }, extra);
+  };
+
+  var drawVulnerabilities = function(data) {
+    var vulnsTable = $('#vulns table').DataTable(defaultTable({
+      columns: [
+        { width: '10%', data: 'level' },
+        { width: '70%', data: 'description' },
+        { width: '20%', data: 'offender' }
+      ],
+      iDisplayLength: 5,
+      order: [[ 0, 'asc' ]],
+      data: data.map(function(item) {
+        return {
+          level: item.level,
+          description: item.description + '<br />' + item.extra,
+          offender: item.offender
+        }
+      }),
+      createdRow: function(row) {
+        var element = $('td', row).eq(0);
+        var status = element.text();
+        element.html('<span class="label label-' + status + '">' + status + '</span>');
+      },
+      fnDrawCallback: function() {
+        $('#vulns .overlay').hide();
+      }
+    }));
+  };
 
   var drawGraph = function(data) {
     var labels = data.map(function(row) { return row.number });
@@ -17,7 +61,7 @@ $(document).ready(function() {
       critical: '#dd4b39',
       high: '#FF851B',
       medium: '#f39c12',
-      low: '#00a65a'
+      low: '#3c8dbc'
     };
 
     var dataBlock = function(level) {
@@ -87,28 +131,17 @@ $(document).ready(function() {
     lineChart.Line(areaChartData, lineChartOptions);
   };
 
-  $.fn.dataTable.ext.errMode = 'none';
-  var scansTable = $('#scans table').DataTable({
-    oLanguage: {
-      sEmptyTable: '<div align="center">There have not been any scans run against this repository!</div>'
-    },
-    autoWidth: true,
+  var scansTable = $('#scans table').DataTable(defaultTable({
     columns: [
       { width: '15%', data: 'number' },
       { width: '70%', data: 'datetime' },
       { width: '15%', data: 'status' }
     ],
-    dom: 'Bfrtip',
-    buttons: [
-      'copyHtml5',
-      'csvHtml5'
-    ],
-    order: [[ 0, 'desc' ]],
-    bInfo: false,
     ajax: {
       url: '/api' + window.location.pathname,
       dataSrc: function(data) {
         drawGraph(data.scans);
+        drawVulnerabilities(data.scans[data.scans.length -1].metrics.items);
         return data.scans;
       }
     },
@@ -126,6 +159,6 @@ $(document).ready(function() {
     fnDrawCallback: function() {
       $('#scans .overlay').hide();
     }
-  });
+  }));
 
 });

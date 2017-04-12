@@ -9,7 +9,24 @@ block content
         |  Hey - a quick note when it comes to security!
       |  This is a private repository.  We want you to know that we clone and scan your repository in a run-once docker conatiner, that is completely isolated from all other builds.
   .row
-    .col-md-12
+    .col-md-5
+      .box.box-primary#repoAbout
+        .box-header.with-border
+          h3.box-title About
+        .box-body
+          if repo.description
+            strong
+              i.fa.fa-book.margin-r-5
+              |  Description
+            p.text-muted  #{repo.description}
+            hr
+          strong
+            i.fa.fa-file-text-o.margin-r-5
+            |  Notes
+          p
+            |  Some other information here?
+
+    .col-md-7
       .box.box-primary#scanHistory
         .box-header.with-border
           h3.box-title Recent Summary
@@ -56,31 +73,34 @@ block content
                   |
                   span.description-text CRITICAL
 
-
-    .col-md-3
-      .box.box-primary
+  .row
+    .col-md-12
+      .box.box-primary#vulns
         .box-header.with-border
-          h3.box-title About
+          h3.box-title Current Vulnerabilities
+          .box-tools.pull-right
+            button.btn.btn-box-tool(type='button', data-widget='collapse')
+              i.fa.fa-minus
         .box-body
-          if repo.description
-            strong
-              i.fa.fa-book.margin-r-5
-              |  Description
-            p.text-muted  #{repo.description}
-            hr
-          strong
-            i.fa.fa-file-text-o.margin-r-5
-            |  Notes
-          p
-            |  Some other information here?
-    .col-md-9
+          .table-responsive
+            table.table.table-bordered.table-striped
+              thead
+                tr
+                  th Level
+                  th Description
+                  th Offender
+        .overlay
+          i.fa.fa-refresh.fa-spin
+
+  .row
+    .col-md-12
       .box.box-primary#scans
         .box-header.with-border
           h3.box-title Latest Scans
           .box-tools.pull-right
             button.btn.btn-box-tool(type='button', data-widget='collapse')
               i.fa.fa-minus
-        .box-body(style='display: block;')
+        .box-body
           .table-responsive
             table.table.table-bordered.table-striped
               thead
