@@ -15,7 +15,7 @@ function updateCodeMirror(data){
     line: (doc.size+5),
     ch: line.length - 1 // set the character position to the end of the line
   };
-  doc.replaceRange(data+'\n', pos); // adds a new line
+  doc.replaceRange('\n' + data, pos); // adds a new line
 }
 
 $(document).ready(function() {
