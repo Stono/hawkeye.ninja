@@ -52,39 +52,24 @@ html
                 li
                   h1
                     i.fa.fa-briefcase.fa-6(aria-hidden='true')
-                  p 0
+                  p #{stats.users}
                 li
                   h1
                     i.fa.fa-users.fa-6(aria-hidden='true')
-                  p 0
+                  p #{stats.repos}
             .counters.col-md-12
               h1 Issues found so far
               #container.flipclock
                 ul.flip.hour
-                  li
-                    section.active
-                      .up
-                        .shadow
-                        .inn 1
-                      .down
-                        .shadow
-                        .inn 1
-                  li
-                    section.active
-                      .up
-                        .shadow
-                        .inn 4
-                      .down
-                        .shadow
-                        .inn 4
-                  li
-                    section.active
-                      .up
-                        .shadow
-                        .inn 0
-                      .down
-                        .shadow
-                        .inn 0
+                  each item in stats.vulnAsArray
+                    li
+                      section.active
+                        .up
+                          .shadow
+                          .inn #{item}
+                        .down
+                          .shadow
+                          .inn #{item}
               .clearfix
 
 
@@ -134,7 +119,7 @@ html
                 i.fa.fa-shield.fa-6(aria-hidden='true')
               ul
                 li
-                  | We only require the minimum amount of scopes from GitHub in order to operate. You can restrict which repositories we can access.
+                  | We only require the minimum amount of scopes from GitHub in order to operate.  You can use GitHub organisation ACLs to restrict our access.
                 li
                   | Each clone and scan is performed in its own, ephemeral docker container, ensuring your code is never stored, or shared.
                 li Our database, and messaging is encrypted using AES256-CTR
@@ -161,16 +146,13 @@ html
                   i.fa.fa-angle-right(aria-hidden='true')
                 .branch
                   i.fa.fa-rocket(aria-hidden='true')
-                  p
-                    | Deploy
-                    br
-                    |  (another tool/CI)
+                  p Deploy
                 .divider-arrow
                   i.fa.fa-angle-right(aria-hidden='true')
                 .branch
                   i.fa.fa-search(aria-hidden='true')
                   p
-                    | Continual Scheduled
+                    | Scheduled
                     br
                     |  Scans
         .row.description
