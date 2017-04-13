@@ -5,22 +5,30 @@ const Redis = require('../lib/redis');
 const List = require('../lib/stores/list');
 const path = require('path');
 const _ = require('lodash');
+const GlobalStats = require('../lib/globalStats');
 
 describe('Scan Manager', () => {
-  let scanManager, repo, redis, list, target, sample;
+  let scanManager, repo, redis, list, target, sample, stats;
+  before(done => {
+    redis = new Redis();
+    redis.once('ready', done);
+  });
+
   beforeEach(done => {
     sample = _.cloneDeep(require(path.join(__dirname, 'samples/hawkeye/results.json')));
-    redis = new Redis();
+    stats = new GlobalStats({ redis: redis });
     repo = {
       id: 123456
     };
     target = { oauth: { accessToken: 'abc' }, repo: repo };
-    redis.once('ready', () => {
-      list = new List({ id: 'scans:pending', redis: redis });
-      scanManager = new ScanManager({ redis: redis, id: repo.id });
-      redis.flushall(done);
-    });
+    list = new List({ id: 'scans:pending', redis: redis });
+    scanManager = new ScanManager({ redis: redis, id: repo.id });
+    redis.flushall(done);
   });
+  afterEach(done => {
+    redis.flushall(done);
+  });
+
   it('should return an empty array when there are no scans', done => {
     scanManager.scans((err, scans) => {
       should.ifError(err);
@@ -94,6 +102,19 @@ describe('Scan Manager', () => {
           should(data.status).eql('pass');
           should(data.metrics.items.length).eql(16);
           done();
+        });
+      });
+    });
+  });
+  it('should increment the scan counter', done => {
+    scanManager.schedule(target, () => {
+      scanManager.pass(1, sample, () => {
+        scanManager.fail(1, sample, () => {
+          stats.scans((err, amount) => {
+            should.ifError(err);
+            should(amount).eql(2);
+            done();
+          });
         });
       });
     });

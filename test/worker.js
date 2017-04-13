@@ -8,10 +8,14 @@ const should = require('should');
 
 describe('Worker', () => {
   let scanManager, redis, worker, exec, fs;
+  before(done => {
+    redis = new Redis(config.redis);
+    redis.once('ready', done);
+  });
+
   beforeEach(done => {
     exec = deride.stub(['command']);
     fs = deride.stub(['readFileSync', 'unlink']);
-    redis = new Redis(config.redis);
     scanManager = new ScanManager({ redis: redis, id: 0 });
     worker = new Worker({
       redis: redis,
@@ -22,8 +26,9 @@ describe('Worker', () => {
     });
     redis.flushall(done);
   });
-  afterEach(() => {
+  afterEach(done => {
     worker.stop();
+    redis.flushall(done);
   });
   const go = done => {
     scanManager.schedule({

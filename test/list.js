@@ -7,14 +7,16 @@ describe('FIFO List', () => {
   let list, redis;
   before(done => {
     redis = new Redis();
-    redis.once('ready', () => {
-      list = new List({ id: 'scan-list:test', redis: redis });
-      done();
-    });
+    redis.once('ready', done);
   });
   beforeEach(done => {
+    list = new List({ id: 'scan-list:test', redis: redis });
     redis.flushall(done);
   });
+  afterEach(done => {
+    redis.flushall(done);
+  });
+
   it('should handle no results', done => {
     list.pop((err, data) => {
       should.ifError(err);

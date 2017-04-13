@@ -55,6 +55,9 @@ describe('Stores', () => {
       beforeEach(done => {
         store.flush(done);
       });
+      afterEach(done => {
+        store.flush(done);
+      });
 
       it('Should add keys', (done) => {
         async.series([

@@ -6,16 +6,19 @@ const EncryptedRedis = require('../lib/encryptedRedis');
 
 describe('Scan Log', () => {
   let log, redis;
-  beforeEach(done => {
+  before(done => {
     redis = new EncryptedRedis(config.redis);
-    redis.on('ready', () => {
-      log = new ScanLog({ repoId: 'repo', number: 'test', redis: redis });
-      redis.flushall(done);
-    });
+    redis.once('ready', done);
   });
-  afterEach(() => {
+  beforeEach(done => {
+    log = new ScanLog({ repoId: 'repo', number: 'test', redis: redis });
+    redis.flushall(done);
+  });
+  afterEach(done => {
     log.stop();
+    redis.flushall(done);
   });
+
   it('should publish log messages to redis', done => {
     const logMessage = 'testing';
     log.subscribe(msg => {

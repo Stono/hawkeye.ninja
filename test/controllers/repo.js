@@ -7,17 +7,23 @@ const should = require('should');
 const Redis = require('../../lib/redis');
 
 describe('Controllers.Repo', () => {
-  let repo, scanManager;
-  beforeEach(done => {
-    let redis = new Redis();
-    redis.once('ready', () => {
-      scanManager = deride.wrap(new ScanManager({ redis: redis, id: 85411269 }));
-      repo = new RepoController({
-        redis: redis
-      });
-      redis.flushall(done);
-    });
+  let repo, scanManager, redis;
+  before(done => {
+    redis = new Redis();
+    redis.once('ready', done);
   });
+
+  beforeEach(done => {
+    scanManager = deride.wrap(new ScanManager({ redis: redis, id: 85411269 }));
+    repo = new RepoController({
+      redis: redis
+    });
+    redis.flushall(done);
+  });
+  afterEach(done => {
+    redis.flushall(done);
+  });
+
   describe('viewRepo', () => {
     it('should append the scanManager scans', done => {
       let req = {
