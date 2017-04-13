@@ -1,9 +1,8 @@
 'use strict';
-const config = require('../config');
 const ScanLog = require('../lib/scanLog');
 const should = require('should');
 const EncryptedRedis = require('../lib/encryptedRedis');
-
+const config = require('../config');
 describe('Scan Log', () => {
   let log, redis;
   before(done => {
@@ -11,7 +10,7 @@ describe('Scan Log', () => {
     redis.once('ready', done);
   });
   beforeEach(done => {
-    log = new ScanLog({ repoId: 'repo', number: 'test', redis: redis });
+    log = new ScanLog({ repoId: 'repo', number: 'test', encryptedRedis: redis });
     redis.flushall(done);
   });
   afterEach(done => {

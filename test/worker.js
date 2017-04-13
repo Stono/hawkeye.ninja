@@ -2,14 +2,15 @@
 const ScanManager = require('../lib/scanManager');
 const EncryptedRedis = require('../lib/encryptedRedis');
 const Worker = require('../lib/worker');
-const config = require('../config');
 const deride = require('deride');
 const should = require('should');
 
 describe('Worker', () => {
   let scanManager, encryptedRedis, worker, exec, fs;
   before(done => {
-    encryptedRedis = new EncryptedRedis(config.encryptedRedis);
+    encryptedRedis = new EncryptedRedis({
+      encryptionKey: 'test'
+    });
     encryptedRedis.once('ready', done);
   });
 
