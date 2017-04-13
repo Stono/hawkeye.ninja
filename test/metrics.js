@@ -69,4 +69,29 @@ describe('Metrics', () => {
       });
     });
   });
+
+  it('counters should return 0 when not previously set', done => {
+    metrics.getCounter('random', (err, data) => {
+      should.ifError(err);
+      should(data).eql(0);
+      done();
+    });
+  });
+
+  it('should let me increment a counter', done => {
+    metrics.incrementCounter('testing', 5, (err, newValue) => {
+      should.ifError(err);
+      should(newValue).eql(5);
+      metrics.incrementCounter('testing', 5, (err, newValue) => {
+        should.ifError(err);
+        should(newValue).eql(10);
+        metrics.getCounter('testing', (err, value) => {
+          should.ifError(err);
+          should(value).eql(10);
+          done();
+        });
+      });
+    });
+  });
+
 });
