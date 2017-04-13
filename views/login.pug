@@ -6,68 +6,165 @@ html
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
     title Hawkeye
     meta(content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no', name='viewport')
-    block header
     link(rel='stylesheet', href='/css/bootstrap.min.css')
     link(rel='stylesheet', href='/css/font-awesome.min.css')
-    link(rel='stylesheet', href='/css/ionicons.min.css')
-    link(rel='stylesheet', href='/css/AdminLTE.min.css')
-    link(rel='stylesheet', href='/css/skins/skin-black.min.css')
-    link(rel='stylesheet', href='/css/highlightjs.min.css')
+    link(rel='stylesheet', href='/css/landingPage.min.css')
+    link(rel='stylesheet', href='/css/codemirror.min.css')
+    link(rel='stylesheet', href='/css/codemirror-theme-material.min.css')
     link(rel='stylesheet', href='/css/hawkeye.min.css')
 
-    //if lt IE 9
-      script(src='dist/js/html5shiv.min.js')
-    //
-  body.hold-transition.login-page.skin-black.layout-boxed
-    .row
-      .col-md-4
-        .login-box
-          .login-logo
-            b &nbsp;
-          .login-box-body
-            p.login-box-msg
-              b About
-            div
-              p SaaS offering of &nbsp;
-                a(href='https://github.com/Stono/hawkeye') Hawkeye &nbsp;
-                | giving you:
-              ul
-                li Module Vulnerability Scanning for nodejs and ruby using &nbsp;
-                  a(href='https://github.com/nodesecurity/nsp') Node Security Project
-                  a(href='https://github.com/rubysec/bundler-audit') Bundler Audit
-                  | and
-                li Bad file pattern matching from &nbsp;
-                  a(href='https://github.com/michenriksen/gitrob') GitRob
-                li Custom file content searching for things like private keys, passwords, high entropy strings
-                li Outdated module checking for nodejs, using &nbsp;
-                  a(href='https://github.com/tjunnone/npm-check-updates') NPM Check Updates
-              p All through your browser.
-      .col-md-4
-        .login-box
-          .login-logo
-            b Hawk
-            | eye
-          .login-box-body
-            p.login-box-msg
-              b Get Started
-            div.text-center
-              img(src='images/logo.png')
-            br
-            a(href='/oauth/github').btn.btn-block.btn-social.btn-github
-              i.fa.fa-github
-              |  Sign in with GitHub
+  body
+    header
+      nav.navbar
+        .navbar-header
+          .navbar-brand
+            img.pull-left(src='images/logo.png')
+            h3.pull-right
+              strong Hawk
+              i eye
+        .navbar-collapse.collapse
+          ul.nav.navbar-nav.navbar-right
+            li
+              a.btn.btn-default.btn-sm.btn-social.btn-github.hidden(href='/oauth/github')
+                i.fa.fa-github
+                |  Sign in with GitHub
+            li.nav-item.nav-link
+              a(href='https://github.com/Stono/hawkeye') GitHub
+    .wrap
+      .content
+        .row.description
+          section.centered-wrapper
+            .hero.col-md-12
+              h1 Automated security and vulnerability scanning for your projects
+              p Easily check for, and keep on top of security issues
+              a.btn.btn-default.btn-lg.btn-social.btn-github(href='/oauth/github')
+                i.fa.fa-github
+                |  Sign in with GitHub
+            .col-md-12.screenshoot
+              textarea#console
+        .row.customer-counters
+          section.centered-wrapper
+            .hero.col-md-12
+              h1 Projects and User counters
+              p Join the growing community of secure application developers
+            .counters.col-md-12
+              ul.list-inline
+                li
+                  h1
+                    i.fa.fa-briefcase.fa-6(aria-hidden='true')
+                  p 0
+                li
+                  h1
+                    i.fa.fa-users.fa-6(aria-hidden='true')
+                  p 0
+        .row.oop
+          section.centered-wrapper
+            .hero.col-md-12
+              h1  Scanning your open source project is 100% free
+              p Forever.  We want to encourage a better security stance in the open source world
 
-      .col-md-4
-        .login-box
-          .login-logo
-            b &nbsp;
-          .login-box-body
-            p.login-box-msg
-              b Secure
-            div.text-left
-              p We've taken the following steps to protect your data:
+        //.row.private-projects
+          //section.centered-wrapper
+            //.hero.col-md-12
+              //h1  Have a private projects?
+              //p They are also free, for a limited time.
+
+        .row.features
+          section.centered-wrapper
+            .card.col-md-4
+              h1
+                i.fa.fa-search.fa-6(aria-hidden='true')
               ul
-                li We only require the minimum amount of scopes from GitHub in order to operate.  You can restrict which repositories we can access.
-                li Each clone and scan is performed in its own, ephemeral docker container, ensuring your code is never stored, or shared.
+                li
+                  | Module Vulnerability Scanning for nodejs and ruby using&nbsp;
+                  a(href='https://github.com/nodesecurity/nsp') Node Security Project&nbsp;
+                  | and&nbsp;
+                  a(href='https://github.com/rubysec/bundler-audit') Bundler Audit
+                li
+                  | Outdated module checking for nodejs, using &nbsp;
+                  a(href='https://github.com/tjunnone/npm-check-updates') NPM Check Updates
+                li
+                  | Bad file pattern matching, including patterns from&nbsp;
+                  a(href='https://github.com/michenriksen/gitrob') GitRob
+                li
+                  | Custom file content searching for things like private keys, passwords, high entropy strings
+            .card.col-md-4
+              h1
+                i.fa.fa-area-chart.fa-6(aria-hidden='true')
+              ul
+                li
+                  | Consolidated reporting across all scanners
+                li
+                  | On demand scanning, as well as continual scanning through schedules
+                li
+                  | Alerting when issues are detected in your project
+            .card.col-md-4
+              h1
+                i.fa.fa-shield.fa-6(aria-hidden='true')
+              ul
+                li
+                  | We only require the minimum amount of scopes from GitHub in order to operate. You can restrict which repositories we can access.
+                li
+                  | Each clone and scan is performed in its own, ephemeral docker container, ensuring your code is never stored, or shared.
                 li Our database, and messaging is encrypted using AES256-CTR
                 li Your connections to this site are entirely HTTPS
+        .row.build-flow
+          section.centered-wrapper
+            .hero.col-md-12
+              h1 Example Workflow
+              div
+                .branch
+                  i.fa.fa-file-code-o.fa-5(aria-hidden='true')
+                  p Checkin Code
+                .divider-arrow
+                  i.fa.fa-angle-right(aria-hidden='true')
+                .branch
+                  i.fa.fa-github(aria-hidden='true')
+                  p GitHub
+                .divider-arrow
+                  i.fa.fa-angle-right(aria-hidden='true')
+                .branch
+                  i.fa.fa-search(aria-hidden='true')
+                  p Immediate Scan
+                .divider-arrow
+                  i.fa.fa-angle-right(aria-hidden='true')
+                .branch
+                  i.fa.fa-rocket(aria-hidden='true')
+                  p
+                    | Deploy
+                    br
+                    |  (another tool/CI)
+                .divider-arrow
+                  i.fa.fa-angle-right(aria-hidden='true')
+                .branch
+                  i.fa.fa-search(aria-hidden='true')
+                  p
+                    | Continual Scheduled
+                    br
+                    |  Scans
+        .row.description
+          section.centered-wrapper
+            .hero.col-md-12
+              h1 Automated security and vulnerability scanning for your projects
+              p Easily check for, and keep on top of security issues
+              a.btn.btn-default.btn-lg.btn-social.btn-github(href='/oauth/github')
+                i.fa.fa-github
+                |  Sign in with GitHub
+
+      footer
+        .container
+          .row
+            .col-md-6
+              ul.footer-links
+                li
+                  a(href='https://karlstoney.com') &#169; Karl Stoney, 2017
+            .col-md-6
+              p.text-right Use of this software is provided without warranty
+              p.text-right All scanning modules are subject to their own licenses
+
+
+    script(src='/js/jquery-2.2.3.min.js')
+    script(src='/js/codemirror.min.js')
+    script(src='/js/codemirror-shell.min.js')
+    script(src='/js/landingPage.min.js')
+    block javascript

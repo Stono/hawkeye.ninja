@@ -46,6 +46,7 @@ module.exports = function(grunt) {
         },
         files: {
           'public/css/AdminLTE.min.css': 'build/css/AdminLTE.less',
+          'public/css/landingPage.min.css': 'build/css/landingPage.less',
           'public/css/hawkeye.min.css': 'build/css/hawkeye.less',
           'public/css/skins/skin-black.min.css': 'build/css/skins/skin-black.less'
         }
