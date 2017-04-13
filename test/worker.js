@@ -1,34 +1,36 @@
 'use strict';
 const ScanManager = require('../lib/scanManager');
-const Redis = require('../lib/redis');
+const EncryptedRedis = require('../lib/encryptedRedis');
 const Worker = require('../lib/worker');
 const config = require('../config');
 const deride = require('deride');
 const should = require('should');
 
 describe('Worker', () => {
-  let scanManager, redis, worker, exec, fs;
+  let scanManager, encryptedRedis, worker, exec, fs;
   before(done => {
-    redis = new Redis(config.redis);
-    redis.once('ready', done);
+    encryptedRedis = new EncryptedRedis(config.encryptedRedis);
+    encryptedRedis.once('ready', done);
   });
 
   beforeEach(done => {
     exec = deride.stub(['command']);
     fs = deride.stub(['readFileSync', 'unlink']);
-    scanManager = new ScanManager({ redis: redis, id: 0 });
+    scanManager = new ScanManager({
+      encryptedRedis: encryptedRedis, id: 0
+    });
     worker = new Worker({
-      redis: redis,
+      encryptedRedis: encryptedRedis,
       fs: fs,
       exec: exec,
       workerId: 'workerId',
       workerInterval: 10
     });
-    redis.flushall(done);
+    encryptedRedis.flushall(done);
   });
   afterEach(done => {
     worker.stop();
-    redis.flushall(done);
+    encryptedRedis.flushall(done);
   });
   const go = done => {
     scanManager.schedule({

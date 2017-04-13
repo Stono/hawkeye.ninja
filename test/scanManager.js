@@ -2,16 +2,21 @@
 const ScanManager = require('../lib/scanManager');
 const should = require('should');
 const Redis = require('../lib/redis');
+
+const EncryptedRedis = require('../lib/encryptedRedis');
 const List = require('../lib/stores/list');
 const path = require('path');
 const _ = require('lodash');
 const GlobalStats = require('../lib/globalStats');
 
 describe('Scan Manager', () => {
-  let scanManager, repo, redis, list, target, sample, stats;
+  let scanManager, repo, encryptedRedis, list, target, sample, stats, redis;
   before(done => {
     redis = new Redis();
-    redis.once('ready', done);
+    encryptedRedis = new EncryptedRedis({
+      encryptionKey: 'test'
+    });
+    encryptedRedis.once('ready', done);
   });
 
   beforeEach(done => {
@@ -21,12 +26,14 @@ describe('Scan Manager', () => {
       id: 123456
     };
     target = { oauth: { accessToken: 'abc' }, repo: repo };
-    list = new List({ id: 'scans:pending', redis: redis });
-    scanManager = new ScanManager({ redis: redis, id: repo.id });
-    redis.flushall(done);
+    list = new List({ id: 'scans:pending', redis: encryptedRedis });
+    scanManager = new ScanManager({
+      encryptedRedis: encryptedRedis, id: repo.id
+    });
+    encryptedRedis.flushall(done);
   });
   afterEach(done => {
-    redis.flushall(done);
+    encryptedRedis.flushall(done);
   });
 
   it('should return an empty array when there are no scans', done => {
@@ -42,8 +49,7 @@ describe('Scan Manager', () => {
       should(scan.id).match(/[a-z0-9]{40}/);
       should(scan.status).eql('pending');
       should(scan.number).eql(1);
-      redis.hget('scans:123456', 1, (err, data) => {
-        data = JSON.parse(data);
+      scanManager.get(1, (err, data) => {
         should.ifError(err);
         should(data.number).eql(1);
         done();

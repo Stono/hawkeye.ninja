@@ -6,7 +6,7 @@ const debug = require('debug')('hawkeye:worker');
 
 const encryptedRedis = new Redis(config.redis);
 const worker = new Worker({
-  redis: encryptedRedis
+  encryptedRedis: encryptedRedis
 });
 worker.start();
 debug(`Worker ${worker.id} has started`);

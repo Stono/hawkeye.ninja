@@ -18,7 +18,10 @@ describe('Controllers.Repo', () => {
   });
 
   beforeEach(done => {
-    scanManager = deride.wrap(new ScanManager({ redis: redis, id: 85411269 }));
+    scanManager = deride.wrap(new ScanManager({
+      encryptedRedis: encryptedRedis,
+      id: 85411269
+    }));
     repo = new RepoController({
       redis: redis,
       encryptedRedis: encryptedRedis
