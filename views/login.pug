@@ -21,7 +21,7 @@ html
             img.pull-left(src='images/logo.png')
             h3.pull-right
               strong Hawk
-              i eye
+              | eye
         .navbar-collapse.collapse
           ul.nav.navbar-nav.navbar-right
             li
@@ -57,6 +57,37 @@ html
                   h1
                     i.fa.fa-users.fa-6(aria-hidden='true')
                   p 0
+            .counters.col-md-12
+              h1 Issues found so far
+              #container.flipclock
+                ul.flip.hour
+                  li
+                    section.active
+                      .up
+                        .shadow
+                        .inn 1
+                      .down
+                        .shadow
+                        .inn 1
+                  li
+                    section.active
+                      .up
+                        .shadow
+                        .inn 4
+                      .down
+                        .shadow
+                        .inn 4
+                  li
+                    section.active
+                      .up
+                        .shadow
+                        .inn 0
+                      .down
+                        .shadow
+                        .inn 0
+              .clearfix
+
+
         .row.oop
           section.centered-wrapper
             .hero.col-md-12
@@ -145,8 +176,6 @@ html
         .row.description
           section.centered-wrapper
             .hero.col-md-12
-              h1 Automated security and vulnerability scanning for your projects
-              p Easily check for, and keep on top of security issues
               a.btn.btn-default.btn-lg.btn-social.btn-github(href='/oauth/github')
                 i.fa.fa-github
                 |  Sign in with GitHub
