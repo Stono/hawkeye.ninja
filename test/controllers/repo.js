@@ -5,18 +5,23 @@ const ScanManager = require('../../lib/scanManager');
 const deride = require('deride');
 const should = require('should');
 const Redis = require('../../lib/redis');
+const EncryptedRedis = require('../../lib/encryptedRedis');
 
 describe('Controllers.Repo', () => {
-  let repo, scanManager, redis;
+  let repo, scanManager, redis, encryptedRedis;
   before(done => {
     redis = new Redis();
+    encryptedRedis = new EncryptedRedis({
+      encryptionKey: 'test'
+    });
     redis.once('ready', done);
   });
 
   beforeEach(done => {
     scanManager = deride.wrap(new ScanManager({ redis: redis, id: 85411269 }));
     repo = new RepoController({
-      redis: redis
+      redis: redis,
+      encryptedRedis: encryptedRedis
     });
     redis.flushall(done);
   });

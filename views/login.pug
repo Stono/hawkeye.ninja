@@ -52,16 +52,16 @@ html
                 li
                   h1
                     i.fa.fa-briefcase.fa-6(aria-hidden='true')
-                  p #{stats.users}
+                  p #{stats.repos}
                 li
                   h1
                     i.fa.fa-users.fa-6(aria-hidden='true')
-                  p #{stats.repos}
+                  p #{stats.users}
             .counters.col-md-12
               h1 Issues found so far
               #container.flipclock
                 ul.flip.hour
-                  each item in stats.vulnAsArray
+                  each item in stats.issues
                     li
                       section.active
                         .up

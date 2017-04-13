@@ -1,11 +1,21 @@
 'use strict';
 const builder = require('../lib/viewModelBuilder');
+const Redis = require('../lib/redis');
+const EncryptedRedis = require('../lib/encryptedRedis');
 const should = require('should');
 const Repo = require('../lib/models/repo');
 
 describe('ViewModels', () => {
-  let model, request;
+  let model, request, encryptedRedis, redis, config;
   before(() => {
+    encryptedRedis = new EncryptedRedis({
+      encryptionKey: 'test'
+    });
+    redis = new Redis();
+    config = {
+      redis: redis,
+      encryptedRedis: encryptedRedis
+    };
     request = {
       params: {
         org: 'stono',
@@ -28,7 +38,7 @@ describe('ViewModels', () => {
   };
   describe('selectRepo', () => {
     before(() => {
-      model = builder()
+      model = builder(config)
       .withUser(request)
       .withRepoList(request);
     });
@@ -39,7 +49,7 @@ describe('ViewModels', () => {
   });
   describe('viewRepo', () => {
     before(() => {
-      model = builder()
+      model = builder(config)
       .withUser(request)
       .withRepo(request)
       .withScans([]);

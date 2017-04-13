@@ -27,7 +27,6 @@
     "build": "./node_modules/grunt/bin/grunt assets"
   },
   "devDependencies": {
-    "async": "2.3.0",
     "deride": "1.1.0",
     "find-free-port": "1.0.2",
     "grunt": "1.0.1",
@@ -47,6 +46,7 @@
   "keywords": [],
   "license": "UNLICENSED",
   "dependencies": {
+    "async": "2.3.0",
     "body-parser": "1.17.1",
     "colors": "1.1.2",
     "command-exists": "1.2.2",
