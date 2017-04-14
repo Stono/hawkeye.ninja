@@ -29,7 +29,7 @@ $(document).ready(function() {
       data: data.map(function(item) {
         return {
           level: item.level,
-          description: item.description + '<br />' + item.extra,
+          description: item.description + '<br />' + item.mitigation,
           offender: item.offender
         }
       }),
