@@ -90,9 +90,6 @@ $(document).ready(function() {
         $(this).find('.scan-extra').slideDown();
         $(this).addClass('selected');
       }
-
-      var data = vulnsTable.row( this ).data();
-      console.log(data);
     });
 
   };
@@ -239,22 +236,34 @@ $(document).ready(function() {
 
   var scansTable = $('#scans table').DataTable(defaultTable({
     columns: [
-      { width: '15%', data: 'number' },
-      { width: '50%', data: 'datetime' },
+      { width: '10%', data: 'number' },
+      { width: '60%', data: 'datetime' },
       { width: '5%', data: 'critical' },
       { width: '5%', data: 'high' },
       { width: '5%', data: 'medium' },
       { width: '5%', data: 'low' },
-      { width: '15%', data: 'status' }
+      { width: '10%', data: 'status' }
     ],
     ajax: {
       url: '/api' + window.location.pathname,
       dataSrc: function(data) {
-        drawGraph(data.scans);
-        var metrics = (data.scans.length === 0) ? [] : data.scans[data.scans.length -1].metrics.items;
-        drawPie(metrics);
-        drawVulnerabilities(metrics);
-        return data.scans.map(function(scan) {
+        var allScans = data.scans.sort(function(a, b) {
+          return a.number < b.number;
+        });
+        var completeScans = allScans.filter(function(scan) {
+          return scan.status !== 'pending';
+        });
+        var latestScan = (completeScans.length === 0) ? [] : completeScans[0].metrics.items;
+
+        drawGraph(completeScans);
+        drawPie(latestScan);
+        drawVulnerabilities(latestScan);
+        return allScans.map(function(scan) {
+          if(scan.status === 'pending') {
+            scan.metrics = {
+              byLevel: { critical: '?', high: '?', medium: '?', low: '?' }
+            };
+          }
           var result = Object.assign({
             number: scan.number,
             datetime: scan.datetime,
@@ -279,5 +288,9 @@ $(document).ready(function() {
       $('#scans .overlay').hide();
     }
   }));
+  $('#scans tbody').on( 'click', 'tr', function () {
+    var data = scansTable.row( this ).data();
+    window.location.href = window.location.pathname + '/' + data.number + '?history=true';
+  });
 
 });

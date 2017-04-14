@@ -5,7 +5,24 @@ var editor = CodeMirror.fromTextArea(document.getElementById('console'), {
   matchBrackets: true,
   readOnly: true
 });
-
+function GetQueryStringParams(sParam)
+{
+  var sPageURL = window.location.search.substring(1);
+  var sURLVariables = sPageURL.split('&');
+  for (var i = 0; i < sURLVariables.length; i++)
+  {
+    var sParameterName = sURLVariables[i].split('=');
+    if (sParameterName[0] == sParam)
+      {
+        return sParameterName[1];
+      }
+  }
+}
+var bounce = true;
+if(GetQueryStringParams('history') === 'true') {
+  $('.scan-queued').hide();
+  bounce = false;
+};
 function updateCodeMirror(data){
   var cm = $('.CodeMirror')[0].CodeMirror;
   var doc = cm.getDoc();
@@ -16,11 +33,11 @@ function updateCodeMirror(data){
     ch: line.length - 1 // set the character position to the end of the line
   };
   doc.replaceRange('\n' + data, pos); // adds a new line
-  if(data.indexOf('Scan complete') > -1) {
+  if(data.indexOf('Scan complete') > -1 && bounce) {
     var path = window.location.pathname.split('/');
     path.pop();
     setTimeout(function() {
-      window.location.pathname = path.join('/');
+      window.location.href = path.join('/');
     }, 2000);
   }
 }
