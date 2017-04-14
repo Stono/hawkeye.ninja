@@ -1,6 +1,14 @@
 extend layout
 block header
 block content
+  .alert.alert-warning.alert-dismissible
+    button.close(type='button', data-dismiss='alert', aria-hidden='true') &times;
+    h4
+      i.icon.fa.fa-warning
+      |  Pre-Beta!
+    | Thank you for trying out Hawkeye!
+    p Please be aware thought that this is a pre-beta release, as such - you should expect some bugs, and also - your scan history to get reset.
+
   .row
     .col-md-12
       .box.box-primary
