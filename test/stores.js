@@ -1,5 +1,5 @@
 'use strict';
-let Stores = require('../lib/stores');
+let JsonStore = require('../lib/stores/jsonStore');
 let should = require('should');
 let async = require('async');
 let config = require('../config');
@@ -11,23 +11,15 @@ describe('Stores', () => {
   let sample;
   let helpers = {
     addKey: (done) => {
-      if(store instanceof Stores.PrimativeStore) {
-        sample = 'test';
-      } else {
-        sample = Object.freeze({
-          name: 'bob'
-        });
-      }
+      sample = Object.freeze({
+        name: 'bob'
+      });
       store.set('key', sample, done);
     },
     checkKeyAdded: (done) => {
       store.get('key', (err, value) => {
         should.ifError(err);
-        if(store instanceof Stores.PrimativeStore) {
-          should(value).eql('test');
-        } else {
-          should(value).eql(sample);
-        }
+        should(value).eql(sample);
         done();
       });
     },
@@ -43,70 +35,64 @@ describe('Stores', () => {
     }
   };
 
-  let testSuite = (type) => {
-    describe(type, () => {
-      before(done => {
-        client = new RedisClient(config.redis);
-        client.once('ready', () => {
-          store = new Stores[type]('store:normal:test', client);
-          done();
-        });
-      });
-      beforeEach(done => {
-        store.flush(done);
-      });
-      afterEach(done => {
-        store.flush(done);
-      });
-
-      it('Should add keys', (done) => {
-        async.series([
-          helpers.addKey,
-          helpers.checkKeyAdded
-        ], done);
-      });
-
-      it('Should remove keys', (done) => {
-        async.series([
-          helpers.addKey,
-          helpers.checkKeyAdded,
-          helpers.removeKey,
-          helpers.checkKeyRemoved
-        ], done);
+  describe('JsonStore', () => {
+    before(done => {
+      client = new RedisClient(config.redis);
+      client.once('ready', () => {
+        store = new JsonStore('store:normal:test', client);
+        done();
       });
     });
-
-    describe('Encrypted: ' + type, () => {
-      before(done => {
-        client = new EncryptedRedisClient(config.redis, 'password');
-        client.once('ready', () => {
-          store = new Stores[type]('store:encrypted:test', client);
-          done();
-        });
-      });
-      beforeEach(done => {
-        store.flush(done);
-      });
-
-      it('Should add keys', (done) => {
-        async.series([
-          helpers.addKey,
-          helpers.checkKeyAdded
-        ], done);
-      });
-
-      it('Should remove keys', (done) => {
-        async.series([
-          helpers.addKey,
-          helpers.checkKeyAdded,
-          helpers.removeKey,
-          helpers.checkKeyRemoved
-        ], done);
-      });
+    beforeEach(done => {
+      store.flush(done);
+    });
+    afterEach(done => {
+      store.flush(done);
     });
 
+    it('Should add keys', (done) => {
+      async.series([
+        helpers.addKey,
+        helpers.checkKeyAdded
+      ], done);
+    });
 
-  };
+    it('Should remove keys', (done) => {
+      async.series([
+        helpers.addKey,
+        helpers.checkKeyAdded,
+        helpers.removeKey,
+        helpers.checkKeyRemoved
+      ], done);
+    });
+  });
 
-  Object.keys(Stores).forEach(testSuite);
+  describe('Encrypted: JsonStore', () => {
+    before(done => {
+      client = new EncryptedRedisClient(config.redis, 'password');
+      client.once('ready', () => {
+        store = new JsonStore('store:encrypted:test', client);
+        done();
+      });
+    });
+    beforeEach(done => {
+      store.flush(done);
+    });
+
+    it('Should add keys', (done) => {
+      async.series([
+        helpers.addKey,
+        helpers.checkKeyAdded
+      ], done);
+    });
+
+    it('Should remove keys', (done) => {
+      async.series([
+        helpers.addKey,
+        helpers.checkKeyAdded,
+        helpers.removeKey,
+        helpers.checkKeyRemoved
+      ], done);
+    });
+  });
 });
