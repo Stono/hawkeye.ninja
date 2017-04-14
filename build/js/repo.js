@@ -27,17 +27,15 @@ $(document).ready(function() {
       iDisplayLength: 5,
       order: [[ 0, 'asc' ]],
       data: data.map(function(item) {
+        var label = '<span class="label label-' + item.level + '">' + item.level + '</span>';
+        var code = '<div class="scan-label">' + item.code + ':</div> ' + item.description;
+        var advisory = '<div class="scan-label">Advisory:</div> ' + item.mitigation;
         return {
-          level: item.level,
-          description: item.description + '<br />' + item.mitigation,
+          level: label,
+          description: '<div class="scan-label-group">' + code + '<br/>' + advisory + '</div>',
           offender: item.offender
         }
       }),
-      createdRow: function(row) {
-        var element = $('td', row).eq(0);
-        var status = element.text();
-        element.html('<span class="label label-' + status + '">' + status + '</span>');
-      },
       fnDrawCallback: function() {
         $('#vulns .overlay').hide();
       }
