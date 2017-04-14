@@ -18,6 +18,7 @@ if(!String.linkify) {
 }
 
 $(document).ready(function() {
+  var converter = new showdown.Converter();
   //$.fn.dataTable.ext.errMode = 'none';
 
   var defaultTable = function(extra) {
@@ -40,26 +41,60 @@ $(document).ready(function() {
     var vulnsTable = $('#vulns table').DataTable(defaultTable({
       columns: [
         { width: '10%', data: 'level' },
-        { width: '70%', data: 'description' },
-        { width: '20%', data: 'offender' }
+        { width: '90%', data: 'description' }
       ],
       iDisplayLength: 5,
       order: [[ 0, 'asc' ]],
       data: data.map(function(item) {
         var label = '<span class="label label-' + item.level + '">' + item.level + '</span>';
-        var code = '<div class="scan-label">' + item.code + ':</div> ' + item.description;
+        var code = '<div class="scan-label">Code:</div> ' + item.code;
+        var title = '<div class="scan-label">Title:</div> ' + item.description;
         var mitigation = item.mitigation.linkify();
         var advisory = '<div class="scan-label">Advisory:</div> ' + mitigation;
+        var offender = '<div class="scan-label">Offender:</div> ' + item.offender;
+
+        var extra = '';
+        Object.keys(item.data).forEach(function(key) {
+          var value = item.data[key];
+          if(typeof value === 'object') { return; }
+          if(value === undefined || value === null) { return; }
+          if(key === 'overview' && item.module === 'nsp') {
+            value = converter.makeHtml(value);
+            extra = extra + '<div class="scan-label">' + key + ':</div><br/>' + value + '<br/>';
+          } else {
+            if(typeof value === 'string') {
+              value = value.linkify();
+            }
+            extra = extra + '<div class="scan-label">' + key + ':</div>' + value + '<br/>';
+          }
+        });
+        extra = '<div class="scan-label-group scan-extra">' + extra + '</extra>';
+        var description = '<div class="scan-label-group">' + title + '<br/>' + offender + '<br />' + advisory +  '</div>' + extra;
         return {
           level: label,
-          description: '<div class="scan-label-group">' + code + '<br/>' + advisory + '</div>',
-          offender: item.offender
+          description: description,
+          raw: item
         }
       }),
       fnDrawCallback: function() {
         $('#vulns .overlay').hide();
       }
     }));
+
+    $('#vulns tbody').on( 'click', 'tr', function () {
+      if ( $(this).hasClass('selected') ) {
+        $(this).find('.scan-extra').slideUp();
+        $(this).removeClass('selected');
+      }
+      else {
+        $(this).find('.scan-extra').slideDown();
+        $(this).addClass('selected');
+      }
+
+      var data = vulnsTable.row( this ).data();
+      console.log(data);
+    });
+
   };
 
   var colors = {
