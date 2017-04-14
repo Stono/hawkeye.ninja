@@ -207,7 +207,6 @@ $(document).ready(function() {
             datetime: scan.datetime,
             status: scan.status,
           }, scan.metrics.byLevel);
-          console.log(result);
           return result;
         });
       }
