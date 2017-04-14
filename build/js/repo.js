@@ -1,3 +1,22 @@
+if(!String.linkify) {
+  String.prototype.linkify = function() {
+
+    // http://, https://, ftp://
+    var urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
+
+    // www. sans http:// or https://
+    var pseudoUrlPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+
+    // Email addresses
+    var emailAddressPattern = /[\w.]+@[a-zA-Z_-]+?(?:\.[a-zA-Z]{2,6})+/gim;
+
+    return this
+    .replace(urlPattern, '<a target="_blank" href="$&">$&</a>')
+    .replace(pseudoUrlPattern, '$1<a target="_blank" href="http://$2">$2</a>')
+    .replace(emailAddressPattern, '<a target="_blank" href="mailto:$&">$&</a>');
+  };
+}
+
 $(document).ready(function() {
   //$.fn.dataTable.ext.errMode = 'none';
 
@@ -29,7 +48,8 @@ $(document).ready(function() {
       data: data.map(function(item) {
         var label = '<span class="label label-' + item.level + '">' + item.level + '</span>';
         var code = '<div class="scan-label">' + item.code + ':</div> ' + item.description;
-        var advisory = '<div class="scan-label">Advisory:</div> ' + item.mitigation;
+        var mitigation = item.mitigation.linkify();
+        var advisory = '<div class="scan-label">Advisory:</div> ' + mitigation;
         return {
           level: label,
           description: '<div class="scan-label-group">' + code + '<br/>' + advisory + '</div>',
