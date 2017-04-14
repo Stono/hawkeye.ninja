@@ -4,6 +4,14 @@ block header
   link(rel='stylesheet', href='/css/codemirror-theme-material.min.css')
 
 block content
+  .alert.alert-info.alert-dismissible
+    button.close(type='button', data-dismiss='alert', aria-hidden='true') &times;
+    h4
+      i.icon.fa.fa-info
+      | Scanning...
+    |  Scans are queued and the workers are shared with all other users.  You'll see a live stream here when the scan starts.
+    p Once the scan completes, you'll automatically be sent back to the project overview.
+
   .row
     .col-md-12
       textarea#console
