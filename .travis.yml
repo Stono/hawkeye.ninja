@@ -10,7 +10,7 @@ env:
     - HE_GITHUB_CLIENTID=test-clientid
     - HE_GITHUB_CALLBACK_URL=http://127.0.0.1
     - HE_SESSION_SECRET=test-sessionsecret
-    - HE_REDIS_PASSWORD=test-redispassword
+    - HE_REDIS_ENCRYPTION_KEY=test
 
 language: node_js
 

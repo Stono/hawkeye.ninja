@@ -3,7 +3,7 @@ const Dal = require('../lib/dal');
 const should = require('should');
 const async = require('async');
 const Crypto = require('node-crypt');
-
+const config = require('../config');
 describe('Data Access Layer', () => {
   let dal, udal, crypto;
   before(() => {
@@ -11,7 +11,7 @@ describe('Data Access Layer', () => {
     udal = new Dal({
       redis: {}
     });
-    crypto = new Crypto({ key: 'some-key' });
+    crypto = new Crypto({ key: config.redis.encryptionKey });
   });
   beforeEach(done => {
     dal.flushall(done);
