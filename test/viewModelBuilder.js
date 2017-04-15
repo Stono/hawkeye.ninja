@@ -1,20 +1,17 @@
 'use strict';
 const builder = require('../lib/viewModelBuilder');
 const Redis = require('../lib/redis');
-const EncryptedRedis = require('../lib/encryptedRedis');
+const Dal = require('../lib/dal');
 const should = require('should');
 const Repo = require('../lib/models/repo');
 
 describe('ViewModels', () => {
-  let model, request, encryptedRedis, redis, config;
+  let model, request, redis, config, dal;
   before(() => {
-    encryptedRedis = new EncryptedRedis({
-      encryptionKey: 'test'
-    });
     redis = new Redis();
+    dal = new Dal({ redis: redis });
     config = {
-      redis: redis,
-      encryptedRedis: encryptedRedis
+      dal: dal
     };
     request = {
       params: {
