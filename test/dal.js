@@ -5,7 +5,7 @@ const should = require('should');
 const async = require('async');
 const Crypto = require('node-crypt');
 
-describe.only('Data Access Layer', () => {
+describe('Data Access Layer', () => {
   let dal, udal, redis, crypto;
   before(done => {
     redis = new Redis();
@@ -24,6 +24,24 @@ describe.only('Data Access Layer', () => {
   });
   afterEach(done => {
     redis.flushall(done);
+  });
+
+  describe('Counter', () => {
+    let counter;
+    before(() => {
+      counter = dal.counter('some:key');
+    });
+    it('should increment the value', done => {
+      counter.inc(1, (err, newValue) => {
+        should.ifError(err);
+        should(newValue).eql(1);
+        counter.get((err, data) => {
+          should.ifError(err);
+          should(data).eql(1);
+          done();
+        });
+      });
+    });
   });
 
   describe('Key Value Pair', () => {

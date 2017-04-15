@@ -3,37 +3,38 @@ const ScanManager = require('../lib/scanManager');
 const should = require('should');
 const Redis = require('../lib/redis');
 
-const EncryptedRedis = require('../lib/encryptedRedis');
-const List = require('../lib/stores/list');
 const path = require('path');
 const _ = require('lodash');
 const GlobalStats = require('../lib/globalStats');
 
+const Dal = require('../lib/dal');
+
 describe('Scan Manager', () => {
-  let scanManager, repo, encryptedRedis, list, target, sample, stats, redis;
+  let scanManager, repo, list, target, sample, stats, redis, dal;
   before(done => {
     redis = new Redis();
-    encryptedRedis = new EncryptedRedis({
-      encryptionKey: 'test'
+    dal = new Dal({
+      redis: redis
     });
-    encryptedRedis.once('ready', done);
+    redis.once('ready', done);
   });
 
   beforeEach(done => {
     sample = _.cloneDeep(require(path.join(__dirname, 'samples/hawkeye/results.json')));
-    stats = new GlobalStats({ redis: redis });
+    stats = new GlobalStats({ dal: dal });
     repo = {
       id: 123456
     };
     target = { oauth: { accessToken: 'abc' }, repo: repo };
-    list = new List({ id: 'scans:pending', redis: encryptedRedis });
+    list = dal.fifoList('scans:pending');
     scanManager = new ScanManager({
-      encryptedRedis: encryptedRedis, id: repo.id
+      id: repo.id,
+      dal: dal
     });
-    encryptedRedis.flushall(done);
+    redis.flushall(done);
   });
   afterEach(done => {
-    encryptedRedis.flushall(done);
+    redis.flushall(done);
   });
 
   it('should return an empty array when there are no scans', done => {

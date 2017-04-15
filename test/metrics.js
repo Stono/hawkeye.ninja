@@ -1,22 +1,22 @@
 'use strict';
 const Metrics = require('../lib/metrics');
-const EncryptedRedis = require('../lib/encryptedRedis');
+const Redis = require('../lib/redis');
 const path = require('path');
 const should = require('should');
 const _ = require('lodash');
+const Dal = require('../lib/dal');
 
 describe('Metrics', () => {
-  let metrics, redis, sample;
+  let metrics, redis, sample, dal;
   before(done => {
     sample = _.cloneDeep(require(path.join(__dirname, 'samples/hawkeye/results.json')));
-    redis = new EncryptedRedis({
-      encryptionKey: 'test'
-    });
+    redis = new Redis();
+    dal = new Dal({ redis: redis });
     redis.once('ready', done);
   });
   beforeEach(done => {
     metrics = new Metrics({
-      encryptedRedis: redis,
+      dal: dal,
       repoId: 123456
     });
     redis.flushall(done);
