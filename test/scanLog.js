@@ -15,8 +15,9 @@ describe('Scan Log', () => {
     dal.flushall(done);
   });
   afterEach(done => {
-    log.stop();
-    dal.flushall(done);
+    log.stop(() => {
+      dal.flushall(done);
+    });
   });
 
   it('should publish log messages', done => {
@@ -34,9 +35,10 @@ describe('Scan Log', () => {
     log.subscribe(() => {
       done(new Error('should not have hit this'));
     }, err => {
-      should.ifError(err);
-      log.stop();
-      log.write(logMessage, done);
+      log.stop(() => {
+        should.ifError(err);
+        log.write(logMessage, done);
+      });
     });
   });
   it('should log messages to the list', () => {
