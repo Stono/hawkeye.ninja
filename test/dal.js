@@ -1,29 +1,22 @@
 'use strict';
 const Dal = require('../lib/dal');
-const Redis = require('../lib/redis');
 const should = require('should');
 const async = require('async');
 const Crypto = require('node-crypt');
 
 describe('Data Access Layer', () => {
-  let dal, udal, redis, crypto;
-  before(done => {
-    redis = new Redis();
-    dal = new Dal({
-      redis: redis
-    });
+  let dal, udal, crypto;
+  before(() => {
+    dal = new Dal();
     dal.use(new dal.middleware.Crypto('some-key'));
-    udal = new Dal({
-      redis: redis
-    });
+    udal = new Dal();
     crypto = new Crypto({ key: 'some-key' });
-    redis.once('ready', done);
   });
   beforeEach(done => {
-    redis.flushall(done);
+    dal.flushall(done);
   });
   afterEach(done => {
-    redis.flushall(done);
+    dal.flushall(done);
   });
 
   describe('Counter', () => {
@@ -194,6 +187,19 @@ describe('Data Access Layer', () => {
           should(data).startWith('crypto:');
           done();
         });
+      });
+    });
+  });
+
+  describe('Pub Sub', () => {
+    let sub;
+    it('should publish and subscribe to messages', done => {
+      const msg = { test: 'message' };
+      sub = dal.subscribe('some:channel', data => {
+        should(data).eql(msg);
+        sub.unsubscribe(done);
+      }, () => {
+        dal.publish('some:channel', msg, () => {});
       });
     });
   });

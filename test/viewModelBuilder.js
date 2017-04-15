@@ -1,15 +1,13 @@
 'use strict';
 const builder = require('../lib/viewModelBuilder');
-const Redis = require('../lib/redis');
 const Dal = require('../lib/dal');
 const should = require('should');
 const Repo = require('../lib/models/repo');
 
 describe('ViewModels', () => {
-  let model, request, redis, config, dal;
+  let model, request, config, dal;
   before(() => {
-    redis = new Redis();
-    dal = new Dal({ redis: redis });
+    dal = new Dal();
     config = {
       dal: dal
     };

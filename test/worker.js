@@ -1,20 +1,15 @@
 'use strict';
 const ScanManager = require('../lib/scanManager');
-const Redis = require('../lib/redis');
 const Worker = require('../lib/worker');
 const Dal = require('../lib/dal');
 const deride = require('deride');
 const should = require('should');
 
 describe('Worker', () => {
-  let scanManager, redis, worker, exec, fs, dal;
-  before(done => {
-    redis = new Redis();
-    dal = new Dal({ redis: redis });
-    redis.once('ready', done);
-  });
+  let scanManager, worker, exec, fs, dal;
 
   beforeEach(done => {
+    dal = new Dal();
     exec = deride.stub(['command']);
     fs = deride.stub(['readFileSync', 'unlink']);
     scanManager = new ScanManager({
@@ -27,11 +22,11 @@ describe('Worker', () => {
       workerId: 'workerId',
       workerInterval: 10
     });
-    redis.flushall(done);
+    dal.flushall(done);
   });
   afterEach(done => {
     worker.stop();
-    redis.flushall(done);
+    dal.flushall(done);
   });
   const go = done => {
     scanManager.schedule({

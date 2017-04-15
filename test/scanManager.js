@@ -1,7 +1,6 @@
 'use strict';
 const ScanManager = require('../lib/scanManager');
 const should = require('should');
-const Redis = require('../lib/redis');
 
 const path = require('path');
 const _ = require('lodash');
@@ -10,16 +9,10 @@ const GlobalStats = require('../lib/globalStats');
 const Dal = require('../lib/dal');
 
 describe('Scan Manager', () => {
-  let scanManager, repo, list, target, sample, stats, redis, dal;
-  before(done => {
-    redis = new Redis();
-    dal = new Dal({
-      redis: redis
-    });
-    redis.once('ready', done);
-  });
+  let scanManager, repo, list, target, sample, stats, dal;
 
   beforeEach(done => {
+    dal = new Dal();
     sample = _.cloneDeep(require(path.join(__dirname, 'samples/hawkeye/results.json')));
     stats = new GlobalStats({ dal: dal });
     repo = {
@@ -31,10 +24,10 @@ describe('Scan Manager', () => {
       id: repo.id,
       dal: dal
     });
-    redis.flushall(done);
+    dal.flushall(done);
   });
   afterEach(done => {
-    redis.flushall(done);
+    dal.flushall(done);
   });
 
   it('should return an empty array when there are no scans', done => {

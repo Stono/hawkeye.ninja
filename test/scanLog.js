@@ -1,28 +1,25 @@
 'use strict';
 const ScanLog = require('../lib/scanLog');
 const should = require('should');
-const Redis = require('../lib/redis');
 const Dal = require('../lib/dal');
 const config = require('../config');
 
 describe('Scan Log', () => {
-  let log, redis, dal;
-  before(done => {
-    redis = new Redis(config.redis);
-    dal = new Dal({ redis: redis });
+  let log, dal;
+  before(() => {
+    dal = new Dal();
     dal.use(new dal.middleware.Crypto(config.redis.encryptionKey));
-    redis.once('ready', done);
   });
   beforeEach(done => {
     log = new ScanLog({ repoId: 'repo', number: 'test', dal: dal });
-    redis.flushall(done);
+    dal.flushall(done);
   });
   afterEach(done => {
     log.stop();
-    redis.flushall(done);
+    dal.flushall(done);
   });
 
-  it('should publish log messages to redis', done => {
+  it('should publish log messages', done => {
     const logMessage = 'testing';
     log.subscribe(msg => {
       should(msg).eql(logMessage);

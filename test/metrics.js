@@ -1,28 +1,24 @@
 'use strict';
 const Metrics = require('../lib/metrics');
-const Redis = require('../lib/redis');
 const path = require('path');
 const should = require('should');
 const _ = require('lodash');
 const Dal = require('../lib/dal');
 
 describe('Metrics', () => {
-  let metrics, redis, sample, dal;
-  before(done => {
-    sample = _.cloneDeep(require(path.join(__dirname, 'samples/hawkeye/results.json')));
-    redis = new Redis();
-    dal = new Dal({ redis: redis });
-    redis.once('ready', done);
-  });
+  let metrics, sample, dal;
   beforeEach(done => {
+    sample = _.cloneDeep(require(path.join(__dirname, 'samples/hawkeye/results.json')));
+    dal = new Dal();
+
     metrics = new Metrics({
       dal: dal,
       repoId: 123456
     });
-    redis.flushall(done);
+    dal.flushall(done);
   });
   afterEach(done => {
-    redis.flushall(done);
+    dal.flushall(done);
   });
 
   it('should update the metrics fora a repo', done => {
@@ -62,7 +58,7 @@ describe('Metrics', () => {
         metrics.update(sample, () => {
           metrics.tminus(1, (err, data) => {
             should.ifError(err);
-            should(data[0].items.length).eql(1);
+            should(data[0].items.length).eql(7);
             should.ifError(err);
             done();
           });

@@ -1,22 +1,17 @@
 'use strict';
 const GlobalStats = require('../lib/globalStats');
-const Redis = require('../lib/redis');
 const should = require('should');
 const Dal = require('../lib/dal');
 
 describe('Global Stats', () => {
-  let globalStats, redis, dal;
-  before(done => {
-    redis = new Redis();
-    dal = new Dal({ redis: redis });
-    redis.once('ready', done);
-  });
+  let globalStats, dal;
   beforeEach(done => {
+    dal = new Dal();
     globalStats = new GlobalStats({ dal: dal });
-    redis.flushall(done);
+    dal.flushall(done);
   });
   afterEach(done => {
-    redis.flushall(done);
+    dal.flushall(done);
   });
 
   it('should return all stats', done => {
@@ -29,6 +24,4 @@ describe('Global Stats', () => {
       done();
     });
   });
-
 });
-

@@ -4,18 +4,12 @@ const Repo = require('../../lib/models/repo');
 const ScanManager = require('../../lib/scanManager');
 const deride = require('deride');
 const should = require('should');
-const Redis = require('../../lib/redis');
 const Dal = require('../../lib/dal');
 
 describe('Controllers.Repo', () => {
-  let repo, scanManager, redis, dal;
-  before(done => {
-    redis = new Redis();
-    dal = new Dal({ redis: redis });
-    redis.once('ready', done);
-  });
-
+  let repo, scanManager, dal;
   beforeEach(done => {
+    dal = new Dal();
     scanManager = deride.wrap(new ScanManager({
       dal: dal,
       id: 85411269
@@ -23,10 +17,10 @@ describe('Controllers.Repo', () => {
     repo = new RepoController({
       dal: dal
     });
-    redis.flushall(done);
+    dal.flushall(done);
   });
   afterEach(done => {
-    redis.flushall(done);
+    dal.flushall(done);
   });
 
   describe('viewRepo', () => {
