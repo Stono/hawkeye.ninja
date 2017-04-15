@@ -8,8 +8,9 @@ describe('Data Access Layer', () => {
   let dal, udal, crypto;
   before(() => {
     dal = new Dal();
-    dal.use(new dal.middleware.Crypto('some-key'));
-    udal = new Dal();
+    udal = new Dal({
+      redis: {}
+    });
     crypto = new Crypto({ key: 'some-key' });
   });
   beforeEach(done => {
