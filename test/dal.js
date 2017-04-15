@@ -61,13 +61,25 @@ describe('Data Access Layer', () => {
         });
       });
     });
+    it.skip('should handle objects', done => {
+      const value = 'some value';
+      kvp.set(value, err => {
+        should.ifError(err);
+        kvp.get((err, data) => {
+          should.ifError(err);
+          should(data).eql(value);
+          done();
+        });
+      });
+    });
+
     it('should store values encrypted', done => {
       const value = 'some value';
       kvp.set(value, err => {
         should.ifError(err);
         ukvp.get((err, data) => {
           should.ifError(err);
-          should(data).eql(crypto.encrypt(value));
+          should(data).startWith('crypto:');
           done();
         });
       });
@@ -116,7 +128,7 @@ describe('Data Access Layer', () => {
         should.ifError(err);
         ucollection.get(key, (err, data) => {
           should.ifError(err);
-          should(data).eql(crypto.encrypt(value));
+          should(data).startWith('crypto:');
           done();
         });
       });
@@ -179,7 +191,7 @@ describe('Data Access Layer', () => {
         should.ifError(err);
         ulist.pop((err, data) => {
           should.ifError(err);
-          should(data).eql(crypto.encrypt(value));
+          should(data).startWith('crypto:');
           done();
         });
       });

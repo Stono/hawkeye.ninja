@@ -1,16 +1,20 @@
 'use strict';
 const ScanLog = require('../lib/scanLog');
 const should = require('should');
-const EncryptedRedis = require('../lib/encryptedRedis');
+const Redis = require('../lib/redis');
+const Dal = require('../lib/dal');
 const config = require('../config');
+
 describe('Scan Log', () => {
-  let log, redis;
+  let log, redis, dal;
   before(done => {
-    redis = new EncryptedRedis(config.redis);
+    redis = new Redis(config.redis);
+    dal = new Dal({ redis: redis });
+    dal.use(new dal.middleware.Crypto(config.redis.encryptionKey));
     redis.once('ready', done);
   });
   beforeEach(done => {
-    log = new ScanLog({ repoId: 'repo', number: 'test', encryptedRedis: redis });
+    log = new ScanLog({ repoId: 'repo', number: 'test', dal: dal });
     redis.flushall(done);
   });
   afterEach(done => {
