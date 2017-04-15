@@ -13,11 +13,9 @@ describe.only('Data Access Layer', () => {
       redis: redis
     });
     dal.use(new dal.middleware.Crypto('some-key'));
-
     udal = new Dal({
       redis: redis
     });
-
     crypto = new Crypto({ key: 'some-key' });
     redis.once('ready', done);
   });
@@ -77,6 +75,22 @@ describe.only('Data Access Layer', () => {
         });
       });
     });
+
+    it('should let me get all items', done => {
+      let validateResponse = next => {
+        collection.all((err, data) => {
+          should.ifError(err);
+          should(data).eql({ key1: 'value1', key2: 'value2' });
+          next();
+        });
+      };
+      async.series([
+        next => { collection.set('key1', 'value1', next); },
+          next => { collection.set('key2', 'value2', next); },
+          validateResponse
+      ], done);
+    });
+
     it('should store values encrypted', done => {
       const key = 'somekey';
       const value = 'somevalue';
@@ -140,6 +154,7 @@ describe.only('Data Access Layer', () => {
           validateList
       ], done);
     });
+
     it('should store values encrypted', done => {
       const value = 'somevalue';
       list.push(value, err => {
