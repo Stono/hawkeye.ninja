@@ -1,6 +1,8 @@
 'use strict';
 module.exports = {
-  redis: {
-    host: 'redis'
+  dal: {
+    redis: {
+      host: 'redis'
+    }
   }
 };

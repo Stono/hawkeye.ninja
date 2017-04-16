@@ -2,7 +2,7 @@
 const GzipMiddleware = require('../../../lib/dal/middleware/gzip');
 const should = require('should');
 
-describe.skip('DAL Middleware: GZip', () => {
+describe('DAL Middleware: GZip', () => {
   let gzip;
   beforeEach(() => {
     gzip = new GzipMiddleware();
@@ -10,7 +10,7 @@ describe.skip('DAL Middleware: GZip', () => {
   it('should gzip things being written', () => {
     const test = 'this is some text';
     const output = gzip.write(test);
-    should(output).startWith('gzip:');
+    should(output instanceof Buffer);
   });
   it('should gunzip things being read', () => {
     const test = 'this is some text';
@@ -18,5 +18,4 @@ describe.skip('DAL Middleware: GZip', () => {
     const output = gzip.read(zipped);
     should(output).eql(test);
   });
-
 });

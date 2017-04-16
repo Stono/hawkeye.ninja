@@ -7,8 +7,8 @@ const _ = require('lodash');
 
 const validateEnv = (key) => {
   if(!process.env[key]) {
-      console.error('Warning'.yellow + ' ' + key + ' should really be set!');
-      return null;
+    console.error('Warning'.yellow + ' ' + key + ' should really be set!');
+    return null;
   }
   return process.env[key];
 };
@@ -19,31 +19,33 @@ const callbackUrl = port => {
 };
 
 let config = {
-  github: {},
-  redis: {
-    host: 'localhost',
-    port: 6379
+  port: 5000,
+  sessionSecret: validateEnv('HE_SESSION_SECRET'),
+  github: {
+    clientid: validateEnv('HE_GITHUB_CLIENTID'),
+    clientsecret: validateEnv('HE_GITHUB_SECRET'),
+    authorizationURL: 'https://github.com/login/oauth/authorize',
+    tokenURL: 'https://github.com/login/oauth/access_token',
+    userProfileURL: 'https://api.github.com/user',
+    callbackUrl: `${callbackUrl(5000)}/oauth/github/callback`
+  },
+  dal: {
+    encryptionKey: validateEnv('HE_DAL_ENCRYPTION_KEY', true),
+    gzip: util.defaultValue(validateEnv('HE_DAL_GZIP'), false),
+    redis: {
+      host: 'localhost',
+      port: 6379,
+      password: validateEnv('HE_REDIS_PASSWORD')
+    }
   }
 };
 
-config.redis.password = validateEnv('HE_REDIS_PASSWORD');
-config.redis.encryptionKey = validateEnv('HE_REDIS_ENCRYPTION_KEY', true);
-config.github.clientid = validateEnv('HE_GITHUB_CLIENTID');
-config.github.clientsecret = validateEnv('HE_GITHUB_SECRET');
-
-config.github.authorizationURL = 'https://github.com/login/oauth/authorize';
-config.github.tokenURL = 'https://github.com/login/oauth/access_token';
-config.github.userProfileURL = 'https://api.github.com/user';
-
-config.sessionSecret = validateEnv('HE_SESSION_SECRET');
-
-config.port = 5000;
-config.github.callbackUrl = `${callbackUrl(config.port)}/oauth/github/callback`;
-const envConfigFile = `./${process.env.NODE_ENV}.js`;
-if(process.env.NODE_ENV && fs.existsSync(path.join(__dirname, envConfigFile))) {
+const env = util.defaultValue(process.env.NODE_ENV, 'local');
+const envConfigFile = `./${env}.js`;
+if(env && fs.existsSync(path.join(__dirname, envConfigFile))) {
   const envConfig = require(envConfigFile);
   config = _.merge(config, envConfig);
 } else {
-  console.warn('Warning'.yellow + ' no environmental configuration found for environment: ' + process.env.NODE_ENV);
+  console.warn('Warning'.yellow + ' no environmental configuration found for environment: ' + env);
 }
 module.exports = config;

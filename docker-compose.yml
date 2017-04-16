@@ -15,7 +15,8 @@ services:
       - HE_GITHUB_CALLBACK_URL
       - HE_SESSION_SECRET
       - HE_REDIS_PASSWORD
-      - HE_REDIS_ENCRYPTION_KEY
+      - HE_DAL_ENCRYPTION_KEY
+      - HE_DAL_GZIP
       - NODE_ENV=prod
       - DEBUG
     ports:
@@ -36,7 +37,8 @@ services:
       - HE_GITHUB_CALLBACK_URL
       - HE_SESSION_SECRET
       - HE_REDIS_PASSWORD
-      - HE_REDIS_ENCRYPTION_KEY
+      - HE_DAL_ENCRYPTION_KEY
+      - HE_DAL_GZIP
       - NODE_ENV=prod
       - DEBUG
     volumes:
