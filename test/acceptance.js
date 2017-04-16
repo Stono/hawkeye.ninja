@@ -7,7 +7,7 @@ const _ = require('lodash');
 const should = require('should');
 const logger = require('superagent-logger');
 
-describe.skip('App', () => {
+describe('App', () => {
   let server;
   beforeEach(done => {
     let modifiedConfig = _.cloneDeep(config);
