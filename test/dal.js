@@ -20,6 +20,21 @@ describe('Data Access Layer', () => {
     dal.flushall(done);
   });
 
+  describe('Batching', () => {
+    it('should batch things', done => {
+      const batch = dal.batch();
+      batch.kvp('some:key').set('value', () => {});
+      batch.kvp('some:key').get((err, data) => {
+        should.ifError(err);
+        should(data).eql('value');
+        done();
+      });
+      batch.exec(err => {
+        should.ifError(err);
+      });
+    });
+  });
+
   describe('Counter', () => {
     let counter;
     before(() => {
