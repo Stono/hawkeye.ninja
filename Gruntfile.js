@@ -4,11 +4,11 @@ require('mocha');
 
 var config = {
   targets: {
-    test: ['test/**/*.js'],
+    test: ['test/**/*.js', '!test/acceptance.js'],
     bin: ['bin/*.js'],
     src: ['lib/**/*.js', '*.js', 'config/*.js']
   },
-  timeout: 3000,
+  timeout: 1000,
   require: ['should']
 };
 config.targets.all = config.targets.test.concat(config.targets.bin).concat(config.targets.src);
@@ -16,13 +16,21 @@ config.targets.all = config.targets.test.concat(config.targets.bin).concat(confi
 module.exports = function(grunt) {
   grunt.initConfig({
     mochaTest: {
-      stdout: {
+      code: {
         options: {
           reporter: 'spec',
           timeout: config.timeout,
           require: config.require
         },
         src: config.targets.test
+      },
+      browser: {
+        options: {
+          reporter: 'spec',
+          timeout: 7500,
+          require: config.require
+        },
+        src: ['test/acceptance.js']
       }
     },
     uglify: {
@@ -83,7 +91,7 @@ module.exports = function(grunt) {
     watch: {
       node: {
         files: config.targets.all,
-        tasks: ['jshint:stdout', 'mochaTest:stdout']
+        tasks: ['jshint:stdout', 'mochaTest:code']
       },
       js: {
         files: [
@@ -108,8 +116,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-notify');
 
-  // Default task.
   grunt.registerTask('assets', ['uglify', 'less']);
-  grunt.registerTask('test', ['jshint:stdout', 'mochaTest:stdout']);
+  grunt.registerTask('test', ['jshint:stdout', 'mochaTest:code']);
+  grunt.registerTask('browser', ['mochaTest:browser']);
   grunt.registerTask('default', ['assets', 'test']);
 };

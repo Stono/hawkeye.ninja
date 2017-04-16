@@ -1,46 +1,21 @@
 'use strict';
 const App = require('../lib/app');
-const freePort = require('find-free-port');
-const should = require('should');
 const Dal = require('../lib/dal');
 const Browser = require('zombie');
-const deride = require('deride');
-const fs = require('fs');
-const path = require('path');
+const util = require('../lib/util');
 
-describe.skip('App', () => {
-  let server, browser, passport, auth, passthrough;
+describe('App', () => {
+  let server, browser, auth, passthrough;
   before(done => {
-    freePort(5100, 5200, (err, port) => {
-      Browser.localhost('hawkeye.website', port);
-      browser = new Browser();
-      should.ifError(err);
-      const dal = new Dal();
-      const passThrough = function() {
-        return (req, res, next) => {
-          if(passthrough) { return passthrough(req, res, next); }
-          next();
-        };
-      };
+    Browser.localhost('hawkeye.website', 5000);
+    browser = new Browser();
+    const dal = new Dal();
 
-      passport = deride.stub(['initialize', 'session', 'authenticate']);
-      passport.setup.initialize.toDoThis(passThrough);
-      passport.setup.session.toDoThis(passThrough);
-
-      passport.setup.authenticate.toDoThis(() => {
-        return (req, res, next) => {
-          if(auth) { return auth(req, res, next); }
-          next();
-        };
-      });
-
-      server = new App({
-        dal: dal,
-        passport: passport,
-        port: port
-      });
-      server.start(done);
+    server = new App({
+      dal: dal,
+      port: 5000
     });
+    server.start(done);
   });
   after(done => {
     server.stop(done);
@@ -49,15 +24,28 @@ describe.skip('App', () => {
     auth = undefined;
     passthrough = undefined;
   });
-  describe.only('Not logged in', () => {
+
+  const visit = (url, done) => {
+    const acceptableErrors = [
+      'document.body.createTextRange is not a function',  // codemirror
+      'Cannot read property \'canvas\' of undefined'      // chartjs
+    ];
+    const assertVisit = err => {
+      let ok = (err === null) ? false : true;
+      acceptableErrors.forEach(msg => {
+        if(err.message === msg) {
+          ok = true;
+        }
+      });
+      if(ok === true) { done() } else { done(err); }
+    };
+    browser.visit(url, assertVisit);
+  };
+
+  describe('Not logged in', () => {
     describe('/', () => {
       before(done => {
-        browser.visit('/', err => {
-          if(err.message !== 'document.body.createTextRange is not a function') {
-            return done(err);
-          }
-          done();
-        });
+        visit('/', done);
       });
       it('should be successful', () => {
         browser.assert.success();
@@ -68,34 +56,79 @@ describe.skip('App', () => {
       // Not sure on the value here, feels like i'm testing a mock
       describe('clicking login', () => {
         before(done => {
-          auth = (req, res) => {
-            res.redirect('https://github.com');
-          };
           browser.click('.btn-github', done);
         });
         it('should redirect me to github', () => {
-          browser
-          .assert.url('https://github.com');
+          browser.assert.url(/https:\/\/github.com\/login\?client_id=/);
         });
       });
     });
   });
-  describe.skip('Logged in', () => {
+
+  describe('Logged in', () => {
+    let cookie;
+    before(d => {
+      const done = () => {
+        cookie = browser.getCookie('connect.sid');
+        d();
+      };
+      const confirmPassword = () => {
+        const url = browser.tabs.current._document._defaultView._response._url;
+        const urlMatch = url.match(/https:\/\/github.com\/login\/oauth\/authorize/);
+        if(!util.isEmpty(urlMatch)) {
+          console.log('filling password again');
+          browser.assert.success();
+          browser
+          .fill('sudo_password', process.env.TEST_GITHUB_PASSWORD)
+          .pressButton('Confirm password', done);
+        } else {
+          done();
+        }
+      };
+      const checkExtraAuth = () => {
+        const url = browser.tabs.current._document._defaultView._response._url;
+        const urlMatch = url.match(/https:\/\/github.com\/login\/oauth\/authorize/);
+        if(!util.isEmpty(urlMatch)) {
+          console.log('page requires extra auth');
+          setTimeout(() => {
+            browser.button('authorize').disabled = false;
+            return browser.pressButton('authorize', confirmPassword);
+          }, 1000);
+        } else {
+          done();
+        }
+      };
+      const login = () => {
+        if(util.isEmpty(process.env.TEST_GITHUB_LOGIN) || util.isEmpty(process.env.TEST_GITHUB_PASSWORD)) {
+          throw new Error('You must set TEST_GITHUB_LOGIN and TEST_GITHUB_PASSWORD');
+        }
+        browser
+        .fill('login', process.env.TEST_GITHUB_LOGIN)
+        .fill('password', process.env.TEST_GITHUB_PASSWORD)
+        .pressButton('Sign in', checkExtraAuth);
+      };
+      browser.visit('/oauth/github', login);
+    });
+    beforeEach(() => {
+    });
     describe('/', () => {
-      before(done => {
-        passthrough = (req, res, next) => {
-          req.user = fs.readFileSync(path.join(__dirname, 'samples/hawkeye/user.json')).toString();
-          next();
-        };
-        browser.visit('/', done);
-      });
-      it('should be successful', () => {
-        browser.assert.success();
-      });
       it('should show the dashboard', () => {
-        browser.assert.text('title', 'Hawkeye - Dashboard');
+        browser.assert.success();
+        browser.assert.url('/');
+      });
+      it('should show links to repos', () => {
+        browser.assert.link('li .repo a', 'apizor', '/repo/Stono/apizor');
       });
     });
-
+    describe('/repo/Stono/apizor', () => {
+      before(done => {
+        browser.setCookie({name: 'connect.sid', domain: 'hawkeye.website', value: cookie});
+        visit('/repo/Stono/apizor', done);
+      });
+      it('should show the repo information page', () => {
+        browser.assert.success();
+        browser.assert.element('#vulns');
+      });
+    });
   });
 });
