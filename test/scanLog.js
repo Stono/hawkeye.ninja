@@ -2,13 +2,11 @@
 const ScanLog = require('../lib/scanLog');
 const should = require('should');
 const Dal = require('../lib/dal');
-const config = require('../config');
 
 describe('Scan Log', () => {
   let log, dal;
   before(() => {
     dal = new Dal();
-    dal.use(new dal.middleware.Crypto(config.redis.encryptionKey));
   });
   beforeEach(done => {
     log = new ScanLog({ repoId: 'repo', number: 'test', dal: dal });

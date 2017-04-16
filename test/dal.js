@@ -55,7 +55,7 @@ describe('Data Access Layer', () => {
         });
       });
     });
-    it.skip('should handle objects', done => {
+    it('should handle objects', done => {
       const value = 'some value';
       kvp.set(value, err => {
         should.ifError(err);
