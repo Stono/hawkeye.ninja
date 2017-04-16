@@ -7,6 +7,10 @@ const util = require('../lib/util');
 describe('App', () => {
   let server, browser, auth, passthrough;
   before(done => {
+    if(util.isEmpty(process.env.TEST_GITHUB_LOGIN) || util.isEmpty(process.env.TEST_GITHUB_PASSWORD)) {
+      throw new Error('You must set TEST_GITHUB_LOGIN and TEST_GITHUB_PASSWORD');
+    }
+
     Browser.localhost('hawkeye.website', 5000);
     browser = new Browser();
     const dal = new Dal();
@@ -99,9 +103,6 @@ describe('App', () => {
         }
       };
       const login = () => {
-        if(util.isEmpty(process.env.TEST_GITHUB_LOGIN) || util.isEmpty(process.env.TEST_GITHUB_PASSWORD)) {
-          throw new Error('You must set TEST_GITHUB_LOGIN and TEST_GITHUB_PASSWORD');
-        }
         browser
         .fill('login', process.env.TEST_GITHUB_LOGIN)
         .fill('password', process.env.TEST_GITHUB_PASSWORD)
