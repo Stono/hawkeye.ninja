@@ -87,6 +87,7 @@ describe('Scan Manager', () => {
       scanManager.fail(1, sample, err => {
         should.ifError(err);
         scanManager.get(1, (err, data) => {
+          should.ifError(err);
           should(data.status).eql('fail');
           should(data.metrics.items.length).eql(16);
           done();
