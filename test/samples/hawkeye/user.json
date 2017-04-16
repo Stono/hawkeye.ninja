@@ -1,0 +1,68 @@
+{
+  "profile": {
+    "login": "Stono",
+    "id": 1486729,
+    "avatar_url": "https://avatars1.githubusercontent.com/u/1486729?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/Stono",
+    "html_url": "https://github.com/Stono",
+    "followers_url": "https://api.github.com/users/Stono/followers",
+    "following_url": "https://api.github.com/users/Stono/following{/other_user}",
+    "gists_url": "https://api.github.com/users/Stono/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/Stono/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/Stono/subscriptions",
+    "organizations_url": "https://api.github.com/users/Stono/orgs",
+    "repos_url": "https://api.github.com/users/Stono/repos",
+    "events_url": "https://api.github.com/users/Stono/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/Stono/received_events",
+    "type": "User",
+    "site_admin": false,
+    "name": "Karl Stoney",
+    "company": null,
+    "blog": "https://karlstoney.com",
+    "location": "Manchester",
+    "email": null,
+    "hireable": true,
+    "bio": null,
+    "public_repos": 52,
+    "public_gists": 3,
+    "followers": 20,
+    "following": 6,
+    "created_at": "2012-02-29",
+    "updated_at": "2017-04-13T07:37:50Z"
+  },
+  "repos": [
+    {
+      "id": 63738114,
+      "name": "csgo",
+      "private": false,
+      "description": null,
+      "owner": "fernando-alves",
+      "fullName": "fernando-alves/csgo"
+    },
+    {
+      "id": 63903865,
+      "name": "cli.peopledata",
+      "private": false,
+      "description": "CLI tools for the people data team to use, but others can join the party if they like",
+      "owner": "peopledata",
+      "fullName": "peopledata/cli.peopledata"
+    },
+    {
+      "id": 71007636,
+      "name": "cli.thoughtdata",
+      "private": false,
+      "description": "ThoughtData CLI",
+      "owner": "peopledata",
+      "fullName": "peopledata/cli.thoughtdata"
+    },
+    {
+      "id": 77170986,
+      "name": "dnsmasq",
+      "private": true,
+      "description": null,
+      "owner": "peopledata",
+      "fullName": "peopledata/dnsmasq"
+    }
+  ]
+}

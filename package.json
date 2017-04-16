@@ -41,7 +41,7 @@
     "mocha": "3.2.0",
     "mocha-jenkins-reporter": "0.3.7",
     "should": "11.2.1",
-    "supertest": "3.0.0"
+    "zombie": "5.0.5"
   },
   "keywords": [],
   "license": "UNLICENSED",
@@ -69,7 +69,6 @@
     "passport-github": "1.1.0",
     "pug": "2.0.0-beta11",
     "socket.io": "1.7.3",
-    "superagent-logger": "1.1.0",
     "tmp": "0.0.31"
   }
 }
