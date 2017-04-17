@@ -293,4 +293,14 @@ $(document).ready(function() {
     window.location.href = window.location.pathname + '/' + data.number + '?history=true';
   });
 
+  var toggleEmail = function() {
+    var val = $('#notifiyWhen').val();
+    if(val === 'Never') {
+      $('#emailNotification').attr('disabled', true);
+    } else {
+      $('#emailNotification').removeAttr( "disabled" );
+    }
+  };
+  $('#notifyWhen').change(toggleEmail);
+  $('#emailNotification').inputmask('email');
 });

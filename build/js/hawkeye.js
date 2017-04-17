@@ -7,6 +7,7 @@ $(document).ready(function() {
       barColor: $this.data('color')
     });
   });
+  $(".select2").select2();
 
   var defaultOrg = $('.treeview.active')[0];
   var defaultRepo = $('.repo.active')[0];

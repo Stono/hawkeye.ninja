@@ -1,5 +1,7 @@
 extend layout
 block header
+  link(rel='stylesheet', href='/css/select2.min.css')
+
 block content
   if repo.private
     .alert.alert-info.alert-dismissible
@@ -15,6 +17,48 @@ block content
         i.icon.fa.fa-info
         | Get scanning!
       |  You can trigger a scan of this repository by hitting the Scan Now button, at the bottom of the page.
+
+  .row
+    .col-md-12
+      .box.box-primary.collapsed-box#repoSettings
+        .box-header.with-border
+          h3.box-title Settings
+          .box-tools.pull-right
+            button.btn.btn-box-tool(type='button', data-widget='collapse')
+              i.fa.fa-plus
+        .box-body
+          .row
+            .col-md-4
+              .form-group
+                label Rescan Frequency
+                |
+                select.form-control.select2(style='width: 100%;')
+                  option(selected='selected') Never
+                  option Hourly
+                  option Daily
+                  option Weekly
+                  option Monthly
+            .col-md-4
+              .form-group
+                label Notify When
+                |
+                select.form-control.select2(style='width: 100%;')#notifyWhen
+                  option(selected='selected') Never
+                  option When something changes
+                  option Always
+            .col-md-4
+              .form-group
+                label Notification Email Address
+                .input-group
+                  .input-group-addon
+                    i.fa.fa-envelope
+                  |
+                  input#emailNotification.form-control(type='text', disabled='disabled')
+
+        .box-footer.clearfix
+          |
+          a.btn.btn-sm.btn-primary.btn-flat.pull-right(href='#') Save
+
 
   .row
     .col-md-5
@@ -118,7 +162,7 @@ block content
         .overlay
           i.fa.fa-refresh.fa-spin
 
-        .box-footer.clearfix(style='display: block;')
+        .box-footer.clearfix
           |
           a.btn.btn-sm.btn-primary.btn-flat.pull-right(href='/repo/' + repo.fullName + '/new') Scan Now
 
@@ -126,3 +170,5 @@ block javascript
   script(src='/js/chart.min.js')
   script(src='/js/repo.min.js')
   script(src='/js/showdown.min.js')
+  script(src='/js/select2.full.min.js')
+  script(src='/js/jquery.inputmask.bundle.min.js')
