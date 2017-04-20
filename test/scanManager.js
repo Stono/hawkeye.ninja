@@ -18,7 +18,7 @@ describe('Scan Manager', () => {
     repo = {
       id: 123456
     };
-    target = { oauth: { accessToken: 'abc' }, repo: repo };
+    target = { oauth: { accessToken: 'abc' }, repo: repo, token: 'abc' };
     list = dal.fifoList('scans:pending');
     scanManager = new ScanManager({
       id: repo.id,
@@ -59,6 +59,16 @@ describe('Scan Manager', () => {
       });
     });
   });
+  it('things added to the scan list shoud contain the token', done => {
+    scanManager.schedule(target, () => {
+      list.pop((err, model) => {
+        should.ifError(err);
+        should(model.token).eql('abc');
+        done();
+      });
+    });
+  });
+
   it('scan numbers should increment, and ids should be different', done => {
     scanManager.schedule(target, (err, first) => {
       should(first.number).eql(1);

@@ -7,16 +7,28 @@ const should = require('should');
 const Dal = require('../../lib/dal');
 
 describe('Controllers.Repo', () => {
-  let repo, scanManager, dal;
+  let repo, scanManager, dal, req;
   beforeEach(done => {
     dal = new Dal();
+    repo = new RepoController({
+      dal: dal
+    });
+    req = {
+      params: {
+        org: 'stono',
+        repo: 'hawkeye'
+      },
+      user: {
+        profile: 'profile info here',
+        oauth: { accessToken: 'oauth here' },
+        repos: require('../samples/github/repos.json').map(r => { return new Repo().fromGithub(r); })
+      }
+    };
     scanManager = deride.wrap(new ScanManager({
       dal: dal,
       id: 85411269
     }));
-    repo = new RepoController({
-      dal: dal
-    });
+
     dal.flushall(done);
   });
   afterEach(done => {
@@ -25,21 +37,9 @@ describe('Controllers.Repo', () => {
 
   describe('viewRepo', () => {
     it('should append the scanManager scans', done => {
-      let req = {
-        params: {
-          org: 'stono',
-          repo: 'hawkeye'
-        },
-        user: {
-          profile: 'profile info here',
-          oauth: 'oauth here',
-          repos: require('../samples/github/repos.json').map(r => { return new Repo().fromGithub(r); })
-        }
-      };
       let res = deride.stub(['render']);
       res.setup.render.toDoThis((view, model) => {
         scanManager.scans((err, scans) => {
-          scanManager.expect.scans.called.once();
           should(model.scans).eql(scans);
           done();
         });
@@ -47,4 +47,19 @@ describe('Controllers.Repo', () => {
       repo.viewRepo(req, res);
     });
   });
+  describe('newScan', () => {
+    it('should schedule a new scan', done => {
+      let res = deride.stub(['redirect']);
+      res.setup.redirect.toDoThis(url => {
+        should(url).match(/\/repo\/Stono\/hawkeye\/1/);
+        scanManager.popPending((err, scan) => {
+          should.ifError(err);
+          console.log(scan);
+          done();
+        });
+      });
+      repo.newScan(req, res);
+    });
+  });
+
 });

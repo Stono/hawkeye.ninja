@@ -31,7 +31,8 @@ describe('Worker', () => {
   const go = done => {
     scanManager.schedule({
       oauth: { accessToken: 'token' },
-      repo: { id: 'repoid', fullName: 'repo/repo' }
+      repo: { id: 'repoid', fullName: 'repo/repo' },
+      token: 'abc'
     }, done);
     worker.start();
   };
@@ -61,8 +62,7 @@ describe('Worker', () => {
       should(command[5]).eql('--rm');
       should(command[6]).eql('stono/hawkeye.ninja-oneshot');
       should(command[7]).eql('https://token:x-oauth-basic@github.com/repo/repo');
-      should(command[8]).eql('workerId');
-      should(command[9]).eql(scanId);
+      should(command[8]).eql('abc');
       done();
     });
     go((err, scan) => {
