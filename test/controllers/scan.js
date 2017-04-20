@@ -42,7 +42,8 @@ describe('Controllers.Scan', () => {
         body: {
           metadata: { state: 'failed' },
           results: result
-        }
+        },
+        query: {}
       };
       next();
 
