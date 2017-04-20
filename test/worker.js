@@ -36,19 +36,6 @@ describe('Worker', () => {
     }, done);
     worker.start();
   };
-  it('should try and read the results from disk', done => {
-    let scanId;
-    exec.setup.command.toCallbackWith([null, { code: 0 }]);
-    fs.setup.readFileSync.toReturn('"{}"');
-    fs.setup.unlink.toDoThis(file => {
-      should(file).match(/\/tmp\/scanLogs\/workerId\/.*\/results.json/);
-      done();
-    });
-
-    go((err, scan) => {
-      scanId = scan.id;
-    });
-  });
 
   it('should invoke the oneshot docker container', done => {
     let scanId;
@@ -57,12 +44,9 @@ describe('Worker', () => {
       should(command[0]).eql('docker');
       should(command[1]).eql('run');
       should(command[2]).eql('--rm');
-      should(command[3]).eql('-v');
-      should(command[4]).match(/tmp\/scanLog/);
-      should(command[5]).eql('--rm');
-      should(command[6]).eql('stono/hawkeye.ninja-oneshot');
-      should(command[7]).eql('https://token:x-oauth-basic@github.com/repo/repo');
-      should(command[8]).eql('abc');
+      should(command[3]).eql('stono/hawkeye.ninja-oneshot');
+      should(command[4]).eql('https://token:x-oauth-basic@github.com/repo/repo');
+      should(command[5]).match(/http.*abc/);
       done();
     });
     go((err, scan) => {

@@ -14,6 +14,7 @@ services:
       - HE_GITHUB_CLIENTID
       - HE_GITHUB_CALLBACK_URL
       - HE_SESSION_SECRET
+      - HE_SERVER_URL=http://web
       - HE_REDIS_PASSWORD
       - HE_DAL_ENCRYPTION_KEY
       - HE_DAL_GZIP
@@ -36,6 +37,7 @@ services:
       - HE_GITHUB_CLIENTID
       - HE_GITHUB_CALLBACK_URL
       - HE_SESSION_SECRET
+      - HE_SERVER_URL=http://web
       - HE_REDIS_PASSWORD
       - HE_DAL_ENCRYPTION_KEY
       - HE_DAL_GZIP
@@ -43,7 +45,6 @@ services:
       - DEBUG
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /tmp/scanLogs:/tmp/scanLogs
 
   oneshot:
     image: stono/hawkeye.ninja-oneshot

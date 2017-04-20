@@ -65,9 +65,9 @@ describe('Controllers.Scan', () => {
 
   describe('handleResult', () => {
     it('should pass the result to the scanManager', done => {
-      let res = deride.stub(['send']);
+      let res = deride.stub(['sendStatus']);
 
-      res.setup.send.toDoThis(() => {
+      res.setup.sendStatus.toDoThis(() => {
         scanManager.get(1, (err, data) => {
           should(data.status).eql('failed');
           done();
@@ -79,9 +79,9 @@ describe('Controllers.Scan', () => {
 
   describe('handleScan', () => {
     it('should pass the result to the scanManager', done => {
-      let res = deride.stub(['send']);
+      let res = deride.stub(['sendStatus']);
 
-      res.setup.send.toDoThis(() => {
+      res.setup.sendStatus.toDoThis(() => {
         scanManager.get(1, (err, data) => {
           should(data.status).eql('failed');
           done();

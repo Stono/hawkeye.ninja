@@ -8,8 +8,7 @@ describe('OneShot', () => {
     exec = deride.stub(['command']);
     oneshot = new OneShot({
       repo: 'https://github.com/some/repo',
-      scanId: 'scanId',
-      workerId: 'workerId',
+      url: 'http://post.to',
       exec: exec
     });
   });
@@ -30,7 +29,7 @@ describe('OneShot', () => {
     exec.setup.command.toDoThis((command, options, next) => {
 
       exec.setup.command.toDoThis((command, options, next) => {
-        should(command).match(/hawkeye scan -t \/tmp\/repo-.* -j \/tmp\/scanLogs\/workerId\/scanId\/results.json/);
+        should(command).match(/hawkeye scan -t \/tmp\/repo-.* -h http:\/\/post\.to/);
         next(null, {
           code: 0
         });
