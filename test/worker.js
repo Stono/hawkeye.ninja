@@ -2,6 +2,7 @@
 const ScanManager = require('../lib/scanManager');
 const Worker = require('../lib/worker');
 const Dal = require('../lib/dal');
+const util = require('../lib/util');
 const deride = require('deride');
 const should = require('should');
 
@@ -40,13 +41,9 @@ describe('Worker', () => {
   it('should invoke the oneshot docker container', done => {
     let scanId;
     exec.setup.command.toDoThis(command => {
-      command = command.split(' ');
-      should(command[0]).eql('docker');
-      should(command[1]).eql('run');
-      should(command[2]).eql('--rm');
-      should(command[3]).eql('stono/hawkeye.ninja-oneshot');
-      should(command[4]).eql('https://token:x-oauth-basic@github.com/repo/repo');
-      should(command[5]).match(/http.*abc/);
+      let boot = util.defaultValue(process.env.ONESHOT_CMD, 'docker run --rm stono/hawkeye.ninja-oneshot');
+      let rxp = new RegExp(boot + ' https://token:x-oauth-basic@github.com/repo/repo http://.*');
+      should(command).match(rxp);
       done();
     });
     go((err, scan) => {
