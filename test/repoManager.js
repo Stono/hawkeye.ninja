@@ -4,7 +4,7 @@ const Dal = require('../lib/dal');
 const Repo = require('../lib/models/repo');
 const should = require('should');
 
-describe.only('Repo Manager', () => {
+describe('Repo Manager', () => {
   let manager, dal, repo;
   before(() => {
     dal = new Dal();
@@ -37,6 +37,14 @@ describe.only('Repo Manager', () => {
     it('should track a repo', () => {
       should(tracked.repo).eql(repo);
     });
+    it('should let me look up a repo by its token', done => {
+      manager.getByToken(repo.token, (err, data) => {
+        should.ifError(err);
+        should(data.repo).eql(repo);
+        done();
+      });
+    });
+
     it('should default the schedule of a tracked repo', () => {
       should(tracked.schedule.freq).eql('Never');
       should(tracked.schedule.when).eql('Never');
@@ -56,6 +64,7 @@ describe.only('Repo Manager', () => {
           should(data.schedule.email).eql('test@test.com');
           should(data.schedule.user).eql(123456);
           should(data.schedule.last).eql(null);
+          should(data.token).match(/[a-z0-9]{96}/);
           //should(data.schedule.last.toString().slice(0, -2)).eql(Date.now().toString().slice(0, -2));
           done();
         });
