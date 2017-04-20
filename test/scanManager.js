@@ -21,7 +21,7 @@ describe('Scan Manager', () => {
     repo = {
       id: 123456
     };
-    target = { oauth: { accessToken: 'abc' }, repo: repo, token: 'abc' };
+    target = { oauth: { accessToken: 'abc' }, repo: repo, token: 'abc', reason: 'test' };
     list = dal.fifoList('scans:pending');
     scanManager = new ScanManager({
       id: repo.id,
@@ -46,6 +46,7 @@ describe('Scan Manager', () => {
       should(scan.id).match(/[a-z0-9]{40}/);
       should(scan.status).eql('pending');
       should(scan.number).eql(1);
+      should(scan.reason).eql('test');
       scanManager.get(1, (err, data) => {
         should.ifError(err);
         should(data.number).eql(1);
