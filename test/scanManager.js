@@ -13,7 +13,10 @@ describe('Scan Manager', () => {
 
   beforeEach(done => {
     dal = new Dal();
-    sample = _.cloneDeep(require(path.join(__dirname, 'samples/hawkeye/results.json')));
+    sample = {
+      results: _.cloneDeep(require(path.join(__dirname, 'samples/hawkeye/results.json'))),
+      metadata: { state: 'fail' }
+    };
     stats = new GlobalStats({ dal: dal });
     repo = {
       id: 123456
@@ -92,36 +95,10 @@ describe('Scan Manager', () => {
       });
     });
   });
-  it('should fail scans', done => {
-    scanManager.schedule(target, () => {
-      scanManager.fail(1, sample, err => {
-        should.ifError(err);
-        scanManager.get(1, (err, data) => {
-          should.ifError(err);
-          should(data.status).eql('fail');
-          should(data.metrics.items.length).eql(16);
-          done();
-        });
-      });
-    });
-  });
-  it('should pass scans', done => {
-    scanManager.schedule(target, () => {
-      scanManager.pass(1, sample, err => {
-        should.ifError(err);
-        scanManager.get(1, (err, data) => {
-          should.ifError(err);
-          should(data.status).eql('pass');
-          should(data.metrics.items.length).eql(16);
-          done();
-        });
-      });
-    });
-  });
   it('should increment the scan counter', done => {
     scanManager.schedule(target, () => {
-      scanManager.pass(1, sample, () => {
-        scanManager.fail(1, sample, () => {
+      scanManager.handleScan(1, sample, () => {
+        scanManager.handleScan(1, sample, () => {
           stats.scans((err, amount) => {
             should.ifError(err);
             should(amount).eql(2);
