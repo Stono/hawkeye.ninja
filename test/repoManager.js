@@ -44,6 +44,28 @@ describe('Repo Manager', () => {
         done();
       });
     });
+    it('track should be idempotent', done => {
+      manager.schedule(123456, {
+        freq: 'Hourly',
+        when: 'Always',
+        email: 'test@test.com',
+        user: 123456
+      }, err => {
+        should.ifError(err);
+        manager.track(repo, err => {
+          should.ifError(err);
+          manager.get(123456, (err, data) => {
+            should(data.schedule.freq).eql('Hourly');
+            should(data.schedule.when).eql('Always');
+            should(data.schedule.email).eql('test@test.com');
+            should(data.schedule.user).eql(123456);
+            should(data.schedule.last).eql(null);
+            should(data.token).match(/[a-z0-9]{96}/);
+            done();
+          });
+        });
+      });
+    });
 
     it('should default the schedule of a tracked repo', () => {
       should(tracked.schedule.freq).eql('Never');
