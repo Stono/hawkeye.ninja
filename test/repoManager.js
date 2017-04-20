@@ -38,7 +38,7 @@ describe('Repo Manager', () => {
       should(tracked.repo).eql(repo);
     });
     it('should let me look up a repo by its token', done => {
-      manager.getByToken(repo.token, (err, data) => {
+      manager.getByToken(tracked.token, (err, data) => {
         should.ifError(err);
         should(data.repo).eql(repo);
         done();

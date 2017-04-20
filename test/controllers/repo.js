@@ -52,9 +52,8 @@ describe('Controllers.Repo', () => {
       let res = deride.stub(['redirect']);
       res.setup.redirect.toDoThis(url => {
         should(url).match(/\/repo\/Stono\/hawkeye\/1/);
-        scanManager.popPending((err, scan) => {
+        scanManager.popPending(err => {
           should.ifError(err);
-          console.log(scan);
           done();
         });
       });
