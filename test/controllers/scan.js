@@ -39,7 +39,10 @@ describe('Controllers.Scan', () => {
         params: {
           token: tracked.token
         },
-        body: result
+        body: {
+          metadata: { state: 'failed' },
+          results: result
+        }
       };
       next();
 
@@ -66,7 +69,7 @@ describe('Controllers.Scan', () => {
 
       res.setup.send.toDoThis(() => {
         scanManager.get(1, (err, data) => {
-          should(data.status).eql('unknown');
+          should(data.status).eql('failed');
           done();
         });
       });
@@ -80,7 +83,7 @@ describe('Controllers.Scan', () => {
 
       res.setup.send.toDoThis(() => {
         scanManager.get(1, (err, data) => {
-          should(data.status).eql('unknown');
+          should(data.status).eql('failed');
           done();
         });
       });
