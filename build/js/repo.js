@@ -91,7 +91,6 @@ $(document).ready(function() {
         $(this).addClass('selected');
       }
     });
-
   };
 
   var colors = {
@@ -153,8 +152,8 @@ $(document).ready(function() {
     pieChart.Doughnut(PieData, pieOptions);
   };
 
-
   var drawGraph = function(data) {
+    data.reverse();
     var labels = data.map(function(row) { return row.number });
 
     var getData = function(level) {
@@ -237,7 +236,8 @@ $(document).ready(function() {
   var scansTable = $('#scans table').DataTable(defaultTable({
     columns: [
       { width: '10%', data: 'number' },
-      { width: '60%', data: 'datetime' },
+      { width: '20%', data: 'datetime' },
+      { width: '40%', data: 'reason' },
       { width: '5%', data: 'critical' },
       { width: '5%', data: 'high' },
       { width: '5%', data: 'medium' },
@@ -258,7 +258,7 @@ $(document).ready(function() {
         drawGraph(completeScans);
         drawPie(latestScan);
         drawVulnerabilities(latestScan);
-        return allScans.map(function(scan) {
+        var result = allScans.map(function(scan) {
           if(scan.status === 'pending') {
             scan.metrics = {
               byLevel: { critical: '?', high: '?', medium: '?', low: '?' }
@@ -268,19 +268,21 @@ $(document).ready(function() {
             number: scan.number,
             datetime: scan.datetime,
             status: scan.status,
+            reason: scan.reason
           }, scan.metrics.byLevel);
           return result;
         });
+        return result;
       }
     },
     createdRow: function(row) {
-      var element = $('td', row).eq(6);
+      var element = $('td', row).eq(7);
       var status = element.text();
       var labels = {
         fail: 'label-danger',
         pending: 'label-default',
         pass: 'label-success'
-      }
+      };
       var label = labels[status] || 'default';
       element.html('<span class="label pull-right ' + label + '">' + status + '</span> ');
     },

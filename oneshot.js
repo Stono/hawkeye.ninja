@@ -7,7 +7,6 @@ const oneshot = new OneShot({
   repo: repo,
   url: url
 });
-console.log(url);
 oneshot.scan((err, result) => {
   process.exit(result.code);
 });
