@@ -3,6 +3,7 @@
 /* global document */
 /* global window */
 /* global showdown */
+/* global alert */
 /* global Chart */
 
 var linkify = function(value) {
@@ -237,6 +238,13 @@ $(document).ready(function() {
     lineChart.Line(areaChartData, lineChartOptions);
   };
 
+  var populateSchedule = function(data) {
+    var schedule = data.tracking.schedule;
+    $('#notifyWhen').val(schedule.when).trigger('change');
+    $('#scanFrequency').val(schedule.freq).trigger('change');
+    $('#emailNotification').val(schedule.email).trigger('change');
+  };
+
   var scansTable = $('#scans table').DataTable(defaultTable({
     columns: [
       { width: '10%', data: 'number' },
@@ -259,6 +267,7 @@ $(document).ready(function() {
         });
         var latestScan = (completeScans.length === 0) ? [] : completeScans[0].metrics.items;
 
+        populateSchedule(data);
         drawGraph(completeScans);
         drawPie(latestScan);
         drawVulnerabilities(latestScan);
@@ -318,6 +327,41 @@ $(document).ready(function() {
     };
   };
 
+  var saveSchedule = function() {
+    if($(this).attr('disabled') === 'disabled') { return false; }
+    toggle('#saveSchedule', false);
+    $('#saveSchedule').text('Saving...');
+
+    var model = {
+      freq: $('#scanFrequency').val(),
+      when: $('#notifyWhen').val(),
+      email: $('#emailNotification').val()
+    };
+    var url = '/api' + window.location.pathname + '/tracking/schedule';
+    $.ajax({
+      type: 'PUT',
+      contentType: 'application/json; charset=utf-8',
+      url: url,
+      data: JSON.stringify(model),
+      dataType: 'json',
+      complete: function() {
+        toggle('#saveSchedule', true);
+      },
+      success: function () {
+        $('#saveSchedule').text('Saved!');
+        setTimeout(function() {
+          $('#repoSettings .btn.btn-box-tool').click();
+          setTimeout(function() { $('#saveSchedule').text('Save'); }, 1000);
+        }, 500);
+      },
+      error: function (){
+        $('#saveSchedule').text('Save');
+        alert('We were unable to save the schedule!');
+      }
+    });
+    return false;
+  };
+
   var emailUpdated = function() {
     toggle('#saveSchedule', !$(this).inputmask('isComplete'));
   };
@@ -325,4 +369,6 @@ $(document).ready(function() {
   $('#notifyWhen').change(toggler('#emailNotification'));
   $('#emailNotification').change(emailUpdated);
   $('#emailNotification').inputmask('email');
+
+  $('#saveSchedule').click(saveSchedule);
 });
