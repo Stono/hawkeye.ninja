@@ -6,7 +6,6 @@
 /* global Chart */
 
 var linkify = function(value) {
-
   // http://, https://, ftp://
   var urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
 
@@ -68,7 +67,7 @@ $(document).ready(function() {
             extra = extra + '<div class="scan-label">' + key + ':</div><br/>' + value + '<br/>';
           } else {
             if(typeof value === 'string') {
-              value = linkify(value.linkify);
+              value = linkify(value);
             }
             extra = extra + '<div class="scan-label">' + key + ':</div>' + value + '<br/>';
           }

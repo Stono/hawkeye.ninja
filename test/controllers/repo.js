@@ -7,10 +7,10 @@ const should = require('should');
 const Dal = require('../../lib/dal');
 
 describe('Controllers.Repo', () => {
-  let repo, scanManager, dal, req;
+  let controller, scanManager, dal, req;
   beforeEach(done => {
     dal = new Dal();
-    repo = new RepoController({
+    controller = new RepoController({
       dal: dal
     });
     req = {
@@ -44,9 +44,35 @@ describe('Controllers.Repo', () => {
           done();
         });
       });
-      repo.viewRepo(req, res);
+      controller.viewRepo(req, res);
     });
   });
+
+  describe('apiViewRepo', () => {
+    let data, scans;
+    beforeEach(done => {
+      let res = deride.stub(['json']);
+      res.setup.json.toDoThis(model => {
+        data = model;
+        scanManager.scans((err, s) => {
+          scans = s;
+          done();
+        });
+      });
+      controller.apiViewRepo(req, res);
+    });
+
+    it('should append the scanManager scans', () => {
+      should(data.scans).eql(scans);
+    });
+
+    it('should append the tracking info', () => {
+      should(data.tracking.repo.id).eql(85411269);
+      should(data.tracking.token).match(/[a-z0-9]{96}/);
+      should(data.tracking.schedule.freq).eql('never');
+    });
+  });
+
   describe('newScan', () => {
     it('should schedule a new scan', done => {
       let res = deride.stub(['redirect']);
@@ -57,7 +83,7 @@ describe('Controllers.Repo', () => {
           done();
         });
       });
-      repo.newScan(req, res);
+      controller.newScan(req, res);
     });
   });
 
