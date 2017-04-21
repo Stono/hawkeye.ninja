@@ -1,28 +1,37 @@
-var editor = CodeMirror.fromTextArea(document.getElementById('console'), {
+'use strict';
+/* global $ */
+/* global document */
+/* global window */
+/* global io */
+/* global CodeMirror */
+
+CodeMirror.fromTextArea(document.getElementById('console'), {
   mode: 'shell',
   theme: 'material',
   lineNumbers: true,
   matchBrackets: true,
   readOnly: true
 });
-function GetQueryStringParams(sParam)
-{
+
+var getQueryStringParams = function(sParam) {
   var sPageURL = window.location.search.substring(1);
   var sURLVariables = sPageURL.split('&');
   for (var i = 0; i < sURLVariables.length; i++)
   {
     var sParameterName = sURLVariables[i].split('=');
-    if (sParameterName[0] == sParam)
+    if (sParameterName[0] === sParam)
       {
         return sParameterName[1];
       }
   }
-}
+};
+
 var bounce = true;
-if(GetQueryStringParams('history') === 'true') {
+if(getQueryStringParams('history') === 'true') {
   $('.scan-queued').hide();
   bounce = false;
-};
+}
+
 function updateCodeMirror(data){
   var cm = $('.CodeMirror')[0].CodeMirror;
   var doc = cm.getDoc();
@@ -43,7 +52,7 @@ function updateCodeMirror(data){
 }
 
 $(document).ready(function() {
-  socket = io();
+  var socket = io();
   socket.on('connect', function() {
     console.log('connected');
     socket.emit('streamLogs', window.location.pathname);

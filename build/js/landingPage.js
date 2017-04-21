@@ -1,8 +1,14 @@
+'use strict';
+/* global $ */
+/* global window */
+/* global document */
+/* global CodeMirror */
+
 var descriptionSection = $('.description .hero');
 var descriptionSectionPosition = descriptionSection.position().top;
 var descriptionSectionHeight = descriptionSection.height();
 
-var mainWrapPadding = parseInt($(".wrap").css("padding-top").replace('px',''));
+var mainWrapPadding = parseInt($('.wrap').css('padding-top').replace('px',''));
 
 var largeGitBtnDisappearPoint = descriptionSectionPosition + descriptionSectionHeight - mainWrapPadding;
 $(window).scroll(function() {
@@ -14,23 +20,6 @@ $(window).scroll(function() {
 });
 
 
-var sizeIcons = function() {
-	var width = $( window ).width() / 200;
-	var min = 2;
-	var max = 6;
-	if(width > max) {
-		width = max;
-	};
-	if(width < min) {
-		width = min;
-	};
-	//$('.fa-6').each(function(idx, icon) { $(icon).css('font-size', width + 'em'); });
-	$('.branch .fa').each(function(idx, icon) { $(icon).css('font-size', width + 'em'); });
-};
-
-//$(window).resize(sizeIcons);
-//$(document).ready(sizeIcons);
-
 var editor = CodeMirror.fromTextArea(document.getElementById('console'), {
 	mode: 'shell',
 	theme: 'material',
@@ -38,7 +27,7 @@ var editor = CodeMirror.fromTextArea(document.getElementById('console'), {
 	matchBrackets: true,
 	readOnly: true
 });
-editor.setSize("100%",500)
+editor.setSize('100%', 500);
 
 function updateCodeMirror(data){
 	var cm = $('.CodeMirror')[0].CodeMirror;

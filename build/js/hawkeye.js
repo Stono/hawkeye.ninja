@@ -1,3 +1,7 @@
+'use strict';
+/* global $ */
+/* global document */
+
 $(document).ready(function() {
   $('.sparkbar').each(function () {
     var $this = $(this);
@@ -30,7 +34,7 @@ $(document).ready(function() {
       $(defaultOrg).addClass('active');
       $(defaultRepo).addClass('active');
       return;
-    };
+    }
 
     $('.repo a').each(function(idx, i) {
       var item = $(i);
