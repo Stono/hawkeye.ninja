@@ -1,7 +1,7 @@
 'use strict';
-const GlobalStats = require('../lib/globalStats');
+const GlobalStats = require('../../lib/managers/globalStats');
+const Dal = require('../../lib/dal');
 const should = require('should');
-const Dal = require('../lib/dal');
 
 describe('Global Stats', () => {
   let globalStats, dal;

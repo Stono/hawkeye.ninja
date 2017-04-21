@@ -4,7 +4,7 @@ const should = require('should');
 
 const path = require('path');
 const _ = require('lodash');
-const GlobalStats = require('../lib/globalStats');
+const GlobalStats = require('../lib/managers/globalStats');
 
 const Dal = require('../lib/dal');
 
