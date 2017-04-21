@@ -2,15 +2,19 @@
 const RepoController = require('../../lib/controllers/repo');
 const Repo = require('../../lib/models/repo');
 const ScanManager = require('../../lib/scanManager');
+const RepoManager = require('../../lib/repoManager');
 const deride = require('deride');
 const should = require('should');
 const Dal = require('../../lib/dal');
 
 describe('Controllers.Repo', () => {
-  let controller, scanManager, dal, req;
+  let controller, scanManager, repoManager, dal, req;
   beforeEach(done => {
     dal = new Dal();
     controller = new RepoController({
+      dal: dal
+    });
+    repoManager = new RepoManager({
       dal: dal
     });
     req = {
@@ -45,6 +49,34 @@ describe('Controllers.Repo', () => {
         });
       });
       controller.viewRepo(req, res);
+    });
+  });
+
+  describe('apiUpdateSchedule', () => {
+    let data;
+    beforeEach(done => {
+      let res = deride.stub(['sendStatus']);
+      res.setup.sendStatus.toDoThis(code => {
+        should(code).eql(204);
+        repoManager.get(85411269, (err, tracking) => {
+          should.ifError(err);
+          data = tracking;
+          done();
+        });
+      });
+      req.body = {
+        freq: 'hourly',
+        when: 'always',
+        email: 'test@test.com'
+      };
+      controller.apiUpdateSchedule(req, res);
+    });
+
+    it('should update the tracking info', () => {
+      should(data.repo.id).eql(85411269);
+      should(data.schedule.freq).eql('hourly');
+      should(data.schedule.when).eql('always');
+      should(data.schedule.email).eql('test@test.com');
     });
   });
 
