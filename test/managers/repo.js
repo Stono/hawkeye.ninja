@@ -1,7 +1,7 @@
 'use strict';
-const RepoManager = require('../lib/repoManager');
-const Dal = require('../lib/dal');
-const Repo = require('../lib/models/repo');
+const RepoManager = require('../../lib/managers/repo');
+const Dal = require('../../lib/dal');
+const Repo = require('../../lib/models/repo');
 const should = require('should');
 
 describe('Repo Manager', () => {
