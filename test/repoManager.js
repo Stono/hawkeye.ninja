@@ -72,6 +72,15 @@ describe('Repo Manager', () => {
       should(tracked.schedule.when).eql('never');
       should(tracked.schedule.email).eql(null);
     });
+
+    it('should not return repos tracked as never', done => {
+      manager.getScheduled((err, data) => {
+        should.ifError(err);
+        should(data.length).eql(0);
+        done();
+      });
+    });
+
     it('should update the schedule frequence', done => {
       manager.schedule(123456, {
         freq: 'hourly',
