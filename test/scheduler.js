@@ -1,6 +1,6 @@
 'use strict';
 const RepoManager = require('../lib/managers/repo');
-const ScanManager = require('../lib/scanManager');
+const ScanManager = require('../lib/managers/scan');
 const Scheduler = require('../lib/scheduler');
 const Dal = require('../lib/dal');
 const Repo = require('../lib/models/repo');

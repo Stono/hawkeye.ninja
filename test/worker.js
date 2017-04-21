@@ -1,5 +1,5 @@
 'use strict';
-const ScanManager = require('../lib/scanManager');
+const ScanManager = require('../lib/managers/scan');
 const Worker = require('../lib/worker');
 const Dal = require('../lib/dal');
 const util = require('../lib/util');

@@ -1,7 +1,7 @@
 'use strict';
 const RepoController = require('../../lib/controllers/repo');
 const Repo = require('../../lib/models/repo');
-const ScanManager = require('../../lib/scanManager');
+const ScanManager = require('../../lib/managers/scan');
 const RepoManager = require('../../lib/managers/repo');
 const deride = require('deride');
 const should = require('should');

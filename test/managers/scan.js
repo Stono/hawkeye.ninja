@@ -1,12 +1,11 @@
 'use strict';
-const ScanManager = require('../lib/scanManager');
+const ScanManager = require('../../lib/managers/scan');
+const GlobalStats = require('../../lib/managers/globalStats');
+const Dal = require('../../lib/dal');
 const should = require('should');
 
 const path = require('path');
 const _ = require('lodash');
-const GlobalStats = require('../lib/managers/globalStats');
-
-const Dal = require('../lib/dal');
 
 describe('Scan Manager', () => {
   let scanManager, repo, list, target, sample, stats, dal;
@@ -14,7 +13,7 @@ describe('Scan Manager', () => {
   beforeEach(done => {
     dal = new Dal();
     sample = {
-      results: _.cloneDeep(require(path.join(__dirname, 'samples/hawkeye/results.json'))),
+      results: _.cloneDeep(require(path.join(__dirname, '../samples/hawkeye/results.json'))),
       metadata: { state: 'fail' }
     };
     stats = new GlobalStats({ dal: dal });
