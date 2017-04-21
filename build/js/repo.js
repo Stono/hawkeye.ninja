@@ -1,21 +1,26 @@
-if(!String.linkify) {
-  String.prototype.linkify = function() {
+'use strict';
+/* global $ */
+/* global document */
+/* global window */
+/* global showdown */
+/* global Chart */
 
-    // http://, https://, ftp://
-    var urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
+var linkify = function(value) {
 
-    // www. sans http:// or https://
-    var pseudoUrlPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+  // http://, https://, ftp://
+  var urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
 
-    // Email addresses
-    var emailAddressPattern = /[\w.]+@[a-zA-Z_-]+?(?:\.[a-zA-Z]{2,6})+/gim;
+  // www. sans http:// or https://
+  var pseudoUrlPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
 
-    return this
-    .replace(urlPattern, '<a target="_blank" href="$&">$&</a>')
-    .replace(pseudoUrlPattern, '$1<a target="_blank" href="http://$2">$2</a>')
-    .replace(emailAddressPattern, '<a target="_blank" href="mailto:$&">$&</a>');
-  };
-}
+  // Email addresses
+  var emailAddressPattern = /[\w.]+@[a-zA-Z_-]+?(?:\.[a-zA-Z]{2,6})+/gim;
+
+  return value
+  .replace(urlPattern, '<a target="_blank" href="$&">$&</a>')
+  .replace(pseudoUrlPattern, '$1<a target="_blank" href="http://$2">$2</a>')
+  .replace(emailAddressPattern, '<a target="_blank" href="mailto:$&">$&</a>');
+};
 
 $(document).ready(function() {
   var converter = new showdown.Converter();
@@ -38,7 +43,7 @@ $(document).ready(function() {
   };
 
   var drawVulnerabilities = function(data) {
-    var vulnsTable = $('#vulns table').DataTable(defaultTable({
+    $('#vulns table').DataTable(defaultTable({
       columns: [
         { width: '10%', data: 'level' },
         { width: '90%', data: 'description' }
@@ -47,14 +52,14 @@ $(document).ready(function() {
       order: [[ 0, 'asc' ]],
       data: data.map(function(item) {
         var label = '<span class="label label-' + item.level + '">' + item.level + '</span>';
-        var code = '<div class="scan-label">Code:</div> ' + item.code;
         var title = '<div class="scan-label">Title:</div> ' + item.description;
-        var mitigation = item.mitigation.linkify();
+        var mitigation = linkify(item.mitigation);
         var advisory = '<div class="scan-label">Advisory:</div> ' + mitigation;
         var offender = '<div class="scan-label">Offender:</div> ' + item.offender;
 
         var extra = '';
         Object.keys(item.data).forEach(function(key) {
+          /* jshint maxcomplexity: 7 */
           var value = item.data[key];
           if(typeof value === 'object') { return; }
           if(value === undefined || value === null) { return; }
@@ -63,7 +68,7 @@ $(document).ready(function() {
             extra = extra + '<div class="scan-label">' + key + ':</div><br/>' + value + '<br/>';
           } else {
             if(typeof value === 'string') {
-              value = value.linkify();
+              value = linkify(value.linkify);
             }
             extra = extra + '<div class="scan-label">' + key + ':</div>' + value + '<br/>';
           }
@@ -74,7 +79,7 @@ $(document).ready(function() {
           level: label,
           description: description,
           raw: item
-        }
+        };
       }),
       fnDrawCallback: function() {
         $('#vulns .overlay').hide();
@@ -194,7 +199,7 @@ $(document).ready(function() {
       //Boolean - Whether grid lines are shown across the chart
       scaleShowGridLines: false,
       //String - Colour of the grid lines
-      scaleGridLineColor: "rgba(0,0,0,.05)",
+      scaleGridLineColor: 'rgba(0,0,0,.05)',
       //Number - Width of the grid lines
       scaleGridLineWidth: 1,
       //Boolean - Whether to show horizontal lines (except X axis)
@@ -220,13 +225,13 @@ $(document).ready(function() {
       //Boolean - Whether to fill the dataset with a color
       datasetFill: true,
       //String - A legend template
-      legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
+      legendTemplate: '<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
       //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
       maintainAspectRatio: true,
       //Boolean - whether to make the chart responsive to window resizing
       responsive: true
     };
-    var lineChartCanvas = $("#scanHistory canvas").get(0).getContext("2d");
+    var lineChartCanvas = $('#scanHistory canvas').get(0).getContext('2d');
     var lineChart = new Chart(lineChartCanvas);
     var lineChartOptions = areaChartOptions;
     lineChartOptions.datasetFill = false;
@@ -295,14 +300,30 @@ $(document).ready(function() {
     window.location.href = window.location.pathname + '/' + data.number + '?history=true';
   });
 
-  var toggleEmail = function() {
-    var val = $('#notifiyWhen').val();
-    if(val === 'Never') {
-      $('#emailNotification').attr('disabled', true);
+  var toggle = function(target, disabled) {
+    if(disabled) {
+      $(target).attr('disabled', true);
     } else {
-      $('#emailNotification').removeAttr( "disabled" );
+      $(target).removeAttr('disabled');
     }
   };
-  $('#notifyWhen').change(toggleEmail);
+
+  var toggler = function(target) {
+    return function() {
+      var val = $(this).val();
+      if(val === 'never') {
+        toggle(target, true);
+      } else {
+        toggle(target, false);
+      }
+    };
+  };
+
+  var emailUpdated = function() {
+    toggle('#saveSchedule', !$(this).inputmask('isComplete'));
+  };
+  $('#scanFrequency').change(toggler('#notifyWhen'));
+  $('#notifyWhen').change(toggler('#emailNotification'));
+  $('#emailNotification').change(emailUpdated);
   $('#emailNotification').inputmask('email');
 });

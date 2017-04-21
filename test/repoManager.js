@@ -68,8 +68,8 @@ describe('Repo Manager', () => {
     });
 
     it('should default the schedule of a tracked repo', () => {
-      should(tracked.schedule.freq).eql('Never');
-      should(tracked.schedule.when).eql('Never');
+      should(tracked.schedule.freq).eql('never');
+      should(tracked.schedule.when).eql('never');
       should(tracked.schedule.email).eql(null);
     });
     it('should update the schedule frequence', done => {

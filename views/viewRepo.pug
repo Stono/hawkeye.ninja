@@ -32,20 +32,20 @@ block content
               .form-group
                 label Rescan Frequency
                 |
-                select.form-control.select2(style='width: 100%;')
-                  option(selected='selected') Never
-                  option Hourly
-                  option Daily
-                  option Weekly
-                  option Monthly
+                select#scanFrequency.form-control.select2(style='width: 100%;')
+                  option(value='never', selected='selected') Never
+                  option(value='hourly') Hourly
+                  option(value='daily') Daily
+                  option(value='weekly') Weekly
+                  option(value='monthly') Monthly
             .col-md-4
               .form-group
                 label Notify When
                 |
-                select.form-control.select2(style='width: 100%;')#notifyWhen
-                  option(selected='selected') Never
-                  option When something changes
-                  option Always
+                select#notifyWhen.form-control.select2(style='width: 100%;', disabled='disabled')
+                  option(value='never', selected='selected') Never
+                  option(value='change') When something changes
+                  option(value='always') Always
             .col-md-4
               .form-group
                 label Notification Email Address
@@ -57,7 +57,7 @@ block content
 
         .box-footer.clearfix
           |
-          a.btn.btn-sm.btn-primary.btn-flat.pull-right(href='#') Save
+          a.btn.btn-sm.btn-primary.btn-flat.pull-right(href='#', disabled='disabled')#saveSchedule Save
 
 
   .row
