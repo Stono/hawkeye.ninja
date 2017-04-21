@@ -23,7 +23,7 @@ describe('Controllers.Repo', () => {
         repo: 'hawkeye'
       },
       user: {
-        profile: 'profile info here',
+        profile: require('../samples/github/profile.json'),
         oauth: { accessToken: 'oauth here' },
         repos: require('../samples/github/repos.json').map(r => { return new Repo().fromGithub(r); })
       }
