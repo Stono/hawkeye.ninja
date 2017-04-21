@@ -4,6 +4,7 @@ const Dal = require('../lib/dal');
 const Browser = require('zombie');
 const util = require('../lib/util');
 
+
 describe('App', () => {
   let server, browser, auth, passthrough;
   before(done => {
