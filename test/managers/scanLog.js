@@ -5,8 +5,8 @@ const should = require('should');
 
 describe('Scan Log', () => {
   let log, dal;
-  const repoId = 'repo';
-  const number = 'test';
+  const repoId = 1;
+  const number = 2;
   before(() => {
     dal = new Dal();
   });
@@ -42,7 +42,7 @@ describe('Scan Log', () => {
     });
   });
   it('should log messages to the list', () => {
-    log.write('test');
+    log.write(repoId, number, 'test');
   });
   it('should let me return all log messages', done => {
     log.write(repoId, number, 'test1');

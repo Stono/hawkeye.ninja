@@ -32,7 +32,7 @@ describe('Worker', () => {
   const go = done => {
     scanManager.schedule({
       oauth: { accessToken: 'token' },
-      repo: { id: 'repoid', fullName: 'repo/repo' },
+      repo: { id: 1, fullName: 'repo/repo' },
       token: 'abc'
     }, done);
     worker.start();
