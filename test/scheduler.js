@@ -1,18 +1,18 @@
 'use strict';
 const RepoManager = require('../lib/managers/repo');
 const ScanManager = require('../lib/managers/scan');
-const Scheduler = require('../lib/scheduler');
+const ScheduleManager = require('../lib/managers/scheduler');
 const Dal = require('../lib/dal');
 const Repo = require('../lib/models/repo');
-const should = require('should');
 const User = require('../lib/models/user');
+const should = require('should');
 const async = require('async');
 
-describe('Scheduler', () => {
+describe('ScheduleManager', () => {
   let repoManager, scanManager, dal, repo, user, scheduler, userStore;
   before(() => {
     dal = new Dal();
-    scheduler = new Scheduler({ dal: dal });
+    scheduler = new ScheduleManager({ dal: dal });
     userStore = dal.collection('users');
     repo = new Repo({
       id: 123456,
