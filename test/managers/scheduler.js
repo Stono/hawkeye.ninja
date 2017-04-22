@@ -1,10 +1,10 @@
 'use strict';
-const RepoManager = require('../lib/managers/repo');
-const ScanManager = require('../lib/managers/scan');
-const ScheduleManager = require('../lib/managers/scheduler');
-const Dal = require('../lib/dal');
-const Repo = require('../lib/models/repo');
-const User = require('../lib/models/user');
+const RepoManager = require('../../lib/managers/repo');
+const ScanManager = require('../../lib/managers/scan');
+const ScheduleManager = require('../../lib/managers/scheduler');
+const Dal = require('../../lib/dal');
+const Repo = require('../../lib/models/repo');
+const User = require('../../lib/models/user');
 const should = require('should');
 const async = require('async');
 

@@ -1,5 +1,4 @@
 'use strict';
-const mock = require('mock-require');
 const should = require('should');
 const deride = require('deride');
 const MockGithubApi = function() {
@@ -11,13 +10,12 @@ const MockGithubApi = function() {
   return self;
 };
 const mockGithubApi = new MockGithubApi();
-mock('github', function StubGithub() { return mockGithubApi; });
 const User = require('../../lib/models/user');
 
 describe('User', () => {
   let user, profile;
   beforeEach(() => {
-    user = new User();
+    user = new User(null, mockGithubApi);
     profile = require('../samples/github/profile.json');
     user.setProfile(profile);
   });
