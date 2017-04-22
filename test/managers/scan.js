@@ -23,7 +23,6 @@ describe('Scan Manager', () => {
     target = { oauth: { accessToken: 'abc' }, repo: repo, token: 'abc', reason: 'test' };
     list = dal.fifoList('scans:pending');
     scanManager = new ScanManager({
-      id: repo.id,
       dal: dal
     });
     dal.flushall(done);
@@ -33,7 +32,7 @@ describe('Scan Manager', () => {
   });
 
   it('should return an empty array when there are no scans', done => {
-    scanManager.scans((err, scans) => {
+    scanManager.scans(repo.id, (err, scans) => {
       should.ifError(err);
       should(scans).eql([]);
       done();
@@ -46,7 +45,7 @@ describe('Scan Manager', () => {
       should(scan.status).eql('pending');
       should(scan.number).eql(1);
       should(scan.reason).eql('test');
-      scanManager.get(1, (err, data) => {
+      scanManager.get(repo.id, 1, (err, data) => {
         should.ifError(err);
         should(data.number).eql(1);
         done();
@@ -87,7 +86,7 @@ describe('Scan Manager', () => {
   it('should let me get a scan by its repo and number', done => {
     scanManager.schedule(target, () => {
       scanManager.schedule(target, (err, second) => {
-        scanManager.get(2, (err, scan) => {
+        scanManager.get(repo.id, 2, (err, scan) => {
           should(scan.id).eql(second.id);
           should(scan.number).eql(2);
           done();
@@ -97,8 +96,8 @@ describe('Scan Manager', () => {
   });
   it('should increment the scan counter', done => {
     scanManager.schedule(target, () => {
-      scanManager.handleScan(1, sample, () => {
-        scanManager.handleScan(1, sample, () => {
+      scanManager.handleScan(repo.id, 1, sample, () => {
+        scanManager.handleScan(repo.id, 1, sample, () => {
           stats.scans((err, amount) => {
             should.ifError(err);
             should(amount).eql(2);

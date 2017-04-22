@@ -14,7 +14,7 @@ describe('Worker', () => {
     exec = deride.stub(['command']);
     fs = deride.stub(['readFileSync', 'unlink']);
     scanManager = new ScanManager({
-      dal: dal, id: 0
+      dal: dal
     });
     worker = new Worker({
       dal: dal,

@@ -26,7 +26,7 @@ describe('ScheduleManager', () => {
       oauth: { accessToken: 'accesstoken' }
     });
     repoManager = new RepoManager({ dal: dal });
-    scanManager = new ScanManager({ dal: dal, id: repo.id });
+    scanManager = new ScanManager({ dal: dal });
   });
   beforeEach(done => {
     async.series([

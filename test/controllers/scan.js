@@ -30,8 +30,7 @@ describe('Controllers.Scan', () => {
     };
 
     scanManager = deride.wrap(new ScanManager({
-      dal: dal,
-      id: repo.id
+      dal: dal
     }));
 
     const setreq = (tracked, next) => {
@@ -69,7 +68,7 @@ describe('Controllers.Scan', () => {
       let res = deride.stub(['sendStatus']);
 
       res.setup.sendStatus.toDoThis(() => {
-        scanManager.get(1, (err, data) => {
+        scanManager.get(repo.id, 1, (err, data) => {
           should(data.status).eql('failed');
           done();
         });
@@ -83,7 +82,7 @@ describe('Controllers.Scan', () => {
       let res = deride.stub(['sendStatus']);
 
       res.setup.sendStatus.toDoThis(() => {
-        scanManager.get(1, (err, data) => {
+        scanManager.get(repo.id, 1, (err, data) => {
           should(data.status).eql('failed');
           done();
         });
