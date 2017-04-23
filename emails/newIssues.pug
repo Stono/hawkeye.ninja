@@ -6,6 +6,9 @@ each issue in issues
     strong Level:&nbsp;
     | #{issue.level}
   p
+    strong Offender:&nbsp;
+    | #{issue.offender}: #{issue.offender}
+  p
     strong Description:&nbsp;
     | #{issue.code}: #{issue.description}
   p
@@ -13,4 +16,6 @@ each issue in issues
     | #{issue.mitigation}
   br
 
-p You are receiving this email because you enabled scheduled scans, with an email notification.  You can disable the email by logging into your account, finding this repository and changing the 'Notify When' setting to 'Never'.
+p To view more information, and to change your notification settings for this repository, please go to&nbsp;
+  a(href='https://hawkeye.website/repo/' + repo.fullName) the repository dashboard
+  | .
