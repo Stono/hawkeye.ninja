@@ -1,4 +1,4 @@
-FROM stono/hawkeye:latest
+FROM stono/hawkeye:0.12.7
 
 # Install hawkeye
 RUN mkdir -p /app
