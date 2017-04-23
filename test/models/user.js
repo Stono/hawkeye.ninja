@@ -2,6 +2,7 @@
 const should = require('should');
 const deride = require('deride');
 const User = require('../../lib/models/user');
+const util = require('../../lib/util');
 
 const repoData = require('../samples/github/repos.json');
 const hookData = require('../samples/github/hooks.json');
@@ -14,7 +15,7 @@ const MockGithubApi = function() {
   repos.setup.getHooks.toCallbackWith([null, { data: hookData }]);
   return self;
 };
-const accessToken = process.env.GITHUB_ACCESS_TOKEN;
+const accessToken = util.defaultValue(process.env.GITHUB_ACCESS_TOKEN, 'accessToken');
 const repoId = 85411269;
 
 describe('User', () => {
