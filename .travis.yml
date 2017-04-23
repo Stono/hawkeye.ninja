@@ -35,6 +35,8 @@ after_success:
   - docker pull stono/hawkeye.ninja
   - docker pull stono/hawkeye.ninja-worker
   - docker pull stono/hawkeye.ninja-oneshot
+  - docker pull stono/hawkeye:$HE_VERSION
+  - docker tag stono/hawkeye:$HE_VERSION stono/hawkeye:latest
   - docker build -f Dockerfile -t stono/hawkeye.ninja --cache-from stono/hawkeye.ninja .
   - docker build -f Dockerfile.worker -t stono/hawkeye.ninja-worker --cache-from stono/hawkeye.ninja-worker .
   - docker build -f Dockerfile.oneshot -t stono/hawkeye.ninja-oneshot --cache-from stono/hawkeye.ninja-oneshot .
