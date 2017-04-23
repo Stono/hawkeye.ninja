@@ -1,0 +1,17 @@
+p The following new issues have been detected in your scan:
+br
+
+each issue in issues
+  strong #{issue.code}:&nbsp;
+  p
+    strong Level:&nbsp;
+    | #{issue.level}
+  p
+    strong Description:&nbsp;
+    | #{issue.description}
+  p
+    strong Mitigation:&nbsp;
+    | #{issue.mitigation}
+  br
+
+p You are receiving this email because you enabled scheduled scans, with an email notification.  You can disable the email by logging into your account, finding this repository and changing the 'Notify When' setting to 'Never'.

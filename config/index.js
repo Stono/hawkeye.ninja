@@ -33,6 +33,10 @@ let config = {
     userProfileURL: 'https://api.github.com/user',
     callbackUrl: `${serverUrl(5000)}/oauth/github/callback`
   },
+  mailgun: {
+    apiKey: validateEnv('HE_MAIL_API_KEY', true),
+    domain: util.defaultValue(validateEnv('HE_MAIL_DOMAIN'), 'sandboxa7bd3a5f06ff493aa90aece9dbb8d552.mailgun.org')
+  },
   dal: {
     encryptionKey: validateEnv('HE_DAL_ENCRYPTION_KEY'),
     gzip: util.defaultValue(validateEnv('HE_DAL_GZIP'), false),
