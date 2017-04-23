@@ -25,6 +25,28 @@ describe('Metrics', () => {
     metrics.update(id, sample, done);
   });
 
+  it('should calulate what has changed', done => {
+    const validateComparison = next => {
+      metrics.latest(id, (err, data) => {
+        should(data.new.items.length).eql(4);
+        should(data.new.byLevel.critical).eql(1);
+        should(data.new.byLevel.high).eql(1);
+        should(data.new.byLevel.medium).eql(1);
+        should(data.new.byLevel.low).eql(1);
+        next();
+      });
+    };
+    const addDifferentSample = next => {
+      sample = _.cloneDeep(require(path.join(__dirname, '../samples/hawkeye/results2.json')));
+      metrics.update(id, sample, next);
+    };
+    async.series([
+      next => { metrics.update(id, sample, next); },
+        addDifferentSample,
+      validateComparison
+    ], done);
+  });
+
   it('let me get the latest results', done => {
     async.series([
       next => { metrics.update(id, sample, next); },
