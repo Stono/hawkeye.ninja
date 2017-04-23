@@ -5,9 +5,14 @@ RUN mkdir -p /app
 WORKDIR /app
 ENTRYPOINT ["node", "oneshot.js"]
 
+RUN groupadd hawkeye && \
+    useradd -g hawkeye hawkeye
+
 COPY package.json /app
 
 RUN cd /app && \
     npm install --quiet --production
 
 COPY ./ /app
+
+RUN chown -R hawkeye:hawkeye /app
