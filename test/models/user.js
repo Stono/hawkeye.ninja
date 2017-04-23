@@ -38,7 +38,7 @@ describe('User', () => {
     mockGithubApi.repos.expect.getAll.called.once();
   });
   it('should fetch hooks for a given repo', done => {
-    user.getHooks(repoId, err => {
+    user.fetchHooks(repoId, err => {
       should.ifError(err);
       const repo = user.getRepo(repoId);
       should(repo.hooks.length).eql(1);
