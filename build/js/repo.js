@@ -67,6 +67,9 @@ $(document).ready(function() {
         Object.keys(item.data).forEach(function(key) {
           /* jshint maxcomplexity: 7 */
           var value = item.data[key];
+          if(key === 'path' && item.module === 'nsp') {
+            value = value.join(' -> ');
+          }
           if(typeof value === 'object') { return; }
           if(value === undefined || value === null) { return; }
           if(key === 'overview' && item.module === 'nsp') {
