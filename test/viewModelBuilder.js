@@ -50,7 +50,7 @@ describe('ViewModels', () => {
       .withScans([]);
     });
     it('should have the repo information', () => {
-      shouldHaveKeys(model.repo, ['id', 'name', 'private', 'description', 'fullName', 'owner']);
+      shouldHaveKeys(model.repo, Object.keys(request.user.repos[0]));
       should(model.repo.fullName).eql('Stono/hawkeye');
       should(model.scans).eql([]);
     });
