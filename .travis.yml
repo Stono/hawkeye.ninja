@@ -12,6 +12,7 @@ env:
     - HE_SESSION_SECRET=test-sessionsecret
     - HE_DAL_ENCRYPTION_KEY=test
     - HE_SERVER_URL=http://127.0.0.1
+    - HE_VERSION=0.12.8
 
 language: node_js
 
@@ -24,10 +25,6 @@ notifications:
 branches:
   only:
     - master
-
-env:
-  global:
-    - HE_VERSION=0.12.8
 
 before_script:
   - npm version $HE_VERSION
