@@ -6,6 +6,12 @@
 /* global alert */
 /* global Chart */
 
+var scanFrequency = '#scanFrequency';
+var notifyWhen = '#notifyWhen';
+var emailNotification = '#emailNotification';
+var saveSchedule = '#saveSchedule';
+
+
 var linkify = function(value) {
   // http://, https://, ftp://
   var urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
@@ -240,9 +246,9 @@ $(document).ready(function() {
 
   var populateSchedule = function(data) {
     var schedule = data.tracking.schedule;
-    $('#notifyWhen').val(schedule.when).trigger('change');
-    $('#scanFrequency').val(schedule.freq).trigger('change');
-    $('#emailNotification').val(schedule.email).trigger('change');
+    $(notifyWhen).val(schedule.when).trigger('change');
+    $(scanFrequency).val(schedule.freq).trigger('change');
+    $(emailNotification).val(schedule.email).trigger('change');
   };
 
   var scansTable = $('#scans table').DataTable(defaultTable({
@@ -316,26 +322,23 @@ $(document).ready(function() {
     }
   };
 
-  var toggler = function(target) {
-    return function() {
-      var val = $(this).val();
-      if(val === 'never') {
-        toggle(target, true);
-      } else {
-        toggle(target, false);
-      }
-    };
+  var toggler = function(val, target) {
+    if(val === 'never') {
+      toggle(target, true);
+    } else {
+      toggle(target, false);
+    }
   };
 
-  var saveSchedule = function() {
+  var postSchedule = function() {
     if($(this).attr('disabled') === 'disabled') { return false; }
-    toggle('#saveSchedule', false);
-    $('#saveSchedule').text('Saving...');
+    toggle(saveSchedule, false);
+    $(saveSchedule).text('Saving...');
 
     var model = {
-      freq: $('#scanFrequency').val(),
-      when: $('#notifyWhen').val(),
-      email: $('#emailNotification').val()
+      freq: $(scanFrequency).val(),
+      when: $(notifyWhen).val(),
+      email: $(emailNotification).val()
     };
     var url = '/api' + window.location.pathname + '/tracking/schedule';
     $.ajax({
@@ -345,30 +348,45 @@ $(document).ready(function() {
       data: JSON.stringify(model),
       dataType: 'json',
       complete: function() {
-        toggle('#saveSchedule', true);
+        toggle(saveSchedule, true);
       },
       success: function () {
-        $('#saveSchedule').text('Saved!');
+        $(saveSchedule).text('Saved!');
         setTimeout(function() {
           $('#repoSettings .btn.btn-box-tool').click();
-          setTimeout(function() { $('#saveSchedule').text('Save'); }, 1000);
+          setTimeout(function() { $(saveSchedule).text('Save'); }, 1000);
         }, 500);
       },
       error: function (){
-        $('#saveSchedule').text('Save');
+        $(saveSchedule).text('Save');
         alert('We were unable to save the schedule!');
       }
     });
     return false;
   };
 
-  var emailUpdated = function() {
-    toggle('#saveSchedule', !$(this).inputmask('isComplete'));
-  };
-  $('#scanFrequency').change(toggler('#notifyWhen'));
-  $('#notifyWhen').change(toggler('#emailNotification'));
-  $('#emailNotification').change(emailUpdated);
-  $('#emailNotification').inputmask('email');
+  var toggleSave = function() {
+    var freqValue = $(scanFrequency).val();
+    var notifyValue = $(notifyWhen).val();
+    var emailValue = $(emailNotification).val();
 
-  $('#saveSchedule').click(saveSchedule);
+    toggler(freqValue, notifyWhen);
+    toggler(notifyValue, emailNotification);
+
+    if(notifyValue !== 'never' && emailValue === '') {
+      return toggle(saveSchedule, true);
+    }
+    if(notifyValue !== 'never' && !$(emailNotification).inputmask('isComplete')) {
+      return toggle(saveSchedule, true);
+    }
+
+    return toggle(saveSchedule, false);
+  };
+
+  $(scanFrequency).change(toggleSave);
+  $(notifyWhen).change(toggleSave);
+  $(emailNotification).keyup(toggleSave);
+  $(emailNotification).inputmask('email');
+
+  $(saveSchedule).click(postSchedule);
 });
