@@ -54,14 +54,12 @@ function updateCodeMirror(data){
 $(document).ready(function() {
   var socket = io();
   socket.on('connect', function() {
-    console.log('connected');
     socket.emit('streamLogs', window.location.pathname);
   })
   .on('error', function(err) {
     console.log(err);
-  });
-
-  socket.on('log', function(msg) {
+  })
+  .on('log', function(msg) {
     updateCodeMirror(msg);
   });
 });
