@@ -1,5 +1,4 @@
-ARG HE_VERSION=
-FROM stono/hawkeye:$HE_VERSION
+FROM stono/hawkeye:0.12.8
 
 # Install hawkeye
 RUN mkdir -p /app
