@@ -2,13 +2,12 @@ p The following new issues have been detected in your scan:
 br
 
 each issue in issues
-  strong #{issue.code}:&nbsp;
   p
     strong Level:&nbsp;
     | #{issue.level}
   p
     strong Description:&nbsp;
-    | #{issue.description}
+    | #{issue.code}: #{issue.description}
   p
     strong Mitigation:&nbsp;
     | #{issue.mitigation}
