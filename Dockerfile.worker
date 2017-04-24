@@ -27,7 +27,6 @@ RUN cd /tmp && \
 # Install hawkeye
 RUN mkdir -p /app
 WORKDIR /app
-CMD ["npm", "run", "worker"]
 
 COPY package.json /app
 
@@ -37,4 +36,5 @@ RUN cd /app && \
 COPY ./ /app
 
 RUN find . -type d \( -path ./node_modules \) -prune -o -exec chown hawkeye:hawkeye {} \;
-RUN chown hawkeye:hawkeye /app
+COPY start_worker.sh /usr/local/bin/start_worker.sh
+CMD ["/usr/local/bin/start_worker.sh"]

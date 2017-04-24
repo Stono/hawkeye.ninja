@@ -28,7 +28,8 @@ RUN cd /app && \
 
 COPY ./ /app
 
-RUN find . -type d \( -path ./node_modules \) -prune -o -exec chown hawkeye:hawkeye {} \;
 RUN chown hawkeye:hawkeye /app
 
 RUN npm run assets
+RUN find . -type d \( -path ./node_modules \) -prune -o -exec chown hawkeye:hawkeye {} \;
+USER hawkeye

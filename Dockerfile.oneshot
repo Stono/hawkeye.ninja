@@ -15,4 +15,5 @@ RUN cd /app && \
 
 COPY ./ /app
 
-RUN chown -R hawkeye:hawkeye /app
+RUN find . -type d \( -path ./node_modules \) -prune -o -exec chown hawkeye:hawkeye {} \;
+USER hawkeye
