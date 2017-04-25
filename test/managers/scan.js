@@ -5,6 +5,7 @@ const EmailManager = require('../../lib/managers/email');
 const GlobalStats = require('../../lib/managers/globalStats');
 const Dal = require('../../lib/dal');
 const should = require('should');
+const async = require('async');
 
 const path = require('path');
 const _ = require('lodash');
@@ -41,6 +42,7 @@ describe('Scan Manager', () => {
       done();
     });
   });
+
   describe('Scheduling', () => {
     let scan;
     beforeEach(done => {
@@ -107,33 +109,67 @@ describe('Scan Manager', () => {
   });
 
   describe('Handling scan results', () => {
-    let schedule;
-    beforeEach(done => {
-      repoManager.track(repo, err => {
-        should.ifError(err);
-        schedule = {
-          freq: 'hourly',
-          when: 'change',
-          email: 'test@test.com',
-          user: 12345
-        };
-        repoManager.schedule(repo.id, schedule, err => {
-          should.ifError(err);
-          scanManager.schedule(target, done);
-        });
-      });
-    });
     it('should queue emails if the scan notification is enabled', done => {
-      scanManager.handleScan(repo.id, 1, sample, () => {
+      const schedule = {
+        freq: 'hourly',
+        when: 'change',
+        email: 'test@test.com',
+        user: 12345
+      };
+      const setTracking = next => {
+        repoManager.track(repo, next);
+      };
+      const setSchedule = next => {
+        repoManager.schedule(repo.id, schedule, next);
+      };
+      const scheduleScan = next => {
+        scanManager.schedule(target, next);
+      };
+      const handleScan = next => {
+        scanManager.handleScan(repo.id, 1, sample, next);
+      };
+      const validateEmail = next => {
         emailManager.pop((err, msg) => {
           should.ifError(err);
           should(msg.subject).match(/New issues detected in: test/);
           should(msg.to).eql(schedule.email);
           should(msg.from).eql('noreply@hawkeye.website');
           should(msg.html).match(/nsp-39/);
-          done();
+          next();
         });
-      });
+      };
+      async.series([
+        setTracking,
+        setSchedule,
+        scheduleScan,
+        handleScan,
+        validateEmail
+      ], done);
+    });
+
+    it('should not queue emails if there is no notification enabled', done => {
+      const setTracking = next => {
+        repoManager.track(repo, next);
+      };
+      const scheduleScan = next => {
+        scanManager.schedule(target, next);
+      };
+      const handleScan = next => {
+        scanManager.handleScan(repo.id, 1, sample, next);
+      };
+      const validateNoEmail = next => {
+        emailManager.pop((err, msg) => {
+          should.ifError(err);
+          should(msg).eql(null);
+          next();
+        });
+      };
+      async.series([
+        setTracking,
+        scheduleScan,
+        handleScan,
+        validateNoEmail
+      ], done);
     });
   });
 
