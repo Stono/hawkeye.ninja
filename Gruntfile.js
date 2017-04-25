@@ -36,7 +36,7 @@ module.exports = function(grunt) {
     uglify: {
       options: {
         mangle: true,
-        preserveComments: 'none'
+        preserveComments: false
       },
       app: {
         files: grunt.file.expandMapping('build/js/*.js', 'public/js/', {
