@@ -41,9 +41,16 @@ describe('Scan Manager', () => {
       done();
     });
   });
-  it('should create new scans', done => {
-    scanManager.schedule(target, (err, scan) => {
-      should.ifError(err);
+  describe('Scheduling', () => {
+    let scan;
+    beforeEach(done => {
+      scanManager.schedule(target, (err, data) => {
+        should.ifError(err);
+        scan = data;
+        done();
+      });
+    });
+    it('should create new scheduled scans', done => {
       should(scan.id).match(/[a-z0-9]{40}/);
       should(scan.status).eql('pending');
       should(scan.number).eql(1);
@@ -54,74 +61,30 @@ describe('Scan Manager', () => {
         done();
       });
     });
-  });
-  it('new scans should be added to the scan list', done => {
-    scanManager.schedule(target, () => {
+    it('should add new scans to the pending scan list', done => {
       list.pop((err, model) => {
         should.ifError(err);
         should(model.scan.id).match(/[a-z0-9]{40}/);
         done();
       });
     });
-  });
-  it('should queue emails if the scan notification is enabled', done => {
-    repoManager.track(repo, () => {
-      const schedule = {
-        freq: 'hourly',
-        when: 'change',
-        email: 'test@test.com',
-        user: 12345
-      };
-      repoManager.schedule(repo.id, schedule, () => {
-        scanManager.schedule(target, () => {
-          scanManager.handleScan(repo.id, 1, sample, () => {
-            emailManager.pop((err, msg) => {
-              should.ifError(err);
-              should(msg.subject).match(/New issues detected in: test/);
-              should(msg.to).eql(schedule.email);
-              should(msg.from).eql('noreply@hawkeye.website');
-              should(msg.html).match(/nsp-39/);
-              done();
-            });
-          });
-        });
-      });
-    });
-  });
-  it('things added to the scan list shoud contain the token', done => {
-    scanManager.schedule(target, () => {
+    it('should append the post back token to the pending scan', done => {
       list.pop((err, model) => {
         should.ifError(err);
         should(model.token).eql('abc');
         done();
       });
     });
-  });
-  it('scan numbers should increment, and ids should be different', done => {
-    scanManager.schedule(target, (err, first) => {
-      should(first.number).eql(1);
-      should.ifError(err);
-      scanManager.schedule(target, (err, scan) => {
+    it('should increment the scan number', done => {
+      should(scan.number).eql(1);
+      scanManager.schedule(target, (err, second) => {
         should.ifError(err);
-        should(scan.id).not.eql(first.id);
-        should(scan.number).eql(2);
+        should(second.id).not.eql(scan.id);
+        should(second.number).eql(2);
         done();
       });
     });
-  });
-  it('should let me get a scan by its repo and number', done => {
-    scanManager.schedule(target, () => {
-      scanManager.schedule(target, (err, second) => {
-        scanManager.get(repo.id, 2, (err, scan) => {
-          should(scan.id).eql(second.id);
-          should(scan.number).eql(2);
-          done();
-        });
-      });
-    });
-  });
-  it('should increment the scan counter', done => {
-    scanManager.schedule(target, () => {
+    it('should increment the total scans counter', done => {
       scanManager.handleScan(repo.id, 1, sample, () => {
         scanManager.handleScan(repo.id, 1, sample, () => {
           stats.scans((err, amount) => {
@@ -132,5 +95,46 @@ describe('Scan Manager', () => {
         });
       });
     });
+    it('should let me get a scan by its repo and number', done => {
+      scanManager.schedule(target, (err, second) => {
+        scanManager.get(repo.id, 2, (err, scan) => {
+          should(scan.id).eql(second.id);
+          should(scan.number).eql(2);
+          done();
+        });
+      });
+    });
   });
+
+  describe('Handling scan results', () => {
+    let schedule;
+    beforeEach(done => {
+      repoManager.track(repo, err => {
+        should.ifError(err);
+        schedule = {
+          freq: 'hourly',
+          when: 'change',
+          email: 'test@test.com',
+          user: 12345
+        };
+        repoManager.schedule(repo.id, schedule, err => {
+          should.ifError(err);
+          scanManager.schedule(target, done);
+        });
+      });
+    });
+    it('should queue emails if the scan notification is enabled', done => {
+      scanManager.handleScan(repo.id, 1, sample, () => {
+        emailManager.pop((err, msg) => {
+          should.ifError(err);
+          should(msg.subject).match(/New issues detected in: test/);
+          should(msg.to).eql(schedule.email);
+          should(msg.from).eql('noreply@hawkeye.website');
+          should(msg.html).match(/nsp-39/);
+          done();
+        });
+      });
+    });
+  });
+
 });
