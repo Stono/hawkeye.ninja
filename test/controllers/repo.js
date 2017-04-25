@@ -10,6 +10,12 @@ const Dal = require('../../lib/dal');
 describe('Controllers.Repo', () => {
   let controller, scanManager, repoManager, dal, req;
   const repoId = 85411269;
+  const errHandler = done => {
+    return err => {
+      return done(err);
+    };
+  };
+
   beforeEach(done => {
     dal = new Dal();
     controller = new RepoController({
@@ -39,6 +45,7 @@ describe('Controllers.Repo', () => {
       scanManager.schedule(target, done);
     });
   });
+
   afterEach(done => {
     dal.flushall(done);
   });
@@ -46,15 +53,12 @@ describe('Controllers.Repo', () => {
   describe('viewScan', () => {
     let data;
     beforeEach(done => {
-      let res = deride.stub(['render', 'sendStatus']);
+      let res = deride.stub(['render']);
       res.setup.render.toDoThis((view, model) => {
         data = model;
         done();
       });
-      res.setup.sendStatus.toDoThis(code => {
-        done(new Error('Controller returned a ' + code));
-      });
-      controller.viewScan(req, res, done);
+      controller.viewScan(req, res, errHandler(done));
     });
     it('should append the scanManager scan', () => {
       should(data.scan.number).eql(1);
@@ -62,15 +66,17 @@ describe('Controllers.Repo', () => {
   });
 
   describe('viewRepo', () => {
-    it('should append the scanManager scans', done => {
+    let model;
+    beforeEach(done => {
       let res = deride.stub(['render']);
-      res.setup.render.toDoThis((view, model) => {
-        scanManager.scans(repoId, (err, scans) => {
-          should(model.scans[0].id).eql(scans[0].id);
-          done();
-        });
+      res.setup.render.toDoThis((view, page) => {
+        model = page;
+        done();
       });
-      controller.viewRepo(req, res);
+      controller.viewRepo(req, res, errHandler(done));
+    });
+    it('should set the title', () => {
+      should(model.page.title).eql(req.params.repo);
     });
   });
 
@@ -91,7 +97,7 @@ describe('Controllers.Repo', () => {
         when: 'always',
         email: 'test@test.com'
       };
-      controller.apiUpdateSchedule(req, res);
+      controller.apiUpdateSchedule(req, res, errHandler(done));
     });
 
     it('should update the tracking info', () => {
@@ -117,7 +123,7 @@ describe('Controllers.Repo', () => {
     });
 
     it('should append the scanManager scans', () => {
-      should(data.scans).eql(scans);
+      should(data.scans.length).eql(scans.length);
     });
 
     it('should append the tracking info', () => {
@@ -128,16 +134,24 @@ describe('Controllers.Repo', () => {
   });
 
   describe('newScan', () => {
-    it('should schedule a new scan', done => {
+    let url;
+    beforeEach(done => {
       let res = deride.stub(['redirect']);
-      res.setup.redirect.toDoThis(url => {
-        should(url).match(/\/repo\/Stono\/hawkeye\/2/);
-        scanManager.popPending(err => {
-          should.ifError(err);
-          done();
-        });
+      res.setup.redirect.toDoThis(target => {
+        url = target;
+        done();
       });
       controller.newScan(req, res);
+    });
+    it('should redirect to the scan page', () => {
+      should(url).match(/\/repo\/Stono\/hawkeye\/2/);
+    });
+    it('should schedule a new scan', done => {
+      scanManager.popPending((err, pending) => {
+        should.ifError(err);
+        should(pending.repo.id).eql(85411269);
+        done();
+      });
     });
   });
 });
