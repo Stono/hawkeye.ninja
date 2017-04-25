@@ -3,17 +3,20 @@ const ViewModelBuilder = require('../lib/viewModelBuilder');
 const Dal = require('../lib/dal');
 const should = require('should');
 const Repo = require('../lib/models/repo');
+const ScanManager = require('../lib/managers/scan');
 
 describe('ViewModels', () => {
-  let model, request, dal, builder;
-  before(() => {
+  let model, request, dal, builder, scanManager;
+  beforeEach(done => {
     dal = new Dal();
     builder = new ViewModelBuilder({ dal: dal });
+    scanManager = new ScanManager({ dal: dal });
 
     request = {
       params: {
         org: 'stono',
-        repo: 'hawkeye'
+        repo: 'hawkeye',
+        scanNumber: 1
       },
       user: {
         profile: 'profile info here',
@@ -21,6 +24,10 @@ describe('ViewModels', () => {
         repos: require('./samples/github/repos.json').map(r => { return new Repo().fromGithub(r); })
       }
     };
+    dal.flushall(done);
+  });
+  afterEach(done => {
+    dal.flushall(done);
   });
   const userInfo = () => {
     it('should have user info', () => {
@@ -32,7 +39,7 @@ describe('ViewModels', () => {
   };
 
   describe('withTitle', () => {
-    before(done => {
+    beforeEach(done => {
       builder(request)
       .withTitle('title')
       .build((err, data) => {
@@ -42,13 +49,13 @@ describe('ViewModels', () => {
       });
     });
     it('should set the title', done => {
-        should(model.page.title).eql('title');
-        done();
+      should(model.page.title).eql('title');
+      done();
     });
   });
 
   describe('withUser', () => {
-    before(done => {
+    beforeEach(done => {
       builder(request)
       .withUser()
       .build((err, data) => {
@@ -67,7 +74,7 @@ describe('ViewModels', () => {
   });
 
   describe('withRepo', () => {
-    before(done => {
+    beforeEach(done => {
       builder(request)
       .withUser()
       .withRepo()
@@ -81,10 +88,20 @@ describe('ViewModels', () => {
     it('should have the repo', () => {
       should(model.repo.name).eql(request.params.repo);
     });
+    it('should error if the repo is not found', done => {
+      request.params.repo = 'unknown';
+      builder(request)
+      .withUser()
+      .withRepo()
+      .build(err => {
+        should(err.message).match(/Repo not found/);
+        done();
+      });
+    });
   });
 
   describe('withStats', () => {
-    before(done => {
+    beforeEach(done => {
       builder(request)
       .withStats()
       .build((err, data) => {
@@ -99,7 +116,7 @@ describe('ViewModels', () => {
   });
 
   describe('withMenu', () => {
-    before(done => {
+    beforeEach(done => {
       builder(request)
       .withUser()
       .withRepoList()
@@ -120,7 +137,7 @@ describe('ViewModels', () => {
   });
 
   describe('loadRepoTracking', () => {
-    before(done => {
+    beforeEach(done => {
       builder(request)
       .withUser()
       .withRepo()
@@ -138,7 +155,7 @@ describe('ViewModels', () => {
   });
 
   describe('withRepoList', () => {
-    before(done => {
+    beforeEach(done => {
       builder(request)
       .withUser()
       .withRepoList()
@@ -155,26 +172,44 @@ describe('ViewModels', () => {
   });
 
   describe('withScan', () => {
-    before(done => {
+    beforeEach(done => {
+      const target = { oauth: { accessToken: 'abc' }, repo: { id: 85411269 }, token: 'abc', reason: 'test' };
+
+      scanManager.schedule(target, err => {
+        should.ifError(err);
+
+        builder(request)
+        .withUser()
+        .withRepo()
+        .loadScans()
+        .withScan()
+        .build((err, data) => {
+          should.ifError(err);
+          model = data;
+          done();
+        });
+      });
+    });
+    userInfo();
+    it('should have the specific scan information', () => {
+      should(model.scan.number).eql(request.params.scanNumber);
+    });
+    it('should error if the scan is not found', done => {
+      request.params.scanNumber = 'unknown';
       builder(request)
       .withUser()
       .withRepo()
       .loadScans()
       .withScan()
-      .build((err, data) => {
-        should.ifError(err);
-        model = data;
+      .build(err => {
+        should(err.message).match(/Scan not found/);
         done();
       });
-    });
-    userInfo();
-    it.skip('should have the specific scan information', () => {
-      should(model.scan.number).eql(request.params.scanNumber);
     });
   });
 
   describe('loadScans', () => {
-    before(done => {
+    beforeEach(done => {
       builder(request)
       .withUser()
       .withRepo()
