@@ -172,9 +172,7 @@ $(document).ready(function() {
 
     var getData = function(level) {
       var result = data.map(function(scan) {
-        return scan.metrics.items.filter(function(item) {
-          return item.level === level;
-        }).length;
+        return scan.metrics.byLevel[level];
       });
       $('#scanHistory .' + level).text(result[result.length -1]);
       return result;
@@ -274,7 +272,7 @@ $(document).ready(function() {
         var completeScans = allScans.filter(function(scan) {
           return scan.status !== 'pending';
         });
-        var latestScan = (completeScans.length === 0) ? [] : completeScans[0].metrics.items;
+        var latestScan = (data.metrics === null) ? [] : data.metrics.items;
 
         populateSchedule(data);
         drawGraph(completeScans);
