@@ -53,8 +53,8 @@ $(document).ready(function() {
   var drawVulnerabilities = function(data) {
     $('#vulns table').DataTable(defaultTable({
       columns: [
-        { width: '10%', data: 'level' },
-        { width: '90%', data: 'description' }
+        { width: '5%', data: 'level' },
+        { width: '95%', data: 'description' }
       ],
       iDisplayLength: 5,
       order: [[ 0, 'asc' ]],
