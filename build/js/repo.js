@@ -257,14 +257,16 @@ $(document).ready(function() {
 
   var scansTable = $('#scans table').DataTable(defaultTable({
     columns: [
-      { width: '10%', data: 'number' },
-      { width: '20%', data: 'datetime' },
-      { width: '40%', data: 'reason' },
+      { width: '15%', data: 'datetime' },
+      { width: '60%', data: 'reason' },
       { width: '5%', data: 'critical' },
       { width: '5%', data: 'high' },
       { width: '5%', data: 'medium' },
       { width: '5%', data: 'low' },
-      { width: '10%', data: 'status' }
+      { width: '5%', data: 'status' }
+    ],
+    columnDefs: [
+      { className: 'td_center', 'targets': [ 2, 3, 4, 5 ] }
     ],
     ajax: {
       url: '/api' + window.location.pathname,
@@ -308,7 +310,7 @@ $(document).ready(function() {
           }
           var result = Object.assign({
             number: scan.number,
-            datetime: scan.datetime,
+            datetime: '<div style="width: 120px">' + scan.datetime + '</div>',
             status: scan.status,
             reason: scan.reason
           }, scan.metrics.byLevel);
@@ -318,7 +320,7 @@ $(document).ready(function() {
       }
     },
     createdRow: function(row) {
-      var element = $('td', row).eq(7);
+      var element = $('td', row).eq(6);
       var status = element.text();
       var labels = {
         fail: 'label-danger',
