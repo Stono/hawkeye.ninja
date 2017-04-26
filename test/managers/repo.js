@@ -50,6 +50,15 @@ describe('Repo Manager', () => {
         done();
       });
     });
+    it('return null if the repo wasnt found by token', done => {
+      const badToken = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+      manager.getByToken(badToken, (err, data) => {
+        should.ifError(err);
+        should(data).eql(null);
+        done();
+      });
+    });
+
     it('track should be idempotent', done => {
       manager.schedule(repo.id, {
         freq: 'hourly',

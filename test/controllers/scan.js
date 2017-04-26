@@ -130,6 +130,25 @@ describe('Controllers.Scan', () => {
 
       controller.handleGithubHook(req, res, errHandler(done));
     });
+    it('should return an error with a bad token', done => {
+      let res = deride.stub(['sendStatus']);
+
+      res.setup.sendStatus.toDoThis(code => {
+        should(code).eql(204);
+        scanManager.get(repo.id, 1, (err, data) => {
+          should(data.status).eql('pending');
+          should(data.reason).match(/github/i);
+          done();
+        });
+      });
+
+      req.params.token = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+      controller.handleGithubHook(req, res, err => {
+        should(err.message).match(/no tracking user/i);
+        done();
+      });
+    });
+
   });
 
 
