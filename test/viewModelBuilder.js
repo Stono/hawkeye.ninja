@@ -196,7 +196,7 @@ describe('ViewModels', () => {
       should(model.scan.number).eql(request.params.scanNumber);
     });
     it('should error if the scan is not found', done => {
-      request.params.scanNumber = 'unknown';
+      request.params.scanNumber = 1234;
       builder(request)
       .withUser()
       .withRepo()
@@ -227,6 +227,26 @@ describe('ViewModels', () => {
     });
     it('should have the list of scans', () => {
       should(model.scans).eql([]);
+    });
+  });
+
+  describe('validateScanNumber', () => {
+    it('should accept valid numbers', done => {
+      builder(request)
+      .validateScanNumber()
+      .build(err => {
+        should(err).eql(null);
+        done();
+      });
+    });
+    it('should reject invalid numbers', done => {
+      request.params.scanNumber = 'bad';
+      builder(request)
+      .validateScanNumber()
+      .build(err => {
+        should(err.message).match(/invalid scan number/i);
+        done();
+      });
     });
   });
 

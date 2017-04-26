@@ -8,6 +8,7 @@ const should = require('should');
 const Dal = require('../../lib/dal');
 const User = require('../../lib/models/user');
 const MockGithubApi = require('../mockGithub');
+const util = require('../../lib/util');
 
 describe('Controllers.Repo', () => {
   let controller, scanManager, repoManager, dal, req, mockGithubApi;
@@ -65,6 +66,13 @@ describe('Controllers.Repo', () => {
     });
     it('should append the scanManager scan', () => {
       should(data.scan.number).eql(1);
+    });
+    it('should error with bad scanNumber values', done => {
+      req.params.scanNumber = 'bad';
+      controller.viewScan(req, null, err => {
+        should(util.isEmpty(err)).eql(false);
+        done();
+      });
     });
   });
 
