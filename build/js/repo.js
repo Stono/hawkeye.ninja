@@ -279,9 +279,27 @@ $(document).ready(function() {
         var latestScan = (data.metrics === null) ? [] : data.metrics.items;
 
         populateSchedule(data);
+
+        var pieDrawn = false;
+        $('#vulnModules button').on('click', function() {
+          if(pieDrawn) { return; }
+          setTimeout(function() {
+            drawPie(latestScan);
+            pieDrawn = true;
+          }, 500);
+        });
+
+        var graphDrawn = false;
+        $('#scanHistory button').on('click', function() {
+          if(graphDrawn) { return; }
+          setTimeout(function() {
         drawGraph(completeScans);
-        drawPie(latestScan);
-        drawVulnerabilities(latestScan);
+            graphDrawn = true;
+          }, 500);
+        });
+
+            drawVulnerabilities(latestScan);
+
         var result = allScans.map(function(scan) {
           if(scan.status === 'pending') {
             scan.metrics = {
