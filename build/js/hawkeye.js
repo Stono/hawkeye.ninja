@@ -17,7 +17,7 @@ $(document).ready(function() {
   var defaultRepo = $('.repo.active')[0];
 
   $('#filter-repo').keyup(function() {
-    var search = $(this).val();
+    var search = $(this).val().toLowerCase();
     $('.treeview.active').each(function() {
       $(this).removeClass('active');
     });
@@ -39,7 +39,7 @@ $(document).ready(function() {
     $('.repo a').each(function(idx, i) {
       var item = $(i);
       item.parent().hide();
-      if(item.text().indexOf(search) > -1) {
+      if(item.text().toLowerCase().indexOf(search) > -1) {
         item.parent().show();
         item.parents('.treeview').addClass('active');
       }

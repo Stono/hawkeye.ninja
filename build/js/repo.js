@@ -98,7 +98,6 @@ $(document).ready(function() {
         $('#vulns .overlay').hide();
       }
     });
-    console.log(vulnTable);
     $('#vulns table').DataTable(vulnTable);
 
     $('#vulns tbody').on( 'click', 'tr', function () {
