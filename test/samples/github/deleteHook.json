@@ -1,0 +1,12 @@
+{
+  "data": "",
+  "meta": {
+    "x-ratelimit-limit": "5000",
+    "x-ratelimit-remaining": "4974",
+    "x-ratelimit-reset": "1493201165",
+    "x-oauth-scopes": "admin:org_hook, admin:repo_hook, repo, user:email",
+    "x-github-request-id": "C32F:1A3E:5A8744A:6FFD1AC:5900686A",
+    "x-github-media-type": "github.v3; format=json",
+    "status": "204 No Content"
+  }
+}

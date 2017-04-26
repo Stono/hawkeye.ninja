@@ -8,7 +8,7 @@ var config = {
     bin: ['bin/*.js'],
     src: ['lib/**/*.js', '*.js', 'config/*.js']
   },
-  timeout: 500,
+  timeout: 5000,
   require: ['should']
 };
 config.targets.all = config.targets.test.concat(config.targets.bin).concat(config.targets.src);

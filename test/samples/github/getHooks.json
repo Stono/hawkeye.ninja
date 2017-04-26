@@ -2,22 +2,13 @@
   {
     "type": "Repository",
     "id": 12345678,
-    "name": "hawkeye",
+    "name": "web",
     "active": true,
     "events": [
-      "create",
-      "delete",
-      "issue_comment",
-      "member",
-      "membership",
-      "public",
-      "pull_request",
-      "push",
-      "repository"
+      "push"
     ],
     "config": {
-      "domain": "hawkeye.website",
-      "token": "********",
+      "service": "hawkeye",
       "user": "Stono"
     },
     "updated_at": "2017-04-02T11:44:44Z",

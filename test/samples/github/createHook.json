@@ -1,0 +1,25 @@
+{
+  "type": "Repository",
+  "id": 13445677,
+  "name": "web",
+  "active": true,
+  "events": [
+    "push"
+    ],
+    "config": {
+      "url": "http://127.0.0.1/hook/test",
+      "content_type": "json",
+      "service": "hawkeye",
+      "insecure_ssl": "0"
+    },
+    "updated_at": "2017-04-26T09:16:42Z",
+    "created_at": "2017-04-26T09:16:42Z",
+    "url": "https://api.github.com/repos/Stono/hawkeye/hooks/13445677",
+    "test_url": "https://api.github.com/repos/Stono/hawkeye/hooks/13445677/test",
+    "ping_url": "https://api.github.com/repos/Stono/hawkeye/hooks/13445677/pings",
+    "last_response": {
+      "code": null,
+      "status": "unused",
+      "message": null
+    }
+}
