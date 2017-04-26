@@ -90,6 +90,26 @@ describe('Controllers.Scan', () => {
       });
       controller.handleResult(req, res);
     });
+    it('should return an error for an invalid token', done => {
+      req.params.token = 'bad-token';
+      controller.handleResult(req, null, err => {
+        should(err.message).match(/invalid token/i);
+        scanManager.get(repo.id, 1, (err, data) => {
+          should(data).eql(null);
+          done();
+        });
+      });
+    });
+    it('should return an error for an invalid reason', done => {
+      req.query.reason = '#¡€41241';
+      controller.handleResult(req, null, err => {
+        should(err.message).match(/invalid reason/i);
+        scanManager.get(repo.id, 1, (err, data) => {
+          should(data).eql(null);
+          done();
+        });
+      });
+    });
   });
 
   describe('handleScan', () => {
@@ -113,6 +133,17 @@ describe('Controllers.Scan', () => {
         controller.handleScan(req, res);
       });
     });
+    it('should return an error for an invalid token', done => {
+      req.params.token = 'bad-token';
+      controller.handleScan(req, null, err => {
+        should(err.message).match(/invalid token/i);
+        scanManager.get(repo.id, 1, (err, data) => {
+          should(data).eql(null);
+          done();
+        });
+      });
+    });
+    it('should validate the json payload is as expected');
   });
 
   describe('handleGithubHook', () => {
@@ -130,7 +161,7 @@ describe('Controllers.Scan', () => {
 
       controller.handleGithubHook(req, res, errHandler(done));
     });
-    it('should return an error with a bad token', done => {
+    it('should return an error for a token which doesnt match a user', done => {
       let res = deride.stub(['sendStatus']);
 
       res.setup.sendStatus.toDoThis(code => {
@@ -148,7 +179,17 @@ describe('Controllers.Scan', () => {
         done();
       });
     });
-
+    it('should return an error for an invalid token', done => {
+      let res = deride.stub(['sendStatus']);
+      req.params.token = 'bad-token';
+      controller.handleGithubHook(req, res, err => {
+        should(err.message).match(/invalid token/i);
+        scanManager.get(repo.id, 1, (err, data) => {
+          should(data).eql(null);
+          done();
+        });
+      });
+    });
   });
 
 
