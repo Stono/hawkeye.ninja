@@ -6,12 +6,13 @@ const GlobalStats = require('../../lib/managers/globalStats');
 const Dal = require('../../lib/dal');
 const should = require('should');
 const async = require('async');
+const User = require('../../lib/models/user');
 
 const path = require('path');
 const _ = require('lodash');
 
 describe('Scan Manager', () => {
-  let repoManager, scanManager, emailManager, repo, list, target, sample, stats, dal;
+  let repoManager, scanManager, emailManager, repo, list, target, sample, stats, dal, user;
 
   beforeEach(done => {
     dal = new Dal();
@@ -19,6 +20,10 @@ describe('Scan Manager', () => {
       results: _.cloneDeep(require(path.join(__dirname, '../samples/hawkeye/results.json'))),
       metadata: { state: 'fail' }
     };
+    user = new User({
+      profile: require('../samples/github/profile.json'),
+      oauth: { accessToken: 'accesstoken' }
+    });
     stats = new GlobalStats({ dal: dal });
     repo = {
       id: 123456,
@@ -113,11 +118,10 @@ describe('Scan Manager', () => {
       const schedule = {
         freq: 'hourly',
         when: 'change',
-        email: 'test@test.com',
-        user: 12345
+        email: 'test@test.com'
       };
       const setTracking = next => {
-        repoManager.track(repo, next);
+        repoManager.track(repo, user.profile.id, next);
       };
       const setSchedule = next => {
         repoManager.schedule(repo.id, schedule, next);
@@ -149,7 +153,7 @@ describe('Scan Manager', () => {
 
     it('should not queue emails if there is no notification enabled', done => {
       const setTracking = next => {
-        repoManager.track(repo, next);
+        repoManager.track(repo, user.profile.id, next);
       };
       const scheduleScan = next => {
         scanManager.schedule(target, next);

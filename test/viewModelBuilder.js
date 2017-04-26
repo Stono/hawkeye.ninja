@@ -19,7 +19,7 @@ describe('ViewModels', () => {
         scanNumber: 1
       },
       user: {
-        profile: 'profile info here',
+        profile: require('./samples/github/profile.json'),
         oauth: 'oauth here',
         repos: require('./samples/github/repos.json').map(r => { return new Repo().fromGithub(r); })
       }

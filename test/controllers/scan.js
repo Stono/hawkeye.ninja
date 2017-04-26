@@ -8,9 +8,10 @@ const Dal = require('../../lib/dal');
 const path = require('path');
 const fs = require('fs');
 const async = require('async');
+const User = require('../../lib/models/user');
 
 describe('Controllers.Scan', () => {
-  let controller, dal, req, repoManager, scanManager, result, repo;
+  let controller, dal, req, repoManager, scanManager, result, repo, user;
   beforeEach(done => {
     dal = new Dal();
     result = JSON.parse(fs.readFileSync(path.join(__dirname, '../samples/hawkeye/results.json')));
@@ -28,6 +29,11 @@ describe('Controllers.Scan', () => {
       owner: 'org',
       fullName: 'org/test'
     };
+    user = new User({
+      profile: require('../samples/github/profile.json'),
+      oauth: { accessToken: 'accesstoken' }
+    });
+
 
     scanManager = deride.wrap(new ScanManager({
       dal: dal
@@ -48,7 +54,7 @@ describe('Controllers.Scan', () => {
 
     };
     const trackRepo = (result, next) => {
-      repoManager.track(repo, next);
+      repoManager.track(repo, user.profile.id, next);
     };
     const flush = next => {
       dal.flushall(next);
@@ -97,6 +103,21 @@ describe('Controllers.Scan', () => {
         req.params.number = data.number;
         controller.handleScan(req, res);
       });
+    });
+  });
+
+  describe.skip('handleGithubHook', () => {
+    it('should trigger a new scan', done => {
+      let res = deride.stub(['sendStatus']);
+
+      res.setup.sendStatus.toDoThis(() => {
+        scanManager.get(repo.id, 1, (err, data) => {
+          should(data.status).eql('failed');
+          done();
+        });
+      });
+
+      controller.handleGithubHook(req, res);
     });
   });
 

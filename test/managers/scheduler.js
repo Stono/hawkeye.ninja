@@ -23,16 +23,19 @@ describe('ScheduleManager', () => {
       fullName: 'someorg/test'
     });
     user = new User({
+      profile: require('../samples/github/profile.json'),
       oauth: { accessToken: 'accesstoken' }
     });
     repoManager = new RepoManager({ dal: dal });
     scanManager = new ScanManager({ dal: dal });
   });
+  const trackRepo = next => { repoManager.track(repo, user.profile.id, next); };
+  const createUser = next => { userStore.set(user.profile.id, user, next) };
   beforeEach(done => {
     async.series([
       dal.flushall,
-      next => { repoManager.track(repo, next); },
-        next => { userStore.set(123456, user, next) }
+      createUser,
+      trackRepo
     ], done);
   });
   afterEach(done => {
@@ -49,7 +52,6 @@ describe('ScheduleManager', () => {
           freq: 'hourly',
           when: 'always',
           email: 'test@test.com',
-          user: 123456,
           last: last
         }, () => {
           scheduler.run(done);
