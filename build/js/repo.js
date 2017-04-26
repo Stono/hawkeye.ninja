@@ -9,8 +9,8 @@
 var scanFrequency = '#scanFrequency';
 var notifyWhen = '#notifyWhen';
 var emailNotification = '#emailNotification';
+var github = '#githubIntegration';
 var saveSchedule = '#saveSchedule';
-
 
 var linkify = function(value) {
   // http://, https://, ftp://
@@ -250,6 +250,7 @@ $(document).ready(function() {
     $(notifyWhen).val(schedule.when).trigger('change');
     $(scanFrequency).val(schedule.freq).trigger('change');
     $(emailNotification).val(schedule.email).trigger('change');
+    $(github).val(schedule.github).trigger('change');
   };
 
   var scansTable = $('#scans table').DataTable(defaultTable({
@@ -339,7 +340,8 @@ $(document).ready(function() {
     var model = {
       freq: $(scanFrequency).val(),
       when: $(notifyWhen).val(),
-      email: $(emailNotification).val()
+      email: $(emailNotification).val(),
+      github: $(github).val()
     };
     var url = '/api' + window.location.pathname + '/tracking/schedule';
     $.ajax({
@@ -367,11 +369,17 @@ $(document).ready(function() {
   };
 
   var toggleSave = function() {
+    /* jshint maxcomplexity: 5 */
     var freqValue = $(scanFrequency).val();
     var notifyValue = $(notifyWhen).val();
     var emailValue = $(emailNotification).val();
+    var githubValue = $(github).val();
 
-    toggler(freqValue, notifyWhen);
+    if(freqValue === 'never' && githubValue === 'never') {
+      toggler('never', notifyWhen);
+    } else {
+      toggler(true, notifyWhen);
+    }
     toggler(notifyValue, emailNotification);
 
     if(notifyValue !== 'never' && emailValue === '') {
@@ -385,6 +393,7 @@ $(document).ready(function() {
   };
 
   $(scanFrequency).change(toggleSave);
+  $(github).change(toggleSave);
   $(notifyWhen).change(toggleSave);
   $(emailNotification).keyup(toggleSave);
   $(emailNotification).inputmask('email');

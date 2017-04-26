@@ -1,33 +1,17 @@
 'use strict';
 const should = require('should');
-const deride = require('deride');
 const User = require('../../lib/models/user');
 const util = require('../../lib/util');
+const MockGithubApi = require('../mockGithub');
 
-const repoData = require('../samples/github/repos.json');
-const createHook = require('../samples/github/createHook.json');
-const getHooks = require('../samples/github/getHooks.json');
-const deleteHook = require('../samples/github/deleteHook.json');
-
-let repos;
-const MockGithubApi = function() {
-  repos = deride.stub(['getAll', 'getHooks', 'createHook', 'deleteHook']);
-  let self = deride.stub(['authenticate'], [{
-    name: 'repos', options: { value: repos, enumerable: true}
-  }]);
-  repos.setup.getAll.toCallbackWith([null, { data: repoData }]);
-  repos.setup.getHooks.toCallbackWith([null, { data: getHooks }]);
-  repos.setup.createHook.toCallbackWith([null, { data: createHook }]);
-  repos.setup.deleteHook.toCallbackWith([null, { data: deleteHook }]);
-  return self;
-};
 const accessToken = util.defaultValue(process.env.GITHUB_ACCESS_TOKEN, 'accessToken');
 const repoId = 85411269;
 
 describe('User', () => {
-  let user, profile, mockGithubApi;
+  let user, profile, mockGithubApi, repos;
   beforeEach(done => {
     mockGithubApi = new MockGithubApi();
+    repos = mockGithubApi.repos;
     user = new User(null, mockGithubApi);
     profile = require('../samples/github/profile.json');
     user.setProfile(profile);

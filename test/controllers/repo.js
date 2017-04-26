@@ -6,9 +6,11 @@ const RepoManager = require('../../lib/managers/repo');
 const deride = require('deride');
 const should = require('should');
 const Dal = require('../../lib/dal');
+const User = require('../../lib/models/user');
+const MockGithubApi = require('../mockGithub');
 
 describe('Controllers.Repo', () => {
-  let controller, scanManager, repoManager, dal, req;
+  let controller, scanManager, repoManager, dal, req, mockGithubApi;
   const repoId = 85411269;
   const errHandler = done => {
     return err => {
@@ -18,6 +20,7 @@ describe('Controllers.Repo', () => {
 
   beforeEach(done => {
     dal = new Dal();
+    mockGithubApi = new MockGithubApi();
     controller = new RepoController({
       dal: dal
     });
@@ -30,11 +33,11 @@ describe('Controllers.Repo', () => {
         repo: 'hawkeye',
         scanNumber: 1
       },
-      user: {
+      user: new User({
         profile: require('../samples/github/profile.json'),
         oauth: { accessToken: 'oauth here' },
         repos: require('../samples/github/repos.json').map(r => { return new Repo().fromGithub(r); })
-      }
+      }, mockGithubApi)
     };
     scanManager = deride.wrap(new ScanManager({
       dal: dal,
@@ -95,7 +98,8 @@ describe('Controllers.Repo', () => {
       req.body = {
         freq: 'hourly',
         when: 'always',
-        email: 'test@test.com'
+        email: 'test@test.com',
+        github: 'push'
       };
       controller.apiUpdateSchedule(req, res, errHandler(done));
     });
@@ -105,6 +109,7 @@ describe('Controllers.Repo', () => {
       should(data.schedule.freq).eql('hourly');
       should(data.schedule.when).eql('always');
       should(data.schedule.email).eql('test@test.com');
+      should(data.schedule.github).eql('push');
     });
   });
 

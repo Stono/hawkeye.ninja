@@ -28,7 +28,7 @@ block content
               i.fa.fa-plus
         .box-body
           .row
-            .col-md-4
+            .col-md-6
               .form-group
                 label Rescan Frequency
                 |
@@ -38,7 +38,16 @@ block content
                   option(value='daily') Daily
                   option(value='weekly') Weekly
                   option(value='monthly') Monthly
-            .col-md-4
+            .col-md-6
+              .form-group
+                label GitHub Integration
+                |
+                select#githubIntegration.form-control.select2(style='width: 100%;')
+                  option(value='never', selected='selected') Never
+                  option(value='push') On Push
+
+          .row
+            .col-md-6
               .form-group
                 label Notify When
                 |
@@ -46,7 +55,7 @@ block content
                   option(value='never', selected='selected') Never
                   option(value='change') When something changes
                   //option(value='always') Always
-            .col-md-4
+            .col-md-6
               .form-group
                 label Notification Email Address
                 .input-group
