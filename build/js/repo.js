@@ -282,6 +282,9 @@ $(document).ready(function() {
           return scan.status !== 'pending';
         });
         var latestScan = (data.metrics === null) ? [] : data.metrics.items;
+        if(allScans.length === 0) {
+          $('#repoSettings .btn.btn-box-tool').click();
+        }
 
         populateSchedule(data);
 
