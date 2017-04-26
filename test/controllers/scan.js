@@ -9,11 +9,17 @@ const path = require('path');
 const fs = require('fs');
 const async = require('async');
 const User = require('../../lib/models/user');
+const errHandler = done => {
+  return err => {
+    return done(err);
+  };
+};
 
 describe('Controllers.Scan', () => {
-  let controller, dal, req, repoManager, scanManager, result, repo, user;
+  let controller, dal, req, repoManager, scanManager, result, repo, user, userStore;
   beforeEach(done => {
     dal = new Dal();
+    userStore = dal.collection('users');
     result = JSON.parse(fs.readFileSync(path.join(__dirname, '../samples/hawkeye/results.json')));
     controller = new ScanController({
       dal: dal
@@ -34,7 +40,6 @@ describe('Controllers.Scan', () => {
       oauth: { accessToken: 'accesstoken' }
     });
 
-
     scanManager = deride.wrap(new ScanManager({
       dal: dal
     }));
@@ -53,14 +58,18 @@ describe('Controllers.Scan', () => {
       next();
 
     };
-    const trackRepo = (result, next) => {
+    const trackRepo = next => {
       repoManager.track(repo, user.profile.id, next);
+    };
+    const createUser = (result, next) => {
+      userStore.set(user.profile.id, user, next);
     };
     const flush = next => {
       dal.flushall(next);
     };
     async.waterfall([
       flush,
+      createUser,
       trackRepo,
       setreq
     ], done);
@@ -106,18 +115,20 @@ describe('Controllers.Scan', () => {
     });
   });
 
-  describe.skip('handleGithubHook', () => {
+  describe('handleGithubHook', () => {
     it('should trigger a new scan', done => {
       let res = deride.stub(['sendStatus']);
 
-      res.setup.sendStatus.toDoThis(() => {
+      res.setup.sendStatus.toDoThis(code => {
+        should(code).eql(204);
         scanManager.get(repo.id, 1, (err, data) => {
-          should(data.status).eql('failed');
+          should(data.status).eql('pending');
+          should(data.reason).match(/github/i);
           done();
         });
       });
 
-      controller.handleGithubHook(req, res);
+      controller.handleGithubHook(req, res, errHandler(done));
     });
   });
 
