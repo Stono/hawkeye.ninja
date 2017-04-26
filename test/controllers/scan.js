@@ -14,6 +14,7 @@ const errHandler = done => {
     return done(err);
   };
 };
+const util = require('../../lib/util');
 
 describe('Controllers.Scan', () => {
   let controller, dal, req, repoManager, scanManager, result, repo, user, userStore;
@@ -93,7 +94,7 @@ describe('Controllers.Scan', () => {
     it('should return an error for an invalid token', done => {
       req.params.token = 'bad-token';
       controller.handleResult(req, null, err => {
-        should(err.message).match(/invalid token/i);
+        should(util.isEmpty(err)).eql(false);
         scanManager.get(repo.id, 1, (err, data) => {
           should(data).eql(null);
           done();
@@ -103,7 +104,7 @@ describe('Controllers.Scan', () => {
     it('should return an error for an invalid reason', done => {
       req.query.reason = '#¡€41241';
       controller.handleResult(req, null, err => {
-        should(err.message).match(/invalid reason/i);
+        should(util.isEmpty(err)).eql(false);
         scanManager.get(repo.id, 1, (err, data) => {
           should(data).eql(null);
           done();
@@ -136,7 +137,7 @@ describe('Controllers.Scan', () => {
     it('should return an error for an invalid token', done => {
       req.params.token = 'bad-token';
       controller.handleScan(req, null, err => {
-        should(err.message).match(/invalid token/i);
+        should(util.isEmpty(err)).eql(false);
         scanManager.get(repo.id, 1, (err, data) => {
           should(data).eql(null);
           done();
@@ -163,19 +164,9 @@ describe('Controllers.Scan', () => {
     });
     it('should return an error for a token which doesnt match a user', done => {
       let res = deride.stub(['sendStatus']);
-
-      res.setup.sendStatus.toDoThis(code => {
-        should(code).eql(204);
-        scanManager.get(repo.id, 1, (err, data) => {
-          should(data.status).eql('pending');
-          should(data.reason).match(/github/i);
-          done();
-        });
-      });
-
       req.params.token = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
       controller.handleGithubHook(req, res, err => {
-        should(err.message).match(/no tracking user/i);
+        should(util.isEmpty(err)).eql(false);
         done();
       });
     });
@@ -183,7 +174,7 @@ describe('Controllers.Scan', () => {
       let res = deride.stub(['sendStatus']);
       req.params.token = 'bad-token';
       controller.handleGithubHook(req, res, err => {
-        should(err.message).match(/invalid token/i);
+        should(util.isEmpty(err)).eql(false);
         scanManager.get(repo.id, 1, (err, data) => {
           should(data).eql(null);
           done();
@@ -191,6 +182,4 @@ describe('Controllers.Scan', () => {
       });
     });
   });
-
-
 });

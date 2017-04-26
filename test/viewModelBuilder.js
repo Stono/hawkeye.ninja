@@ -16,7 +16,8 @@ describe('ViewModels', () => {
       params: {
         org: 'stono',
         repo: 'hawkeye',
-        scanNumber: 1
+        scanNumber: 1,
+        token: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
       },
       user: {
         profile: require('./samples/github/profile.json'),
@@ -226,6 +227,26 @@ describe('ViewModels', () => {
     });
     it('should have the list of scans', () => {
       should(model.scans).eql([]);
+    });
+  });
+
+  describe('validateToken', () => {
+    it('should accept valid tokens', done => {
+      builder(request)
+      .validateToken()
+      .build(err => {
+        should(err).eql(null);
+        done();
+      });
+    });
+    it('should reject invalid tokens', done => {
+      request.params.token = 'bad';
+      builder(request)
+      .validateToken()
+      .build(err => {
+        should(err.message).match(/invalid token/i);
+        done();
+      });
     });
   });
 });
