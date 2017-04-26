@@ -79,3 +79,22 @@ table.dataTable {
 .td_center {
   text-align: center;
 }
+
+@keyframes bluefade {
+  0%   {box-shadow: 0 0 0px #3c8dbc;}
+  20%   {box-shadow: 0 0 8px #3c8dbc;}
+  40%   {box-shadow: 0 0 0px #3c8dbc;}
+  60%   {box-shadow: 0 0 8px #3c8dbc;}
+  80%   {box-shadow: 0 0 0px #3c8dbc;}
+}
+
+.box-highlight {
+  animation-name: bluefade;
+  animation-duration: 6s;
+}
+
+div.dataTables_filter input {
+  margin-left: .2em;
+  padding: 16px;
+  font-size: 1em;
+}

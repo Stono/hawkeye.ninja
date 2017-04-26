@@ -37,7 +37,9 @@ $(document).ready(function() {
   var defaultTable = function(extra) {
     return Object.assign({
       oLanguage: {
-        sEmptyTable: '<div align="center">No data to show.</div>'
+        sEmptyTable: '<div align="center">No data to show.</div>',
+        sSearch: '',
+        sSearchPlaceholder: 'Search'
       },
       autoWidth: true,
       dom: 'Bfrtip',
@@ -51,7 +53,7 @@ $(document).ready(function() {
   };
 
   var drawVulnerabilities = function(data) {
-    $('#vulns table').DataTable(defaultTable({
+    var vulnTable = defaultTable({
       columns: [
         { width: '5%', data: 'level' },
         { width: '95%', data: 'description' }
@@ -95,7 +97,9 @@ $(document).ready(function() {
       fnDrawCallback: function() {
         $('#vulns .overlay').hide();
       }
-    }));
+    });
+    console.log(vulnTable);
+    $('#vulns table').DataTable(vulnTable);
 
     $('#vulns tbody').on( 'click', 'tr', function () {
       if ( $(this).hasClass('selected') ) {
