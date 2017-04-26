@@ -12,6 +12,8 @@ var emailNotification = '#emailNotification';
 var github = '#githubIntegration';
 var saveSchedule = '#saveSchedule';
 
+var ajaxData;
+
 var linkify = function(value) {
   // http://, https://, ftp://
   var urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
@@ -267,6 +269,7 @@ $(document).ready(function() {
     ajax: {
       url: '/api' + window.location.pathname,
       dataSrc: function(data) {
+        ajaxData = data;
         var allScans = data.scans.sort(function(a, b) {
           return a.number < b.number;
         });
@@ -341,6 +344,7 @@ $(document).ready(function() {
       freq: $(scanFrequency).val(),
       when: $(notifyWhen).val(),
       email: $(emailNotification).val(),
+      last: ajaxData.tracking.schedule.last,
       github: $(github).val()
     };
     var url = '/api' + window.location.pathname + '/tracking/schedule';
