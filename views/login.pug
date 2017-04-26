@@ -35,8 +35,8 @@ html
         .row.description
           section.centered-wrapper
             .hero.col-md-12
-              h1 Automated security and vulnerability scanning for your projects
-              p Easily check for, and keep on top of security issues
+              h1 Automated project security and vulnerability scanning
+              p Check for issues in your projects right now, with just a single click
               a.btn.btn-default.btn-lg.btn-social.btn-github(href='/oauth/github')
                 i.fa.fa-github
                 |  Sign in with GitHub
@@ -77,7 +77,7 @@ html
           section.centered-wrapper
             .hero.col-md-12
               h1  Scanning your open source project is 100% free
-              p Forever.  We want to encourage a better security stance in the open source world
+              p And for the foreseeable future, so is scanning your private projects too!
 
         //.row.private-projects
           //section.centered-wrapper
@@ -113,7 +113,9 @@ html
                 li
                   | On demand scanning, as well as continual scanning through schedules
                 li
-                  | Alerting when issues are detected in your project
+                  | GitHub integration for scanning on push
+                li
+                  | Email alerting when issues are detected in your project
             .card.col-md-4
               h1
                 i.fa.fa-shield.fa-6(aria-hidden='true')
@@ -136,7 +138,7 @@ html
                   i.fa.fa-angle-right(aria-hidden='true')
                 .branch
                   i.fa.fa-github(aria-hidden='true')
-                  p GitHub
+                  p GitHub Hook
                 .divider-arrow
                   i.fa.fa-angle-right(aria-hidden='true')
                 .branch
