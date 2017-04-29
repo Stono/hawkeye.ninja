@@ -17,5 +17,57 @@ block content
         .box-body
           p
             |  Please get started by selecting a repository, from the menu on the left.
+          p
+            |  If you're wondering why this page lacks any real content; that's because this is an MVP!  I wanted to get you the value bit as soon as possible, and that's the ability to scan and alert on your repos as soon as possible; pretty consolidated dashboards come later.
+          p
+            | So for the time being, this will act as a news page!
+
+  .row
+    .col-md-12
+      ul.timeline
+        li.time-label
+          span.bg-green 29 Apr. 2017
+        li
+          i.fa.fa-envelope.bg-blue
+          .timeline-item
+            span.time
+              i.fa.fa-clock-o
+              |  19:06
+            h3.timeline-header
+              | Hawkeye (the hosted version!) goes Pre-Beta public!
+            .timeline-body
+              | Both exciting, and scary, but I'm releasing this to the wild in the hope it'll help you all out!  I really encourage any feedback, suggestions, tips etc!
+              p
+                | Drop me an email at&nbsp;
+                a(href='mailto:me@karlstoney.com') me@karlstoney.com
+        li.time-label
+          span.bg-green 1 Apr. 2017
+        li
+          i.fa.fa-envelope.bg-blue
+          .timeline-item
+            span.time
+              i.fa.fa-clock-o
+              | 12:00
+            h3.timeline-header
+              | Ruby support added to Hawkeye
+            .timeline-body
+              | Thanks to Laura, hawkeye now checks your Gemfile for known vulnerabilities too!
+
+        li.time-label
+          span.bg-green 18 Mar. 2017
+        li
+          i.fa.fa-envelope.bg-blue
+          .timeline-item
+            span.time
+              i.fa.fa-clock-o
+              | 12:00
+            h3.timeline-header
+              | Hawkeye (the cli version!) goes open source on GitHub
+            .timeline-body
+              | The first incantation of Hawkeye as a CLI tool for your Pipelines goes public!  The aim of the game is to make it as simple as possible for you to run a basic set of static code analysis checks as part of your CI/CD Pipeline.
+              p Check it out&nbsp;
+                a(href='https://github.com/Stono/hawkeye') here
+        li
+          i.fa.fa-clock-o.bg-gray
 
 block javascript
