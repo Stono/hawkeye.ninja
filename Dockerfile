@@ -12,7 +12,7 @@ RUN yum -y -q update && \
     yum -y -q install wget epel-release openssl openssl-devel tar unzip \
 							libffi-devel python-devel redhat-rpm-config git-core \
 							gcc gcc-c++ make zlib-devel pcre-devel ca-certificates \
-              ruby rubygemsi nodejs && \
+              nodejs && \
     yum -y -q clean all
 
 # Install hawkeye
@@ -22,14 +22,10 @@ EXPOSE 5000
 CMD ["npm", "run", "web"]
 
 COPY package.json /app
-
 RUN cd /app && \
-    npm install --quiet
-
+    npm install --quiet && \
+    chown -R hawkeye:hawkeye /app
 COPY ./ /app
-
-RUN chown hawkeye:hawkeye /app
-
 RUN npm run assets
 RUN find . -type d \( -path ./node_modules \) -prune -o -exec chown hawkeye:hawkeye {} \;
 USER hawkeye
