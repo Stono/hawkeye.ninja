@@ -28,6 +28,11 @@ RUN cd /tmp && \
 RUN mkdir -p /app
 WORKDIR /app
 
+# If we ever change the hawkeye version, redo everything below
+ARG HE_VERSION=
+RUN yum -y -q update && \
+    yum -y -q clean all
+
 COPY package.json /app
 
 RUN cd /app && \

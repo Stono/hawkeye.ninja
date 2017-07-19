@@ -8,6 +8,11 @@ ENTRYPOINT ["node", "oneshot.js"]
 RUN groupadd hawkeye && \
     useradd -g hawkeye hawkeye
 
+# If we ever change the hawkeye version, redo everything below
+ARG HE_VERSION=
+RUN yum -y -q update && \
+    yum -y -q clean all
+
 COPY package.json /app
 
 RUN cd /app && \

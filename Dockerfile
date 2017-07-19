@@ -21,10 +21,16 @@ WORKDIR /app
 EXPOSE 5000
 CMD ["npm", "run", "web"]
 
+# If we ever change the hawkeye version, redo everything below
+ARG HE_VERSION=
+RUN yum -y -q update && \
+    yum -y -q clean all
+
 COPY package.json /app
 RUN cd /app && \
     npm install --quiet && \
     chown -R hawkeye:hawkeye /app
+
 COPY ./ /app
 RUN npm run assets
 RUN find . -type d \( -path ./node_modules \) -prune -o -exec chown hawkeye:hawkeye {} \;
