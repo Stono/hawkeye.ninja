@@ -12,7 +12,7 @@ env:
     - HE_SESSION_SECRET=test-sessionsecret
     - HE_DAL_ENCRYPTION_KEY=test
     - HE_SERVER_URL=http://127.0.0.1
-    - HE_VERSION=0.14.3
+    - HE_VERSION=0.14.4
 
 language: node_js
 
