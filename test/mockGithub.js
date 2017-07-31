@@ -8,9 +8,10 @@ module.exports = function  MockGithubApi() {
   const deleteHook = require('./samples/github/deleteHook.json');
 
   const repos = deride.stub(['getAll', 'getHooks', 'createHook', 'deleteHook']);
-  let self = deride.stub(['authenticate'], [{
+  let self = deride.stub(['authenticate', 'hasNextPage'], [{
     name: 'repos', options: { value: repos, enumerable: true}
   }]);
+  self.setup.hasNextPage.toReturn(false);
   repos.setup.getAll.toCallbackWith([null, { data: repoData }]);
   repos.setup.getHooks.toCallbackWith([null, { data: getHooks }]);
   repos.setup.createHook.toCallbackWith([null, { data: createHook }]);
