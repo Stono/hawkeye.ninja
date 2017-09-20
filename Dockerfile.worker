@@ -5,7 +5,7 @@ RUN groupadd hawkeye && \
     useradd -g hawkeye hawkeye
 
 # Get nodejs repos
-RUN curl --silent --location https://rpm.nodesource.com/setup_7.x | bash -
+RUN curl --silent --location https://rpm.nodesource.com/setup_8.x | bash -
 
 RUN yum -y -q update && \
     yum -y -q remove iputils && \
