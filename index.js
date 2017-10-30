@@ -7,7 +7,6 @@ const async = require('async');
 const Migrate = require('./lib/migrate');
 
 const redis = new require('./lib/dal/redis/client')(config.dal.redis);
-console.log(redis);
 const migrate = new Migrate({
   path: __dirname + '/migrations',
   redis: redis
