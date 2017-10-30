@@ -38,7 +38,8 @@ let config = {
     domain: util.defaultValue(validateEnv('HE_MAIL_DOMAIN'), 'sandboxa7bd3a5f06ff493aa90aece9dbb8d552.mailgun.org')
   },
   dal: {
-    encryptionKey: validateEnv('HE_DAL_ENCRYPTION_KEY'),
+    hmac: validateEnv('HE_ENC_HMAC', true),
+    key: validateEnv('HE_ENC_KEY', true),
     gzip: util.defaultValue(validateEnv('HE_DAL_GZIP'), false),
     redis: {
       host: 'localhost',

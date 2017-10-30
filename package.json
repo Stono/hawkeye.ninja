@@ -64,7 +64,7 @@
     "lodash": "4.17.4",
     "mailgun-js": "0.13.1",
     "moment": "2.19.1",
-    "node-crypt": "0.1.3",
+    "node-crypt": "1.0.1",
     "passport": "0.4.0",
     "passport-github": "1.1.0",
     "pug": "2.0.0-rc.4",

@@ -16,7 +16,8 @@ services:
       - HE_SESSION_SECRET
       - HE_SERVER_URL=http://web
       - HE_REDIS_PASSWORD
-      - HE_DAL_ENCRYPTION_KEY
+      - HE_ENC_KEY
+      - HE_ENC_HMAC
       - HE_MAIL_API_KEY
       - HE_DAL_GZIP
       - NODE_ENV=prod
@@ -40,7 +41,8 @@ services:
       - HE_SESSION_SECRET
       - HE_SERVER_URL=http://web
       - HE_REDIS_PASSWORD
-      - HE_DAL_ENCRYPTION_KEY
+      - HE_ENC_KEY
+      - HE_ENC_HMAC
       - HE_MAIL_API_KEY
       - HE_DAL_GZIP
       - NODE_ENV=prod

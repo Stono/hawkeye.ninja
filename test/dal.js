@@ -11,7 +11,7 @@ describe('Data Access Layer', () => {
     udal = new Dal({
       redis: {}
     });
-    crypto = new Crypto({ key: config.dal.encryptionKey });
+    crypto = new Crypto({ key: config.dal.key, hmacKey: config.dal.hmac });
   });
   beforeEach(done => {
     dal.flushall(done);
