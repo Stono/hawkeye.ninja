@@ -26,6 +26,20 @@ block content
     .col-md-12
       ul.timeline
         li.time-label
+          span.bg-green 1 Nov. 2017
+        li
+          i.fa.fa-envelope.bg-blue
+          .timeline-item
+            span.time
+              i.fa.fa-clock-o
+              | 19:32 
+            h3.timeline-header
+              | Encryption Upgrade 
+            .timeline-body
+              p A recent switch from aes-cbc to aes-ctr to further improve the data we store at rest, and in transit between microservices has resulted in me needing to reset the underlying database.  I appreciate this is a little frustrating but unfortunately I didn't have the time to implement a complex data migration.  
+              p As a result, you will have lost your scan history and also any notifications you may have set up! 
+
+        li.time-label
           span.bg-green 31 July. 2017
         li
           i.fa.fa-envelope.bg-blue
