@@ -7,6 +7,7 @@ module.exports = function MigrateFromOldEncryption() {
   const redis = new Redis(config.dal.redis);
   let self = {};
   self.migrate = function(done) {
+    return done();
     const removeKeys = (err, keys) => {
       async.forEachOf(keys, (key, idx, next) => {
         redis.del(key.replace('he:', ''), next);
