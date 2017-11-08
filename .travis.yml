@@ -13,7 +13,7 @@ env:
     - HE_ENC_KEY=8556e651184da5c8d5ab8f3236ef1164d8b5e9cff704025d9212d32408eeffc9
     - HE_ENC_HMAC=40996c4c2b3a0db82dbd469395a3fc7e04b1925f729d2ebc2232c5751d70a390
     - HE_SERVER_URL=http://127.0.0.1
-    - HE_VERSION=0.17.0
+    - HE_VERSION=0.18.0
 
 language: node_js
 
