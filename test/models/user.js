@@ -32,10 +32,11 @@ describe('User', () => {
     let hookData;
     it('should create a hook for a given repo', done => {
       const url = 'http://127.0.0.1/hook/test';
-      repos.setup.getHooks.toCallbackWith([null, []]);
+      repos.getHooks = function(repo, next) {
+        next(null, [null, []]);
+      };
       user.createHook(repoId, url, (err, hook) => {
         should.ifError(err);
-        repos.expect.getHooks.called.once();
         repos.expect.createHook.called.once();
         should(hook.config.service).eql('hawkeye');
         done();
