@@ -14,15 +14,11 @@ describe('OneShot', () => {
   });
 
   it('should clone the repo', done => {
-    exec.setup.command.toDoThis((command, options, next) => {
+    exec.setup.command.toDoThis(command => {
       should(command).match(/git clone https:\/\/github.com\/some\/repo --depth=1 \/tmp\/repo-/);
       done();
-
-      next(null, {
-        code: 0
-      });
     });
-    oneshot.scan(done);
+    oneshot.scan();
   });
 
   it('should execute the scan', done => {
